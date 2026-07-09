@@ -1,0 +1,52 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_portal_daerah/assets/js/default
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-03-26T21:05:47.300541Z
+737
+nuryanto
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+default.js
+file
+
+
+
+
+2012-05-08T09:05:22.547759Z
+242e9582312e6327c23fb37f5165bf72
+2012-03-21T08:21:16.894291Z
+536
+nuryanto
+
+default_admin.js
+file
+
+
+
+
+2012-05-08T09:05:22.556759Z
+5a43dd429124aad42d6d574d4d7b5c8e
+2012-03-26T21:05:47.300541Z
+737
+nuryanto
+

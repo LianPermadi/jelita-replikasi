@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/2012/!svn/ver/1618/alp_backoffice/www/modules/pelayanan/views
+END
+val_perusahaan.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/2012/!svn/ver/1262/alp_backoffice/www/modules/pelayanan/views/val_perusahaan.php
+END
+kecamatan_load_perusahaan.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/2012/!svn/ver/970/alp_backoffice/www/modules/pelayanan/views/kecamatan_load_perusahaan.php
+END
+pemohon_tab.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/2012/!svn/ver/1558/alp_backoffice/www/modules/pelayanan/views/pemohon_tab.php
+END
+kecamatan_load_idProp.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/2012/!svn/ver/452/alp_backoffice/www/modules/pelayanan/views/kecamatan_load_idProp.php
+END
+daftar_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/daftar_load.php
+END
+kelurahan_load_idKab.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/2012/!svn/ver/452/alp_backoffice/www/modules/pelayanan/views/kelurahan_load_idKab.php
+END
+pick_list_data_izin.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/2012/!svn/ver/1558/alp_backoffice/www/modules/pelayanan/views/pick_list_data_izin.php
+END
+pemohon_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/pemohon_load.php
+END
+penduduk_tab.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/2012/!svn/ver/1490/alp_backoffice/www/modules/pelayanan/views/penduduk_tab.php
+END
+rekomendasi_edit.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/rekomendasi_edit.php
+END
+val_pemohon.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/2012/!svn/ver/1211/alp_backoffice/www/modules/pelayanan/views/val_pemohon.php
+END
+izin_paralel_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/izin_paralel_load.php
+END
+pdf.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/pdf.php
+END
+kelurahan_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/2012/!svn/ver/970/alp_backoffice/www/modules/pelayanan/views/kelurahan_load.php
+END
+kabupaten_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/2012/!svn/ver/970/alp_backoffice/www/modules/pelayanan/views/kabupaten_load.php
+END
+list_paralel_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/list_paralel_load.php
+END
+sementara_list.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/2012/!svn/ver/1281/alp_backoffice/www/modules/pelayanan/views/sementara_list.php
+END
+ambilsk_list.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/ambilsk_list.php
+END
+perusahaan_tab.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/2012/!svn/ver/1558/alp_backoffice/www/modules/pelayanan/views/perusahaan_tab.php
+END
+pendaftaran_list.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/2012/!svn/ver/1241/alp_backoffice/www/modules/pelayanan/views/pendaftaran_list.php
+END
+kelurahan_load_perusahaan.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/2012/!svn/ver/970/alp_backoffice/www/modules/pelayanan/views/kelurahan_load_perusahaan.php
+END
+kabupaten_load_perusahaan.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/2012/!svn/ver/970/alp_backoffice/www/modules/pelayanan/views/kabupaten_load_perusahaan.php
+END
+pick_list.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/pick_list.php
+END
+pick_list_other.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/pick_list_other.php
+END
+kecamatan_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/2012/!svn/ver/970/alp_backoffice/www/modules/pelayanan/views/kecamatan_load.php
+END
+sementara_edit.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/2012/!svn/ver/1284/alp_backoffice/www/modules/pelayanan/views/sementara_edit.php
+END
+kelurahan_load_idProp.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/2012/!svn/ver/452/alp_backoffice/www/modules/pelayanan/views/kelurahan_load_idProp.php
+END
+perusahaan_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/perusahaan_load.php
+END
+pendaftaran_edit.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/2012/!svn/ver/1618/alp_backoffice/www/modules/pelayanan/views/pendaftaran_edit.php
+END
+pick_list_perusahaan.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/pelayanan/views/pick_list_perusahaan.php
+END

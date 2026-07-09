@@ -1,0 +1,31 @@
+# Mengaktifkan mod_rewrite
+RewriteEngine On
+
+# Redirect ke HTTPS jika domain adalah jelita.latih.id
+RewriteCond %{HTTP_HOST} ^jelita\.latih\.id [NC]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+<IfModule mod_rewrite.c>
+    # Nonaktifkan listing direktori
+    Options +FollowSymLinks -Indexes
+
+    # Kirim semua permintaan melalui index.php jika bukan file atau folder nyata
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Untuk PHP 5
+    <IfModule mod_php5.c>
+        RewriteRule ^(.*)$ /spekta/index.php?/$1 [L]
+    </IfModule>
+
+    # Jika bukan PHP 5
+    <IfModule !mod_php5.c>
+        RewriteRule ^(.*)$ /spekta/index.php?/$1 [L]
+    </IfModule>
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # Error 404 jika mod_rewrite tidak aktif
+    ErrorDocument 404 /index.php
+</IfModule>

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/2012/!svn/ver/205/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/ci/system/libraries/Cache/drivers
+END
+Cache_memcached.php
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/2012/!svn/ver/205/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/ci/system/libraries/Cache/drivers/Cache_memcached.php
+END
+Cache_dummy.php
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/2012/!svn/ver/205/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/ci/system/libraries/Cache/drivers/Cache_dummy.php
+END
+Cache_file.php
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/2012/!svn/ver/205/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/ci/system/libraries/Cache/drivers/Cache_file.php
+END
+Cache_apc.php
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/2012/!svn/ver/205/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/ci/system/libraries/Cache/drivers/Cache_apc.php
+END

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/2012/!svn/ver/164/alp_portal_daerah/system/database/drivers/mysql
+END
+mysql_driver.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/2012/!svn/ver/164/alp_portal_daerah/system/database/drivers/mysql/mysql_driver.php
+END
+mysql_result.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/2012/!svn/ver/164/alp_portal_daerah/system/database/drivers/mysql/mysql_result.php
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/2012/!svn/ver/164/alp_portal_daerah/system/database/drivers/mysql/index.html
+END
+mysql_forge.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/2012/!svn/ver/164/alp_portal_daerah/system/database/drivers/mysql/mysql_forge.php
+END
+mysql_utility.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/2012/!svn/ver/164/alp_portal_daerah/system/database/drivers/mysql/mysql_utility.php
+END

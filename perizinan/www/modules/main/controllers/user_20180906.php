@@ -1,0 +1,656 @@
+<?php
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ * Description of welcome
+ * @author Obi
+*/
+
+class User extends MY_Controller {
+  
+  function __construct() {
+    parent::__construct();
+    
+    $this->tm_pemohon = new Tm_pemohon();
+    $this->tmwcm = new Tmwcm();
+    $this->load->library('curl');
+    $this->load->library('xml_parsing_win');
+    $detect = $this->load->library('Mobile_Detect');
+    if($detect->isMobile()) {
+      $link = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
+      $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+      $base_url = base_url();
+      $xx = explode('/', $base_url);
+      $x = 0;
+      $jumlah_url_1 = count($xx) - 1;
+      $jumlah_url = count($xx);
+      $url_mobile = NULL;
+      foreach ($xx as $apl_mobile_url) {
+        $x++;
+        if($jumlah_url_1 == $x) {
+        }else{
+          if ($jumlah_url == $x) {
+          }else{
+            if($x == 1) {
+              $url_mobile.= $apl_mobile_url;
+              $url_mobile.= '//';
+            }else{
+              if ($x == 2) {
+              }else{
+                $url_mobile.= $apl_mobile_url;
+                $url_mobile.= '/';
+              }
+            }
+          }
+        }  
+      }
+      redirect($url_mobile."alp_mobile");
+    }
+  }
+  
+  function index() {
+    $session		= $this->session->userdata("userlogin");
+    $username	= $this->session->userdata("username");
+    $otherdb		= $this->load->database('otherdb', TRUE); // the TRUE paramater tells CI that you'd like to return the database object.
+    if(empty($session)){
+    	redirect('main/login', 'refresh');
+    }
+    
+    $user	= $this->db->get_where("tm_pemohon",array("username"=>$username,'status'=>'1'))->first_row();
+    $ada  = 0;
+    $ada2	= 0;
+    
+    /*
+    if($username == 'pamudi1694'){  // Khusus menyambungkan kembali Linknya
+      $permohonan_portal =	$otherdb->query("select id_pemohon,id_permohonan_portal,izin,lokasi_izin from tmpemohon_portal")->result();
+      if(count($permohonan_portal)>0){
+        $id = array();
+        foreach($permohonan_portal as $dat){
+        	$id_permohonan_portal = $dat->id_permohonan_portal;
+          array_push($id,$id_permohonan_portal);
+          $cpp = new tmpermohonan_portal();        
+          $cpp->where('id', $id_permohonan_portal)->get();
+          if($cpp->id != '' && $cpp->id_pemohon == '99999999'){
+            $tmpermohonan_portal = new tmpermohonan_portal();
+            $tmpermohonan_portal->where('id', $id_permohonan_portal);
+            $tmpermohonan_portal->update('id_perizinan', $dat->izin);
+            $tmpermohonan_portal = new tmpermohonan_portal();
+            $tmpermohonan_portal->where('id', $id_permohonan_portal);
+            $tmpermohonan_portal->update('id_pemohon', $dat->id_pemohon);
+            $tmpermohonan_portal = new tmpermohonan_portal();
+            $tmpermohonan_portal->where('id', $id_permohonan_portal);
+            $tmpermohonan_portal->update('lokasi_izin', $dat->lokasi_izin);
+          }
+        }
+      }
+    }
+    */
+        
+    // select data permohonan sementara
+    $permohonan_portal =	$otherdb->query("select id_pemohon,id_permohonan_portal,izin,lokasi_izin from tmpemohon_portal where id_pemohon=".$user->id."")->result();
+    if(count($permohonan_portal)>0){
+      $id = array();
+      foreach($permohonan_portal as $dat){
+      	$id_permohonan_portal = $dat->id_permohonan_portal;
+        array_push($id,$id_permohonan_portal);
+        $cpp = new tmpermohonan_portal();        
+        $cpp->where('id', $id_permohonan_portal)->get();
+        if($cpp->id != '' && $cpp->id_pemohon == '99999999'){
+          $tmpermohonan_portal = new tmpermohonan_portal();
+          $tmpermohonan_portal->where('id', $id_permohonan_portal);
+          $tmpermohonan_portal->update('id_perizinan', $dat->izin);
+          $tmpermohonan_portal = new tmpermohonan_portal();
+          $tmpermohonan_portal->where('id', $id_permohonan_portal);
+          $tmpermohonan_portal->update('id_pemohon', $dat->id_pemohon);
+          $tmpermohonan_portal = new tmpermohonan_portal();
+          $tmpermohonan_portal->where('id', $id_permohonan_portal);
+          $tmpermohonan_portal->update('lokasi_izin', $dat->lokasi_izin);
+        }
+      }
+      $array = implode("','",$id);
+      //$sql = "select * from tmpermohonan_portal where no_permohonan is null and id in('".$array."')";
+      $sql = "select * from tmpermohonan_portal where no_permohonan is null and id_pemohon =".$user->id." order by d_entry desc";
+      $permohonan_portal_sementara =	$this->db->query($sql)->result();
+      if(!empty($permohonan_portal_sementara)){
+        $ada = 1;
+        $data['permohonan_sementara']	= $permohonan_portal_sementara;
+      }
+    
+    }
+    // select data permohonan sementara
+    
+    // select data permohonan sudah diproses
+    $sql = "select * from tmpermohonan_portal where no_permohonan is not null and id_pemohon=".$user->id." order by d_entry desc";
+    $permohonan =	$this->db->query($sql)->result();
+    if(!empty($permohonan)){
+      $ada2 = 1;
+      $id2 = array();
+      foreach($permohonan as $dat){
+        array_push($id2,$dat->no_permohonan);
+      }
+      $array = implode("','",$id2);
+      $sql = "select tmpermohonan.pendaftaran_id as 'nomor_pengajuan',trstspermohonan.n_sts_permohonan_2 as 'status'
+              from tmpermohonan_trstspermohonan,tmpermohonan,trstspermohonan 
+              where tmpermohonan_trstspermohonan.trstspermohonan_id<'13' 
+              and tmpermohonan.id=tmpermohonan_trstspermohonan.tmpermohonan_id 
+              and tmpermohonan_trstspermohonan.trstspermohonan_id=trstspermohonan.id
+              and tmpermohonan_trstspermohonan.tmpermohonan_id in
+              (select id from tmpermohonan where pendaftaran_id in('".$array."'))";
+              			
+      $permohonan2 =	$otherdb->query($sql)->result();
+      $id2 = array();
+      $status = array();
+      foreach($permohonan2 as $dat){
+        array_push($id2,$dat->nomor_pengajuan);
+        array_push($status,$dat->nomor_pengajuan,$dat->status);
+      }
+      $array = implode("','",$id2);
+      $sql = "select * from tmpermohonan_portal where no_permohonan in('".$array."') order by d_entry desc";
+      $permohonan2 =	$this->db->query($sql)->result();
+      $data["permohonan_track"] = $permohonan2;
+      $data["status"] = $status;
+    }
+    // select data permohonan sudah diproses
+    
+    $data['title'] = "Dashboard";
+    $data['load']	 = "user/status_proses";
+    $data['ada']	 = $ada;
+    $data['ada2']	 = $ada2;
+    $this->load->view('template_user',$data);
+  }
+  
+  function datapemohon() {
+    $session		= $this->session->userdata("userlogin");
+    $username	= $this->session->userdata("username");
+    $otherdb		= $this->load->database('otherdb', TRUE); // the TRUE paramater tells CI that you'd like to return the database object.
+    
+    if(empty($session)){
+    	redirect('main/login', 'refresh');
+    }
+  
+    $query	= $this->db->get_where('tm_pemohon', array('username' => $username, 'status'=>'1'))->first_row();
+    $jenis = ucfirst($query->jenis);
+    $alamat_penanggung_jawab	=	"";
+    if(!empty($query->kelurahan1)){
+      $propinsi1	=	$otherdb->query("select * from trpropinsi where id=".$query->propinsi1." order by n_propinsi asc")->first_row();
+      $kabupaten1	=	$otherdb->query("select * from trkabupaten where id=".$query->kabupaten1."")->first_row();
+      $kecamatan1	=	$otherdb->query("select * from trkecamatan where id=".$query->kecamatan1."")->first_row();
+      $kelurahan1	=	$otherdb->query("select * from trkelurahan where id=".$query->kelurahan1."")->first_row();
+      $alamat_penanggung_jawab	=	$propinsi1->n_propinsi."<br>".$kabupaten1->n_kabupaten."<br>".$kecamatan1->n_kecamatan."<br>".$kelurahan1->n_kelurahan."<br>".$query->almtPemohon;
+    }
+    $propinsi2		=	$otherdb->query("select * from trpropinsi where id=".$query->propinsi2." order by n_propinsi asc")->first_row();
+    $kabupaten2	=	$otherdb->query("select * from trkabupaten where id=".$query->kabupaten2."")->first_row();
+    $kecamatan2	=	$otherdb->query("select * from trkecamatan where id=".$query->kecamatan2."")->first_row();
+    $kelurahan2	=	$otherdb->query("select * from trkelurahan where id=".$query->kelurahan2."")->first_row();
+    $alamat_pemohon	=	$propinsi2->n_propinsi."<br>".$kabupaten2->n_kabupaten."<br>".$kecamatan2->n_kecamatan."<br>".$kelurahan2->n_kelurahan."<br>".$query->almtPerusahaan;
+    $data['title'] 									= "Data Pemohon";
+    $data['data']										= $query;
+    $data['jenis']									= $jenis;
+    $data['load']										= "user/datapemohon";
+    $data['alamat_penanggung_jawab']= $alamat_penanggung_jawab;
+    $data['alamat_pemohon']					= $alamat_pemohon;
+    $this->load->view('template_user',$data);
+  }
+  
+  function ubahdatapemohon(){
+    $session	= $this->session->userdata("userlogin");
+    $otherdb	= $this->load->database('otherdb', TRUE); // the TRUE paramater tells CI that you'd like to return the database object.
+    if(empty($session)){
+      redirect('main/login', 'refresh');
+    }
+    $username	= $this->session->userdata("username");
+    $query			= $this->db->get_where('tm_pemohon', array('username' => $username, 'status'=>'1'))->first_row();
+    $provinsi		= $otherdb->query('select * from trpropinsi order by n_propinsi')->result();
+    $kabupaten	= $otherdb->query("select * from trkabupaten where kd_prov='12' order by n_kabupaten")->result();
+    $propinsi1	=	0;
+    $kabupaten1	=	0;
+    $kecamatan1	=	0;
+    $kelurahan1	=	0;
+    
+    if(!empty($query->kelurahan1)){
+      $propinsi1		=	$otherdb->query("select * from trpropinsi order by n_propinsi asc")->result();
+      $kabupaten1	=	$otherdb->query("select * from trkabupaten where kd_prov=".$query->propinsi1."")->result();
+      $kecamatan1	=	$otherdb->query("select * from trkecamatan where kd_kab=".$query->kabupaten1."")->result();
+      //$kelurahan1	=	$otherdb->query("select * from trkelurahan where kd_kec=".$query->kecamatan1."")->result();
+      $kelurahan1	=	$otherdb->query("select * from trkelurahan where kd_kel  IN (SELECT trkelurahan_id FROM trkecamatan_trkelurahan WHERE trkecamatan_id ='".$query->kecamatan1."') order by n_kelurahan")->result();
+    }
+    
+    $kabupaten2	=	$otherdb->query("select * from trkabupaten where kd_prov=".$query->propinsi2."")->result();
+    $kecamatan2	=	$otherdb->query("select * from trkecamatan where kd_kab=".$query->kabupaten2."")->result();
+    //$kelurahan2	=	$otherdb->query("select * from trkelurahan where kd_kec=".$query->kecamatan2."")->result();
+    $kelurahan2	=	$otherdb->query("select * from trkelurahan where kd_kel  IN (SELECT trkelurahan_id FROM trkecamatan_trkelurahan WHERE trkecamatan_id ='".$query->kecamatan2."') order by n_kelurahan")->result();
+    $data['title']			= "Ubah Data Pemohon";
+    $data['data']				= $query;
+    $data['load']				= "user/ubahdatapemohon";
+    $data['provinsi']		= $provinsi;
+    $data['kabupaten']	= $kabupaten;
+    $data['propinsi1']	= $propinsi1;
+    $data['kabupaten1']	= $kabupaten1;
+    $data['kecamatan1']	= $kecamatan1;
+    $data['kelurahan1']	= $kelurahan1;
+    $data['propinsi2']	= $provinsi;
+    $data['kabupaten2']	= $kabupaten2;
+    $data['kecamatan2']	= $kecamatan2;
+    $data['kelurahan2']	= $kelurahan2;
+    $data['jenis']			= ucfirst($query->jenis);
+    $this->load->view('template_user',$data);
+  }
+  
+	function doeditdata(){
+	  $session 		= $this->session->userdata("userlogin");
+	  $username 	= $this->session->userdata("username");
+	  if(empty($session)){
+	    redirect('main/login', 'refresh');
+	  }
+	  $query = $this->db->get_where('tm_pemohon', array('username' => $username, 'status'=>'1'))->first_row();
+	  $jenis = $query->jenis;
+	  if(empty($_POST)){
+	  	$this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon ulangi proses');
+	  	redirect('main/user/ubahdatapemohon', 'refresh');
+	  }
+	  
+	  if($jenis=="pemohon"){
+	    $nama_pemohon					=	htmlspecialchars($_POST['nama_pemohon'],ENT_QUOTES);
+	    $nama_pemegang_kuasa	=	htmlspecialchars($_POST['nama_pemegang_kuasa'],ENT_QUOTES);
+	    $no_npwp_pemohon			=	htmlspecialchars($_POST['no_npwp_pemohon'],ENT_QUOTES);
+	    $no_ktp_pemohon				=	htmlspecialchars($_POST['no_ktp_pemohon'],ENT_QUOTES);
+	    $alamat_pemohon				=	nl2br(htmlspecialchars($_POST['alamat_pemohon'],ENT_QUOTES));
+	    $propinsi2						=	htmlspecialchars($_POST['provinsi2'],ENT_QUOTES);
+	    $kabupaten2						=	htmlspecialchars($_POST['kabupaten2'],ENT_QUOTES);
+	    $kecamatan2						=	htmlspecialchars($_POST['kecamatan2'],ENT_QUOTES);
+	    $kelurahan2						=	htmlspecialchars($_POST['kelurahan2'],ENT_QUOTES);
+	    $email_pemohon				=	htmlspecialchars($_POST['email_pemohon'],ENT_QUOTES);
+	    $telp_pemohon					=	htmlspecialchars($_POST['telp_pemohon'],ENT_QUOTES);
+	    $telp_pemegang_kuasa	=	htmlspecialchars($_POST['telp_pemegang_kuasa'],ENT_QUOTES);
+	    $query			= $this->db->get_where('tm_pemohon', array('emailPerusahaan' => $email_pemohon, 'username !='=>$username))->first_row();
+	    $query2			= $this->db->get_where('tm_pemohon', array('telpPerusahaan' => $telp_pemohon, 'username !='=>$username))->first_row();
+	    
+	    if(count($query)>0){
+	      $this->session->set_flashdata('error', 'Terjadi Kesalahan, Email Telah digunakan oleh user lain');
+	      redirect('main/user/ubahdatapemohon', 'refresh');
+	    }
+	    if(count($query)>0){
+	      $this->session->set_flashdata('error', 'Terjadi Kesalahan, Nomor HP Telah digunakan oleh user lain');
+	      redirect('main/user/ubahdatapemohon', 'refresh');
+	    }
+	    
+	    $data = array("namaPerusahaan" 	=> $nama_pemohon,
+	                  "namaPemohon" 		=> $nama_pemegang_kuasa,
+	                  "npwpPerusahaan" 	=> $no_npwp_pemohon,
+	                  "ktpPerusahaan" 	=> $no_ktp_pemohon,
+	                  "almtPerusahaan" 	=> $alamat_pemohon,
+	                  "propinsi2"				=> $propinsi2,
+	                  "kabupaten2"			=> $kabupaten2,
+	                  "kecamatan2"			=> $kecamatan2,
+	                  "kelurahan2"			=> $kelurahan2,
+	                  "emailPerusahaan" => $email_pemohon,
+	                  "telpPerusahaan" 	=> $telp_pemohon,
+	                  "telpPemohon" 		=> $telp_pemegang_kuasa,
+	                  "data"						=> "1"
+	                 );
+	    
+	  }
+	  
+	  if($jenis=="perusahaan"){
+	    $nama_perusahaan		 =	htmlspecialchars($_POST['nama_perusahaan'],ENT_QUOTES);
+	    $nama_direktur			 =	htmlspecialchars($_POST['nama_penanggung_jawab'],ENT_QUOTES);
+	    $nama_pemegang_kuasa =	htmlspecialchars($_POST['nama_pemegang_kuasa'],ENT_QUOTES);
+	    $no_ktp_direktur		 =	htmlspecialchars($_POST['no_ktp_direktur'],ENT_QUOTES);
+	    $no_npwp_perusahaan	 =	htmlspecialchars($_POST['no_npwp_perusahaan'],ENT_QUOTES);
+	    $no_akta_perusahaan	 =	htmlspecialchars($_POST['no_akta_perusahaan'],ENT_QUOTES);
+	    $alamat_direktur		 =	nl2br(htmlspecialchars($_POST['alamat_direktur'],ENT_QUOTES));
+	    $propinsi1					 =	htmlspecialchars($_POST['provinsi1'],ENT_QUOTES);
+	    $kabupaten1					 =	htmlspecialchars($_POST['kabupaten1'],ENT_QUOTES);
+	    $kecamatan1					 =	htmlspecialchars($_POST['kecamatan1'],ENT_QUOTES);
+	    $kelurahan1					 =	htmlspecialchars($_POST['kelurahan1'],ENT_QUOTES);
+	    $alamat_perusahaan	 =	nl2br(htmlspecialchars($_POST['alamat_perusahaan'],ENT_QUOTES));
+	    $propinsi2					 =	htmlspecialchars($_POST['provinsi2'],ENT_QUOTES);
+	    $kabupaten2					 =	htmlspecialchars($_POST['kabupaten2'],ENT_QUOTES);
+	    $kecamatan2					 =	htmlspecialchars($_POST['kecamatan2'],ENT_QUOTES);
+	    $kelurahan2					 =	htmlspecialchars($_POST['kelurahan2'],ENT_QUOTES);
+	    $email_perusahaan		 =	htmlspecialchars($_POST['email_perusahaan'],ENT_QUOTES);
+	    $email_direktur			 =	htmlspecialchars($_POST['email_direktur'],ENT_QUOTES);
+	    $telp_direktur			 =	htmlspecialchars($_POST['telp_direktur'],ENT_QUOTES);
+	    $telp_perusahaan		 =	htmlspecialchars($_POST['telp_perusahaan'],ENT_QUOTES);
+	    $telp_pemegang_kuasa =	htmlspecialchars($_POST['telp_pemegang_kuasa'],ENT_QUOTES);
+	    $fax_perusahaan			 =	htmlspecialchars($_POST['fax_perusahaan'],ENT_QUOTES);
+	    
+	    $query			= $this->db->get_where('tm_pemohon', array('emailPerusahaan' => $email_perusahaan, 'username !='=>$username))->first_row();
+	    $query2			= $this->db->get_where('tm_pemohon', array('telpPerusahaan' => $telp_direktur, 'username !='=>$username))->first_row();
+	    if(count($query)>0){
+	      $this->session->set_flashdata('error', 'Terjadi Kesalahan, Email Telah digunakan oleh user lain');
+	      redirect('main/user/ubahdatapemohon', 'refresh');
+	    }
+	    if(count($query)>0){
+	    $this->session->set_flashdata('error', 'Terjadi Kesalahan, Nomor HP Telah digunakan oleh user lain');
+	    redirect('main/user/ubahdatapemohon', 'refresh');
+	    }
+	  
+	    $data = array("namaPerusahaan"        => $nama_perusahaan,
+	                  "namaPemohon"           => $nama_pemegang_kuasa,
+	                  "nama_penanggung_jawab" => $nama_direktur,
+	                  "ktpPemohon"            => $no_ktp_direktur,
+	                  "npwpPerusahaan"        => $no_npwp_perusahaan,
+	                  "aktaPerusahaan"        => $no_akta_perusahaan,
+	                  "almtPemohon"           => $alamat_direktur,
+	                  "propinsi1"	            => $propinsi1,
+	                  "kabupaten1"            => $kabupaten1,
+	                  "kecamatan1"            => $kecamatan1,
+	                  "kelurahan1"            => $kelurahan1,
+	                  "almtPerusahaan"        => $alamat_perusahaan,
+	                  "propinsi2"	            => $propinsi2,
+	                  "kabupaten2"            => $kabupaten2,
+	                  "kecamatan2"            => $kecamatan2,
+	                  "kelurahan2"            => $kelurahan2,
+	                  "emailPerusahaan"       => $email_perusahaan,
+	                  "emailPemohon"          => $email_direktur,
+	                  "telpPerusahaan"        => $telp_direktur,
+	                  "telp_penanggung_jawab" => $telp_perusahaan,
+	                  "telpPemohon"           => $telp_pemegang_kuasa,
+	                  "faxPerusahaan"         => $fax_perusahaan,
+	                  "data"                  => "1"
+	                 );
+	  }
+	  
+	  $this->db->where('username', $username);
+	  $this->db->where('status', '1');
+	  if($this->db->update('tm_pemohon', $data)){
+	    $this->session->set_flashdata('success', 'Data Berhasil Diubah');
+	    redirect('main/user/datapemohon', 'refresh');
+	  }else{
+	    $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon ulangi proses');
+	    redirect('main/user/ubahdatapemohon', 'refresh');
+	  }			
+  }
+	
+  function dokumenpemohon() {
+    $session	= $this->session->userdata("userlogin");
+    if(empty($session)){
+      redirect('main/login', 'refresh');
+    }
+    $username	= $this->session->userdata("username");
+    $query			= $this->db->get_where('tm_pemohon', array('username' => $username, 'status'=>'1'))->first_row();
+    $jenis = $query->jenis;
+    $data['title']				= "Dokumen Pemohon";
+    $data['load']			= "user/dokumenpemohon";
+    $data['data']			= $query;
+    $data['jenis']			= ucfirst($jenis);
+    $data['username']	= $username;
+    $this->load->view('template_user',$data);
+  }
+  
+  function ubahdokumenpemohon() {
+    $session	= $this->session->userdata("userlogin");
+    $username	= $this->session->userdata("username");
+    if(empty($session)){
+      redirect('main/login', 'refresh');
+    }
+    $query = $this->db->get_where('tm_pemohon', array('username' => $username, 'status'=>'1'))->first_row();
+    $jenis = $query->jenis;
+    $data['title'] = "Dokumen Pemohon";
+    $data['jenis'] = ucfirst($jenis);
+    $data['load']	= "user/ubahdokumenpemohon";
+    $this->load->view('template_user',$data);
+  }
+  
+  function doeditdokumen(){
+    $username	= $this->session->userdata("username");
+    $session		= $this->session->userdata("userlogin");
+    if(empty($session)){
+      redirect('main/login', 'refresh');
+    }
+    
+    $base_url	= 'assets/userassets/';
+    include($base_url.'plugins/class.upload/class.upload.php');
+    $query	= $this->db->get_where('tm_pemohon', array('username' => $username, 'status'=>'1'))->first_row();
+    $jenis = $query->jenis;
+    
+    ////////////////////////////////  UPLOAD AKTA  ///////////////////////////////////////////////////////////////////
+    if(!empty($_FILES['akta']['name'])){
+    	$temp	= explode(".",$_FILES["akta"]["name"]);
+    	if(strtolower(end($temp))!="pdf"){
+    	  $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon hanya mengunggah file berformat pdf untuk dokumen akta');
+    	  redirect('main/user/ubahdokumenpemohon', 'refresh');
+    	}
+    	$akta	= "akta";
+    	$akta2	= "akta.".end($temp);
+    	$dir_dest	= $base_url."pemohon/".$username."/dokumen/";
+    	$data	= array("scan_akta_pemohon"	=> $akta2);
+    	$this->db->where('username', $username);
+    	$this->db->where('status', '1');
+    	if($this->db->update('tm_pemohon', $data)){
+    	  $unset	= $dir_dest.$query->scan_akta_pemohon;
+    	  if(!empty($query->scan_akta_pemohon)){
+    	  	unlink($unset);
+    	  }
+    	  $lokasi=$_FILES['akta']['tmp_name'];
+    	  move_uploaded_file($lokasi,$dir_dest.$akta2);
+    	}else{
+    	  $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon mengulangi proses');
+    	  redirect('main/user/dokumenpemohon', 'refresh');
+    	}
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    ////////////////////////////////  UPLOAD NPWP  ///////////////////////////////////////////////////////////////////
+    if(!empty($_FILES['npwp']['name'])){
+      $temp	= explode(".",$_FILES["npwp"]["name"]);
+      if(strtolower(end($temp))!="jpg" && strtolower(end($temp))!="jpeg" && strtolower(end($temp))!="png"){
+        $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon hanya mengunggah file berbentuk gambar saja');
+        redirect('main/user/dokumenpemohon', 'refresh');
+      }
+      
+      $npwp 	= "npwp";
+      $npwp2 	= "npwp.".end($temp);
+      $base_url	= 'assets/userassets/';
+      $handle	= new Upload($_FILES['npwp']);
+      if($handle->uploaded) {
+      	$dir_dest	= $base_url."pemohon/".$username."/dokumen/";
+      	$handle->file_new_name_body 	= $npwp;
+      	$handle->image_resize				= true;
+      	$handle->image_ratio_x				= true;
+      	$handle->image_y						= 500;
+      }
+      $data = array("scan_npwp_pemohon"	=> $npwp2);
+      $this->db->where('username', $username);
+      $this->db->where('status', '1');
+      if($this->db->update('tm_pemohon', $data)){
+        $unset	= $dir_dest.$query->scan_npwp_pemohon;
+        if(!empty($query->scan_npwp_pemohon)){
+          unlink($unset);
+        }
+        $handle->Process($dir_dest);
+      }else{
+        $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon mengulangi proses');
+        redirect('main/user/dokumenpemohon', 'refresh');
+      }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    ////////////////////////////////  UPLOAD KTP  ///////////////////////////////////////////////////////////////////
+    if(!empty($_FILES['ktp']['name'])){
+      $temp	= explode(".",$_FILES["ktp"]["name"]);
+      if(strtolower(end($temp))!="jpg" && strtolower(end($temp))!="jpeg" && strtolower(end($temp))!="png"){
+        $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon hanya mengunggah file berbentuk gambar saja');
+        redirect('main/user/dokumenpemohon', 'refresh');
+      }
+      $ktp 			= "ktp";
+      $ktp2 		= "ktp.".end($temp);
+      $base_url	= 'assets/userassets/';
+      $handle		= new Upload($_FILES['ktp']);
+      if($handle->uploaded) {
+      	$dir_dest	= $base_url."pemohon/".$username."/dokumen/";
+      	$handle->file_new_name_body 	= $ktp;
+      	$handle->image_resize				= true;
+      	$handle->image_ratio_x				= true;
+      	$handle->image_y						= 500;
+      }
+      $data = array("scan_ktp_pemegang_kuasa"	=> $ktp2);
+      $this->db->where('username', $username);
+      $this->db->where('status', '1');
+      
+      if($this->db->update('tm_pemohon', $data)){
+        $unset	= $dir_dest.$query->scan_ktp_pemegang_kuasa;
+        if(!empty($query->scan_ktp_pemegang_kuasa)){
+          unlink($unset);
+        }
+        $handle->Process($dir_dest);
+      }else{
+        $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon mengulangi proses');
+        redirect('main/user/dokumenpemohon', 'refresh');
+      }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    $query	= $this->db->get_where('tm_pemohon', array('username' => $username, 'status'=>'1'))->first_row();
+    // if(!empty($query->scan_ktp_pemegang_kuasa) && !empty($query->scan_akta_pemohon) && !empty($query->scan_npwp_pemohon)){
+    if($jenis=="pemohon"){
+      // if(!empty($query->scan_ktp_pemegang_kuasa) && !empty($query->scan_npwp_pemohon)){
+      if(!empty($query->scan_ktp_pemegang_kuasa)){
+      	$data = array("dokumen"	=> "1");
+      }else{
+      	$data = array("dokumen"	=> "0");
+      }
+    }
+    
+    if($jenis=="perusahaan"){
+      if(!empty($query->scan_ktp_pemegang_kuasa) && !empty($query->scan_npwp_pemohon) && !empty($query->scan_akta_pemohon)){
+      	$data = array("dokumen"	=> "1");
+      }else{
+      	$data = array("dokumen"	=> "0");
+      }
+    }
+    
+    $this->db->where('username', $username);
+    $this->db->where('status', '1');
+    $this->db->update('tm_pemohon', $data);
+    $this->session->set_flashdata('success', 'Dokumen Berhasil Diubah');
+    redirect('main/user/dokumenpemohon', 'refresh');
+  }
+  
+  function permohonan() {
+    $session	= $this->session->userdata("userlogin");
+    $username	= $this->session->userdata("username");
+    $otherdb		= $this->load->database('otherdb', TRUE); // the TRUE paramater tells CI that you'd like to return the database object.
+    if(empty($session)){
+      redirect('main/login', 'refresh');
+    }
+    $user	=	$this->db->get_where('tm_pemohon',array('username'=>$username))->first_row();
+    $permohonan	=	$this->db->order_by("d_entry","desc");
+    $permohonan	= $this->db->get_where('tmpermohonan_portal', array('id_pemohon' => $user->id))->result();
+    $no=0;
+    foreach($permohonan as $status){
+      $permohonan[$no]->status = "Online";
+      if(empty($status->no_permohonan)){
+        $belakang = $otherdb->get_where("tmpemohon_portal",array('id_permohonan_portal'=>$status->id))->first_row();
+        if(count($belakang)==0){
+          $permohonan[$no]->status = "Ditolak";
+        }
+      }else{
+        $databackoffice	= $otherdb->get_where("tmpermohonan",array("pendaftaran_id"=>$status->no_permohonan))->first_row();
+        if(count($databackoffice)==0){
+          $permohonan[$no]->status = "Ditolak";
+        }else{
+          $stats = $otherdb->get_where("tmpermohonan_trstspermohonan",array("tmpermohonan_id"=>$databackoffice->id))->first_row();
+          $stat	= $otherdb->get_where("trstspermohonan",array("id"=>$stats->trstspermohonan_id))->first_row();
+          if(count($stat)!=0){
+            $permohonan[$no]->status = $stat->n_sts_permohonan_2;
+          }
+          $belakang = $otherdb->get_where("tmpemohon_portal",array('id_permohonan_portal'=>$status->id))->first_row();
+          if(count($belakang)==0){
+            $permohonan[$no]->status = "Ditolak";
+        	}					
+        }					
+      }
+      // echo $no;
+      $no++;
+    }
+    $data['permohonan']	= $permohonan;
+    $data['title']      = "Permohonan Perizinan";
+    $data['load']	      = "user/permohonan";
+    $this->load->view('template_user',$data);
+  }
+  
+  function history() {
+    $session  = $this->session->userdata("userlogin");
+    $username = $this->session->userdata("username");
+    $otherdb  = $this->load->database('otherdb', TRUE); // the TRUE paramater tells CI that you'd like to return the database object.
+    if(empty($session)){
+      redirect('main/login', 'refresh');
+    }
+    $user = $this->db->get_where('tm_pemohon',array('username'=>$username))->first_row();
+    $permohonan = $this->db->order_by("d_entry","desc");
+    $permohonan = $this->db->get_where('tmpermohonan_portal', array('id_pemohon' => $user->id))->result();
+    $no=0;
+    foreach($permohonan as $status){
+      $permohonan[$no]->status = "Online";
+      if(empty($status->no_permohonan)){
+        $belakang = $otherdb->get_where("tmpemohon_portal",array('id_permohonan_portal'=>$status->id))->first_row();
+        if(count($belakang)==0){
+          $permohonan[$no]->status = "Ditolak (Berkas Persyaratan tidak ter-upload dengan sempurna, silahkan ulangi Permohonan Perizinan)";
+        }
+      }else{
+        $databackoffice = $otherdb->get_where("tmpermohonan",array("pendaftaran_id"=>$status->no_permohonan))->first_row();
+        if(count($databackoffice)==0){
+          $permohonan[$no]->status = "Ditolak";
+        }else{
+          $stats = $otherdb->get_where("tmpermohonan_trstspermohonan",array("tmpermohonan_id"=>$databackoffice->id))->first_row();
+          $stat = $otherdb->get_where("trstspermohonan",array("id"=>$stats->trstspermohonan_id))->first_row();
+          if(count($stat)!=0){
+            $permohonan[$no]->status = $stat->n_sts_permohonan_2;
+          }
+          $belakang = $otherdb->get_where("tmpemohon_portal",array('id_permohonan_portal'=>$status->id))->first_row();
+          if(count($belakang)==0){
+            $permohonan[$no]->status = "Ditolak";
+          }
+        }
+      }
+      // echo $no;
+      $no++;
+    }
+    $data['permohonan'] = $permohonan;
+    $data['title']      = "History Permohonan";
+    $data['load']       = "user/history";
+    $this->load->view('template_user',$data);
+  }
+  
+  function reset(){
+    $session	= $this->session->userdata("userlogin");
+    if(empty($session)){
+      redirect('main/login', 'refresh');
+    }
+    $data['title'] = "Reset Password";
+    $data['load']	 = "user/reset";
+    $this->load->view('template_user',$data);
+  }
+  
+  function doreset(){
+  	$session	= $this->session->userdata("userlogin");
+  	if(empty($session)){
+  	  redirect('main/login', 'refresh');
+  	}
+  	if(empty($_POST)){
+  	  $this->session->set_flashdata('error', 'Terjadi Kesalahan, mohon ulangi proses');
+  	  redirect('main/user/reset', 'refresh');
+  	}
+  	$username	= $this->session->userdata("username");
+  	$pwlama		=	md5(htmlspecialchars($_POST['password_lama']));
+  	$pwbaru		=	md5(htmlspecialchars($_POST['password_baru']));
+  	$pwkonf		=	md5(htmlspecialchars($_POST['konfirm_password']));
+  	$query	= $this->db->get_where('tm_pemohon', array('username' => $username, 'password'=>$pwlama,'status'=>'1'))->first_row();
+  	if(count($query)==0){
+  	  $this->session->set_flashdata('error', 'Terjadi Kesalahan, Password Lama Tidak Sesuai');
+  	  redirect('main/user/reset', 'refresh');
+  	}
+  	if($pwbaru!=$pwkonf){
+  	  $this->session->set_flashdata('error', 'Terjadi Kesalahan, Password Baru dan Konfirmasi Password Tidak Sesuai');
+  	  redirect('main/user/reset', 'refresh');
+  	}
+  	$data = array('password' 	=> $pwbaru);
+  	$this->db->where('username', $username);
+  	$this->db->update('tm_pemohon', $data); 
+  	$this->session->set_flashdata('success', 'Password Telah Berhasil Diganti');
+  	redirect('main/user/reset', 'refresh');
+  }
+}
+?>

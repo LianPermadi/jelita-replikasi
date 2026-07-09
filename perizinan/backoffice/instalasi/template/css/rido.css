@@ -1,0 +1,19 @@
+body { 
+    background-color: #ccc;
+    width: 100%;
+    margin: 0;
+}
+#tagbody{background-color:#fef1ec;margin :10px;padding:5px;border: 2px solid #528CE0;font-family:"Times New Roman", Times, serif;font-size:12px; -moz-border-radius:8px;-webkit-border-radius:8px;border-radius: 8px;}
+#header{background-color: #1b75bb;padding: 5px;}
+#header h2{font-size: 24px;}
+#isikontent{margin-left: 200px;margin-right: 200px;margin-top: 10px;margin-bottom: 10px;border: 1px solid #528CE0;background-color:#F4F4F4;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius: 4px;padding: 10px;}
+.pageTitle span{color: #00F;font-size: 24px;}
+.input{border: 1px solid #528CE0;background-color: #CCC;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius: 4px;padding: 3px;color: #00F;}
+.input:hover{border: 1px solid #528CE0;background-color: #eee;color: #999;}
+.nextbutton,#tblsubmit{text-decoration: none; background-color: #eee;font-size: 12px;border: 1px solid #999;color: darkorange;padding: 3px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius: 3px;cursor: pointer;}
+.nextbutton:hover,#tblsubmit:hover{text-decoration: none; background-color: #CCC;border: 1px solid #666;color: coral;}
+.label{color: #666;font-size: 12px;font-weight: bold;}
+.header{color: #8F5B00;font-size: 16px;font-weight: bold;text-align: left;}
+#warning{color: #cd0a0a;font-size: 14px;font-style: italic;}
+#loading{display: none;font-size: 12px;font-style: italic;color: #cd0a0a;}
+#dialogloading{display:none;}

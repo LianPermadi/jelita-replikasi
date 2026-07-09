@@ -1,0 +1,52 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_backoffice/www/modules/unitkerja/views
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-03-21T07:12:39.581791Z
+514
+rido
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+list.php
+file
+
+
+
+
+2012-05-08T08:50:00.628028Z
+b962248835f3f19e8e9eee2e1223eab8
+2012-03-16T03:25:31.508776Z
+173
+bekti
+
+edit.php
+file
+
+
+
+
+2012-05-08T08:50:00.634028Z
+8e77d53be80b5ed2094c5acfda1cd29a
+2012-03-21T07:12:39.581791Z
+514
+rido
+

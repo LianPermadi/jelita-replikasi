@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Jika request cocok dengan folder-folder ini, biarkan lewat
+RewriteCond %{REQUEST_URI} ^/(android|assets|backoffice|bukutamu|captcha|database|fonts|images|investasijabar|jdih|kehadiran|log|nib|php-firewall|system|uploads|www)(/.*)?$ [NC]
+RewriteRule .* - [L]
+
+# Kalau bukan file atau folder asli
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Lempar ke index.php untuk semua yang tidak lolos
+RewriteRule ^(.*)$ index.php/$1 [L]

@@ -1,0 +1,34 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_backoffice/www/modules/sandbox
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-04-19T08:52:35.453359Z
+1388
+hadinata
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+models
+dir
+
+controllers
+dir
+

@@ -1,0 +1,53 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/ci/system/fonts
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-03-16T06:55:12.743151Z
+205
+yobi
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+index.html
+file
+
+
+
+
+2012-05-08T09:05:37.029587Z
+0227cfd904e99656279202032b98d4a7
+2012-03-16T06:55:12.743151Z
+205
+yobi
+
+texb.ttf
+file
+
+
+
+
+2012-05-08T09:05:37.056589Z
+906e2a1400a5e176b35879e8e6b1338b
+2012-03-16T06:55:12.743151Z
+205
+yobi
+has-props
+

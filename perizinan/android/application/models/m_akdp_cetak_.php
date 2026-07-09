@@ -1,0 +1,292 @@
+<?php
+
+class M_akdp_cetak extends CI_Model {
+
+	function ambildata($userid) {
+
+		$tg1 = date("Y-m-d");
+		$tg2 = date("Y-m-d");
+
+		if ($userid == 175){
+			//$sts = '1';
+			 $where = 'approve = 1';
+		}else if ($userid == 176){
+			//$sts = '4';
+			 $where = 'approve = 4';
+		}
+		else if ($userid == 178){
+			//$sts = '3';
+			 $where = 'approve = 3';
+		}else{
+			 $where = '(approve = 1 or approve = 2 or approve = 3 or approve = 4)';
+		}
+		$otherdb = $this->load->database('otherdb',TRUE);
+		//$ambildata = $otherdb->get('akdp_cetak');
+		$otherdb->select('*');
+		$otherdb->from('akdp_cetak');
+		//$otherdb->where('approve',$sts);
+		$otherdb->where($where);
+		//$otherdb->where('tgl_kp_awal <=',$tg2);
+		//$otherdb->where('tgl_kp_awal >=',$tg1);
+		
+		$ambildata = $otherdb->get();
+
+		if ($ambildata->num_rows() > 0) {
+			foreach ($ambildata->result() as $data) {
+				$hasilakdp_cetak[] = $data;
+			}
+			return $hasilakdp_cetak;
+		}
+	}
+
+function caridata($tg1,$tg2,$userid) {
+	if ($userid == 175){
+			//$sts = '1';
+			 $where = 'approve = 1';
+		}else if ($userid == 176){
+			//$sts = '4';
+			 $where = 'approve = 4';
+		}
+		else if ($userid == 178){
+			//$sts = '3';
+			 $where = 'approve = 3';
+		}else{
+			 $where = '(approve = 1 or approve = 2 or approve = 3 or approve = 4)';
+		}
+		$otherdb = $this->load->database('otherdb',TRUE);
+		//$ambildata = $otherdb->get('akdp_cetak');
+
+		$otherdb->select('*');
+		$otherdb->from('akdp_cetak');
+		$otherdb->where($where);
+		$otherdb->where('tgl_kp_awal <=',$tg2);
+		$otherdb->where('tgl_kp_awal >=',$tg1);
+		
+		$ambildata = $otherdb->get();
+
+		if ($ambildata->num_rows() > 0) {
+			foreach ($ambildata->result() as $data) {
+				$hasilakdp_cetak[] = $data;
+			}
+			return $hasilakdp_cetak;
+		}
+	}
+	
+    function update_akdp_cetak($iduser) {
+		$otherdb = $this->load->database('otherdb',TRUE);
+			$update = $this->input->post('msg');
+			$passphrase = $this->input->post('passphrase');
+			for ($i=0; $i < count($update) ; $i++) { 
+				$akdpcetak = $otherdb->select('*');
+		        $akdpcetak = $otherdb->from('akdp_cetak');
+				$akdpcetak = $otherdb->where('id', $update[$i])->get();
+				foreach ($akdpcetak->result() as $data) {
+					$kypengolah = $data->kyStafPTSP;
+					$kyEsl4     = $data->kyEsl4PTSP;
+					$kyEsl3     = $data->kyEsl3PTSP;
+					$kyKa       = $data->kyKaPTSP;
+					$dttek = $data->id_perusahaan.$data->jenis_kend.$data->no_kend.$data->no_uji.$data->merek.$data->tahun.$data->daya_angkut_org.
+                             $data->daya_angkut_brg.$data->bahan_bakar.$data->jenis_pel.$data->kode_trayek.$data->masa_berlaku.$data->ket.
+       					     $data->no_sartek.$data->tgl_sartek.$data->no_sk.$data->tgl_sk.$data->golongan.$data->nama_pemilik.$data->alamat_pemilik.
+		    			     $data->no_induk_kend.$data->tgl_penetepan.$data->keterangan_histori.$data->no_induk.$data->user_bo.$data->kp_id.
+			    		     $data->ex_no_kend.$data->ex_no_uji.$data->ex_nama_pemilik.$data->ex_alamat_pemilik.$data->ex_kode_trayek.$data->status.
+				    	     $data->no_kp.$data->tgl_kp_awal.$data->tgl_kp_akhir.$data->fasilitas.$data->sifat_pel.$data->nama_perusahaan.
+					         $data->alamat_perusahaan.$data->nama_pimpinan.$data->alamat_pimpinan.$data->info.$data->id_gol.$data->x.$data->tgl_penetapan_kp.
+					         $data->penetapan_oleh.$data->print_kp.$data->print_sk.$data->skkp.$data->tgl_masuk.$data->tgl_ambil.$data->retribusi;
+                    $dttek = str_replace(' ','',$dttek);
+                    $kytek = md5($dttek);
+
+                    $nomor_kend = $data->no_kend;
+
+
+                }
+               // echo  $nomor_kend;
+               // die;
+				$simpan = FALSE;
+				if ($iduser	== 175){
+//$kytek = 2;
+
+					if($kypengolah == $kytek) {
+						$simpan = TRUE;
+					$data=array('approve'=>'4','kyEsl4PTSP'=>$kytek,'tg_kyEsl4PTSP'=>date("Y-m-d h:i:s"));
+/*
+
+					$this->load->library('cfpdf');
+					$this->load->library('cfpdi');
+
+					$pdf = new FPDI();
+
+					//$filepdf = $_SERVER['DOCUMENT_ROOT'].'/kaltara/backoffice/assets/skpdf/SK_'.$nodaftar[$i].'.pdf';
+					$filepdf = $_SERVER['DOCUMENT_ROOT'].'/kaltara/backoffice/assets/skpdf/SK_tes.pdf';
+try {
+	$pageCount = $pdf->setSourceFile($filepdf);
+
+
+					for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+					    $templateId = $pdf->importPage($pageNo);
+					    $size = $pdf->getTemplateSize($templateId);
+					    if ($size['w'] > $size['h']) {
+					        $pdf->AddPage('L', array($size['w'], $size['h']));
+					        $img = base_url('assets/img/bsre.jpg');
+
+						//$pdf->cell(12);
+						
+						//$pdf->Image($img,17,190,180,12);
+						$pdf->Image($img,17,190,185,12);
+					    } else {
+					        $pdf->AddPage('P', array($size['w'], $size['h']));
+					        $img = base_url('assets/img/bsre.jpg');
+
+						//$pdf->cell(12);
+						$pdf->Image($img,17,310,180,12);
+						//$pdf->Image($img,17,308,180,12);
+						//$pdf->Image($img,17,330,180,12);
+					    }
+					    $pdf->useTemplate($templateId);
+					if($pageNo == 1){
+						$kop = base_url('assets/img/kop.jpg');
+						$pdf->Image($kop,15,12,185,28);
+					}						
+					}
+						//$pdf->Output($filepdf,'F');
+					$pdf->Output($filepdf,'F');
+						
+
+} catch (Exception $e) {
+	
+}
+*/
+
+				}
+
+//die;
+				/*else if($kypengolah != $kytek){
+					//echo $kypengolah;
+					//die;
+					
+					$pesan = 'tes';
+					//return $pesan;
+				
+			$url = 'akdp_cetak/pesan/?kyp='.$kypengolah.'&&kyt='.$kytek.'&&id='.$update[$i];
+			redirect($url);
+
+				}*/
+				}else if($iduser == 176){
+						if($kypengolah == $kytek && $kyEsl4 == $kytek){ 
+							$simpan = TRUE;
+					    	$data=array('approve'=>'3','kyEsl3PTSP'=>$kytek,'tg_kyEsl3PTSP'=>date("Y-m-d h:i:s"));
+					}
+				    }else if($iduser == 178){
+							if($kypengolah == $kytek && $kyEsl4 == $kytek  && $kyEsl3 == $kytek) {
+								$simpan = TRUE;
+					        	$data=array('approve'=>'2','kyKaPTSP'=>$kytek,'tg_kyKaPTSP'=>date("Y-m-d h:i:s"));
+					        	//------------------------- ttd digital
+
+				//$path_jar = $_SERVER['DOCUMENT_ROOT'].'/android_online/android/assets/esign/signer/JSignPdf.jar';
+				$path_jar = $_SERVER['DOCUMENT_ROOT'].'/android/assets/esign/signer/JSignPdf.jar';
+				//$path_pdf = $_SERVER['DOCUMENT_ROOT'].'/kaltara/backoffice/assets/skpdf/SK_'.$nodaftar[$i].'.pdf'; 
+				$path_pdf = $_SERVER['DOCUMENT_ROOT'].'/kaltara/backoffice/assets/skpdf/'.$nomor_kend.'.pdf';
+				//$path_pdf = 'http://124.81.122.226/nrspdf/web/assets/skpdf/SK_0814410601042018243.pdf'; 
+				//$path_p12 = $_SERVER['DOCUMENT_ROOT'].'/android_online/android/assets/esign/signer/kepala.p12';
+				$path_p12 = $_SERVER['DOCUMENT_ROOT'].'/android/assets/esign/signer/kepala.p12'; 
+        		$output_path = $_SERVER['DOCUMENT_ROOT'].'/kaltara/backoffice/assets/esignfile/';
+        		$tsa_url = "http://tsa-osd.lemsaneg.go.id/";
+        		$ocsp = "http://cvs-osd.lemsaneg.go.id/ocsp";
+
+        		$command = 'java -jar "'.$path_jar.'" "'.$path_pdf.'" -kst PKCS12 -ksf "'.$path_p12.'" -ksp "'.$passphrase.'" -l "Dinas PMPTSP Jawa Barat" -r "Pengesahan Naskah Perizinan" -c "kontak yang bisa dihubungi" -tsh SHA256 -ha SHA256 -d "'.$output_path.'" -os "" -ts '.$tsa_url.' -ta PASSWORD -tsu "coba" -tsp "1234" --ocsp --ocsp-server-url "'.$ocsp.'"';
+        		exec($command, $val, $er);
+						if($er == 0 || $er == 3){
+						
+						}else{
+							redirect('akdp_cetak/pesan_esign');
+						}
+//------------------------- akhir ttd digital	
+						}
+                    }
+			
+				$otherdb->where('id', $update[$i]);
+				if($simpan){ 
+					$otherdb->update('akdp_cetak',$data);
+				 }
+			}
+	}
+
+
+	function update_akdp_cetak_revisi($iduser,$no_sk,$tgl_penetapan,$tgl_penetapan_kp,$no_kend,$akdpkendaraan_id) {
+		
+		if($akdpkendaraan_id == ''){
+		}else{
+			$akdp = $this->load->database('akdp',TRUE);
+			$data=array('approve'=>'2');
+			$akdp->where('no_kend',$no_kend);
+			$akdp->where('id',$akdpkendaraan_id);
+			$tes = $akdp->update('akdpkendaraan',$data);
+			
+			$otherdb = $this->load->database('otherdb',TRUE);
+			$update = $this->input->post('msg');
+			for ($i=0; $i < count($update) ; $i++) { 
+				$otherdb->where('id', $update[$i]);
+				$otherdb->delete('akdp_cetak');
+		}
+	}
+
+	}
+	
+	function caridata_nokend($nokend,$userid) {
+	if ($userid == 175){
+			//$sts = '1';
+			 $where = 'approve = 1';
+		}else if ($userid == 176){
+			//$sts = '4';
+			 $where = 'approve = 4';
+		}
+		else if ($userid == 178){
+			//$sts = '3';
+			 $where = 'approve = 3';
+		}else{
+			 $where = '(approve = 1 or approve = 2 or approve = 3 or approve = 4)';
+		}
+		$otherdb = $this->load->database('otherdb',TRUE);
+		//$ambildata = $otherdb->get('akdp_cetak');
+
+		$otherdb->select('*');
+		$otherdb->from('akdp_cetak');
+		$otherdb->where($where);
+		$otherdb->like('no_kend',$nokend);
+		
+		
+		
+		$ambildata = $otherdb->get();
+
+		if ($ambildata->num_rows() > 0) {
+			foreach ($ambildata->result() as $data) {
+				$hasilakdp_cetak[] = $data;
+			}
+			return $hasilakdp_cetak;
+		}
+	}
+
+	function update_revisi($id,$akdpkendaraan_id,$msg_revisi) {
+		
+		if($akdpkendaraan_id == ''){
+		}else{
+			$akdp = $this->load->database('akdp',TRUE);
+			$data=array('approve'=>'2',
+				'msg_revisi'=>$msg_revisi
+
+			);//2
+			
+			//$akdp->where('no_kend',$no_kend);
+			$akdp->where('id',$akdpkendaraan_id);
+			$tes = $akdp->update('akdpkendaraan',$data);
+		//}
+			
+	$otherdb = $this->load->database('otherdb',TRUE);
+				$otherdb->where('id', $id);
+				$otherdb->delete('akdp_cetak');
+
+				redirect('akdp_cetak/index');
+}
+}
+}
+?>

@@ -1,0 +1,45 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+application/logs/*
+!application/logs/index.html
+
+# Cache
+cache/
+application/cache/*
+!application/cache/index.html
+
+# Uploads / user files
+assets/userassets/
+uploads/
+upload/
+
+# Environment / config sensitive
+.env
+*.env
+
+# Composer
+vendor/
+
+# Node
+node_modules/
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Database dump
+*.sql
+*.dump

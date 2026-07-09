@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/2012/!svn/ver/1497/alp_backoffice/www/modules/rekapitulasi/views
+END
+view_ceklap.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/view_ceklap.php
+END
+list_ceklap.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/2012/!svn/ver/539/alp_backoffice/www/modules/rekapitulasi/views/list_ceklap.php
+END
+izin_rekap.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/2012/!svn/ver/1364/alp_backoffice/www/modules/rekapitulasi/views/izin_rekap.php
+END
+list_detail_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/list_detail_load.php
+END
+list_rekap.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/2012/!svn/ver/1497/alp_backoffice/www/modules/rekapitulasi/views/list_rekap.php
+END
+view_lap_izin.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/view_lap_izin.php
+END
+listpendaftaran2_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/listpendaftaran2_load.php
+END
+list_lap_izin.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/2012/!svn/ver/539/alp_backoffice/www/modules/rekapitulasi/views/list_lap_izin.php
+END
+realisasi_listZ.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/2012/!svn/ver/414/alp_backoffice/www/modules/rekapitulasi/views/realisasi_listZ.php
+END
+pergi_list.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/pergi_list.php
+END
+listpendaftaran3_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/listpendaftaran3_load.php
+END
+detailtahun_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/2012/!svn/ver/849/alp_backoffice/www/modules/rekapitulasi/views/detailtahun_load.php
+END
+view_retribusi.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/2012/!svn/ver/1335/alp_backoffice/www/modules/rekapitulasi/views/view_retribusi.php
+END
+retribusi_list.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/2012/!svn/ver/418/alp_backoffice/www/modules/rekapitulasi/views/retribusi_list.php
+END
+listretribusi_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/listretribusi_load.php
+END
+view_izin.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/view_izin.php
+END
+izin_list.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/2012/!svn/ver/417/alp_backoffice/www/modules/rekapitulasi/views/izin_list.php
+END
+list.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/2012/!svn/ver/415/alp_backoffice/www/modules/rekapitulasi/views/list.php
+END
+listpendaftaran_load.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/listpendaftaran_load.php
+END
+view_rekappergi.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/view_rekappergi.php
+END
+view_rekapretribusi.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/view_rekapretribusi.php
+END
+view_back_lap.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/rekapitulasi/views/view_back_lap.php
+END
+view_rekapitulasi_.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/2012/!svn/ver/1309/alp_backoffice/www/modules/rekapitulasi/views/view_rekapitulasi_.php
+END
+list_back_lap.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/2012/!svn/ver/419/alp_backoffice/www/modules/rekapitulasi/views/list_back_lap.php
+END
+view_rekapitulasi.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/2012/!svn/ver/1363/alp_backoffice/www/modules/rekapitulasi/views/view_rekapitulasi.php
+END

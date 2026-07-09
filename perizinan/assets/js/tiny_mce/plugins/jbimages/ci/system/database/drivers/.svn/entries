@@ -1,0 +1,61 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/ci/system/database/drivers
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-03-16T06:55:12.743151Z
+205
+yobi
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+mssql
+dir
+
+sqlite
+dir
+
+oci8
+dir
+
+postgre
+dir
+
+mysql
+dir
+
+odbc
+dir
+
+index.html
+file
+
+
+
+
+2012-05-08T09:05:35.733513Z
+0227cfd904e99656279202032b98d4a7
+2012-03-16T06:55:12.743151Z
+205
+yobi
+
+mysqli
+dir
+

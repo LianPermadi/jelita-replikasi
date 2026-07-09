@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/2012/!svn/ver/1667/alp_backoffice/www/modules/property/models
+END
+tmproperty_prasarana_trkoefesientarifretribusi.php
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/tmproperty_prasarana_trkoefesientarifretribusi.php
+END
+trproperty.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/2012/!svn/ver/1667/alp_backoffice/www/modules/property/models/trproperty.php
+END
+tmproperty_klasifikasi_trkoefesientarifretribusi.php
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/tmproperty_klasifikasi_trkoefesientarifretribusi.php
+END
+tmproperty_jenisperizinan.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/tmproperty_jenisperizinan.php
+END
+tmproperty_prasarana.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/tmproperty_prasarana.php
+END
+trretribusi.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/trretribusi.php
+END
+tmproperty_klasifikasi.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/tmproperty_klasifikasi.php
+END
+trperizinan_trproperty.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/trperizinan_trproperty.php
+END
+trproperty_details.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/trproperty_details.php
+END
+trperizinan_trretribusi.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/trperizinan_trretribusi.php
+END
+tmproperty_jenisperizinan_trproperty.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/tmproperty_jenisperizinan_trproperty.php
+END
+trkoefesientarifretribusi_trproperty.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/2012/!svn/ver/173/alp_backoffice/www/modules/property/models/trkoefesientarifretribusi_trproperty.php
+END

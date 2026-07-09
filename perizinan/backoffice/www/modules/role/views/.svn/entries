@@ -1,0 +1,52 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_backoffice/www/modules/role/views
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-03-16T03:25:31.508776Z
+173
+bekti
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+list.php
+file
+
+
+
+
+2012-05-08T08:50:03.151172Z
+c6efd3c2a7e7de4337f67cefb46d0e05
+2012-03-16T03:25:31.508776Z
+173
+bekti
+
+edit.php
+file
+
+
+
+
+2012-05-08T08:50:03.167173Z
+2ff45ff6e20938cd586f0637efc94f4a
+2012-03-16T03:25:31.508776Z
+173
+bekti
+

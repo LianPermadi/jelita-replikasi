@@ -1,0 +1,54 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_portal_daerah/assets/js/tiny_mce/plugins/jbimages/img
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-03-16T06:55:12.743151Z
+205
+yobi
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+spinner.gif
+file
+
+
+
+
+2012-05-08T09:05:43.893980Z
+9304491f5776607d6691c607dcd9aae6
+2012-03-16T06:55:12.743151Z
+205
+yobi
+has-props
+
+jbimages.gif
+file
+
+
+
+
+2012-05-08T09:05:43.905981Z
+a32c0e251e9309749159bcd39a2f379b
+2012-03-16T06:55:12.743151Z
+205
+yobi
+has-props
+

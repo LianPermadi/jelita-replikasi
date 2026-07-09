@@ -1,0 +1,52 @@
+8
+
+dir
+1675
+https://192.168.0.2:8443/svn/2012/alp_backoffice/www/modules/api/controllers
+https://192.168.0.2:8443/svn/2012
+
+
+
+2012-04-20T08:32:45.505426Z
+1438
+yobi
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+2e2a23f6-83ea-5248-af34-5c91c12791a4
+
+api.php
+file
+
+
+
+
+2012-05-08T08:50:09.224520Z
+b6a7556405ffc1c34f9b2bc96c2a24db
+2012-04-20T08:32:45.505426Z
+1438
+yobi
+
+maintainer.php
+file
+
+
+
+
+2012-05-08T08:50:09.229520Z
+29de615420956aca6bc77d6acdb52cb4
+2012-03-16T03:25:31.508776Z
+173
+bekti
+
