@@ -3,9 +3,9 @@
 $active_group = "default";
 $active_record = TRUE;
 
-$db['default']['hostname'] = "db";
+$db['default']['hostname'] = "localhost";
 $db['default']['username'] = "root";
-$db['default']['password'] = "rootpass";
+$db['default']['password'] = "";
 $db['default']['database'] = "portal";
 $db['default']['dbdriver'] = "mysql";
 $db['default']['dbprefix'] = "";
@@ -17,9 +17,9 @@ $db['default']['char_set'] = "utf8";
 $db['default']['dbcollat'] = "utf8_general_ci";
 
 // database backoffice
-$db['otherdb']['hostname'] = "db";
+$db['otherdb']['hostname'] = "localhost";
 $db['otherdb']['username'] = 'root'; 
-$db['otherdb']['password'] = 'rootpass';
+$db['otherdb']['password'] = '';
 $db['otherdb']['database'] = 'backoffice';
 $db['otherdb']['dbdriver'] = "mysql";
 $db['otherdb']['dbprefix'] = "";

@@ -44,29 +44,34 @@ $method    = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '-
 $uri       = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '-';
 $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '-';
 
-if (stripos($agent, 'Amazonbot') !== false) {
-    header("Location: https://dpmptsp.jabarprov.go.id/error/404");
-    exit;
-    show_404(); // jika pakai CodeIgniter
-}
+$local_ips = ['127.0.0.1', '::1', 'localhost'];
+$is_local = in_array($ip, $local_ips) || stripos($ip, '127.0.0.') === 0 || stripos($ip, '192.168.') === 0 || stripos($ip, '10.0.') === 0;
 
-$bots = [
-    'Googlebot', 'Bingbot', 'Slurp', 'DuckDuckBot', 'Baiduspider',
-    'YandexBot', 'Sogou', 'Exabot', 'facebot', 'ia_archiver',
-    'AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'SeznamBot',
-    'BLEXBot', 'CCBot', 'Amazonbot', 'PetalBot', 'AspiegelBot',
-    'DataForSeoBot', 'megaindex.ru', 'ZoominfoBot', 'Trendictionbot',
-    'YisouSpider', 'crawler', 'spider', 'robot', 'python-requests',
-    'Go-http-client', 'wget', 'curl', 'libwww', 'Scrapy'
-  ];
-  
-  foreach ($bots as $bot) {
-    if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
+if (!$is_local) {
+    if (stripos($agent, 'Amazonbot') !== false) {
         header("Location: https://dpmptsp.jabarprov.go.id/error/404");
         exit;
-      show_404(); // atau header("HTTP/1.0 404 Not Found"); exit;
+        show_404();
     }
-  }
+
+    $bots = [
+        'Googlebot', 'Bingbot', 'Slurp', 'DuckDuckBot', 'Baiduspider',
+        'YandexBot', 'Sogou', 'Exabot', 'facebot', 'ia_archiver',
+        'AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'SeznamBot',
+        'BLEXBot', 'CCBot', 'Amazonbot', 'PetalBot', 'AspiegelBot',
+        'DataForSeoBot', 'megaindex.ru', 'ZoominfoBot', 'Trendictionbot',
+        'YisouSpider', 'crawler', 'spider', 'robot', 'python-requests',
+        'Go-http-client', 'wget', 'curl', 'libwww', 'Scrapy'
+      ];
+      
+      foreach ($bots as $bot) {
+        if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
+            header("Location: https://dpmptsp.jabarprov.go.id/error/404");
+            exit;
+          show_404();
+        }
+      }
+}
   
 
 // ====== AMBIL KOORDINAT LOKASI ======
