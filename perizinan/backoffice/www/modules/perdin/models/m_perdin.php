@@ -13,67 +13,101 @@ if (!defined('BASEPATH'))
 
 class M_perdin extends Model {
 
-	public function get_data($tgla = NULL, $tglb = NULL, $admin=null, $iduser = NULL) {
-            // $sql = "SELECT * 
-            //     FROM euis_bukutamu order by waktu desc";
+public function get_data($tgla = NULL, $tglb = NULL, $admin = null, $iduser = NULL) {
+    // Query pertama ke tabel keu_perdin
+    $sql1 = "SELECT * 
+             FROM keu_perdin 
+             WHERE DATE(tanggal_berangkat) BETWEEN ? AND ?
+             ORDER BY tanggal_berangkat DESC";
+    $result = $this->db->query($sql1, array($tgla, $tglb))->result();
 
-            //     $result = $this->db->query($sql)->result();
-        if ($admin == 1 OR $iduser == 197 OR $iduser == 218 OR $iduser == 550 OR $iduser == 543) {
-            $sql = "SELECT * 
-                    FROM keu_perdin 
-                    WHERE DATE(tanggal_berangkat) BETWEEN ? AND ?
-                    OR no_grup_perdin IS NOT NULL
-                    GROUP BY file_srt, no_grup_perdin
-                    ORDER BY tanggal_berangkat DESC";
-            $result = $this->db->query($sql, array($tgla, $tglb))->result();
-        } else {
-            $sql = "SELECT * 
-                    FROM keu_perdin 
-                    WHERE (DATE(tanggal_berangkat) BETWEEN ? AND ? 
-                    AND (user_id = ? OR user_id = 443))
-                    OR no_grup_perdin IS NOT NULL
-                    GROUP BY file_srt, no_grup_perdin
-                    ORDER BY tanggal_berangkat DESC";
-            // var_dump($sql);die();
-            $result = $this->db->query($sql, array($tgla, $tglb, $iduser))->result();
-        }
+    // Jika kosong, ambil dari tabel keu_perdin_2024
+    if (empty($result)) {
+        $sql2 = "SELECT * 
+                 FROM keu_perdin_2024 
+                 WHERE DATE(tanggal_berangkat) BETWEEN ? AND ?
+                 ORDER BY tanggal_berangkat DESC";
+        $result = $this->db->query($sql2, array($tgla, $tglb))->result();
+    }
+
+    return $result;
+}
+  //diubah pada 120925
+
+
+    // public function get_data($tgla = NULL, $tglb = NULL, $admin=null, $iduser = NULL) {
+    //         // $sql = "SELECT * 
+    //         //     FROM euis_bukutamu order by waktu desc";
+
+    //         //     $result = $this->db->query($sql)->result();
+    //     if ($admin == 1 OR $iduser == 197 OR $iduser == 218 OR $iduser == 550 OR $iduser == 543) {
+    //         $sql = "SELECT * 
+    //                 FROM keu_perdin 
+    //                 WHERE DATE(tanggal_berangkat) BETWEEN ? AND ?
+    //                 OR no_grup_perdin IS NOT NULL
+    //                 GROUP BY file_srt, no_grup_perdin
+    //                 ORDER BY tanggal_berangkat DESC";
+    //         $result = $this->db->query($sql, array($tgla, $tglb))->result();
+    //     } else {
+    //         $sql = "SELECT * 
+    //                 FROM keu_perdin 
+    //                 WHERE (DATE(tanggal_berangkat) BETWEEN ? AND ? 
+    //                 AND (user_id = ? OR user_id = 443))
+    //                 OR no_grup_perdin IS NOT NULL
+    //                 GROUP BY file_srt, no_grup_perdin
+    //                 ORDER BY tanggal_berangkat DESC";
+    //         // var_dump($sql);die();
+    //         $result = $this->db->query($sql, array($tgla, $tglb, $iduser))->result();
+    //     }
         
         
-                // var_dump($tglb);die();
-        return $result;
+    //             // var_dump($tglb);die();
+    //     return $result;
+    // }
+
+ public function get_rekap_sp_by_pegawai($tgla = NULL, $tglb = NULL) {
+    if (!$tgla || !$tglb) {
+        return []; // Return kosong kalau tanggal nggak valid
     }
-    public function get_rekap_sp_by_pegawai($tgla = NULL, $tglb = NULL) {
-        // Pastikan parameter tanggal tidak kosong
-        if (!$tgla || !$tglb) {
-            return []; // Kembalikan array kosong jika parameter tidak valid
-        }
-    
-        // Query untuk rekapitulasi SP berdasarkan id_pegawai
-        $sql = "
-                SELECT 
-                    *,
-                    id_pegawai, 
-                    COUNT(no__sppd) AS total_sp, 
-                    COUNT(DISTINCT no_grup_perdin) AS total_grup_perdin,
-                    MIN(DATE(tanggal_berangkat)) AS tanggal_berangkat_awal,
-                    MAX(DATE(tanggal_berangkat)) AS tanggal_berangkat_akhir
-                FROM 
-                    keu_perdin
-                WHERE 
-                    DATE(tanggal_berangkat) BETWEEN ? AND ?
-                    AND no_grup_perdin IS NOT NULL
-                GROUP BY 
-                    id_pegawai,no__sppd
-                ORDER BY 
-                    total_sp DESC
-            ";
-    
-    
-        // Eksekusi query dengan parameter tanggal
-        $result = $this->db->query($sql, array($tgla, $tglb))->result();
-    
-        return $result;
-    }
+
+    $sql = "
+        SELECT 
+            p.*,
+            pg.n_pegawai,
+            COUNT(*) AS total_sp,
+            MIN(DATE(p.tanggal_berangkat)) AS tanggal_berangkat_awal,
+            MAX(DATE(p.tanggal_berangkat)) AS tanggal_berangkat_akhir
+        FROM keu_perdin p
+        JOIN tmpegawai pg ON pg.id = p.id_pegawai
+        WHERE 
+            DATE(p.tanggal_berangkat) BETWEEN ? AND ?
+            AND p.no__sppd IS NOT NULL
+        GROUP BY pg.n_pegawai
+        ORDER BY total_sp DESC
+    ";
+
+    return $this->db->query($sql, array($tgla, $tglb))->result();
+}
+
+    //  public function get_rekap_sp_by_pegawai($start_date, $end_date)
+    // {
+    //     $query = $this->db->query("
+    //         SELECT 
+    //             pg.*,
+    //             pg.n_pegawai,
+    //             COUNT(*) AS total_sp,
+    //             MIN(DATE(p.tanggal_berangkat)) AS tanggal_berangkat_awal,
+    //             MAX(DATE(p.tanggal_berangkat)) AS tanggal_berangkat_akhir
+    //         FROM keu_perdin p
+    //         JOIN tmpegawai pg ON pg.id = p.id_pegawai
+    //         WHERE 
+    //             DATE(p.tanggal_berangkat) BETWEEN ? AND ?
+    //             AND p.no__sppd IS NOT NULL
+    //         GROUP BY pg.n_pegawai
+    //     ", [$start_date, $end_date]);
+
+    //     return $query->result_array();
+    // }
     public function cekDataMingguSebelumSesudah($tanggal, $id_pegawai)
     {
         // Pastikan $tanggal tidak kosong dan valid
@@ -125,22 +159,131 @@ class M_perdin extends Model {
             //     FROM euis_bukutamu order by waktu desc";
 
             //     $result = $this->db->query($sql)->result();
-            // var_dump($iduser);die();
-        if ($admin == 1 OR $iduser == 182) {
-            $sql = "SELECT *, MAX(tanggal_berangkat) as tanggal_berangkat_terakhir, COUNT(*) as jumlah_perdin
-                    FROM keu_perdin
-                    WHERE DATE(tanggal_berangkat) BETWEEN ? AND ?
-                     GROUP BY no_grup_perdin, id_tim 
-                    ORDER BY tanggal_berangkat_terakhir DESC";
+            // var_dump($admin);die();
+        if ($admin == 1 ) {
+            $sql = "SELECT 
+                        kp.*,
+                        MAX(kp.tanggal_berangkat) AS tanggal_berangkat_terakhir,
+                        COUNT(*) AS jumlah_perdin,
+                        kp.status_approve,
+                        lp.status_approve as log_status_approve,
+                        lp.catatan_approve,
+                        lp.tanggal_pembuatan AS log_terakhir
+                    FROM keu_perdin kp
+                    LEFT JOIN log_perjalanan_dinas lp 
+                        ON lp.id_data_utama = kp.id
+                        AND lp.tanggal_pembuatan = (
+                            SELECT MAX(tanggal_pembuatan) 
+                            FROM log_perjalanan_dinas 
+                            WHERE id_data_utama = kp.id
+                        )
+                    WHERE DATE(kp.tanggal_berangkat) BETWEEN ? AND ?
+                    GROUP BY kp.no_grup_perdin, kp.id_tim
+                    ORDER BY id DESC;
+                    ";
             $result = $this->db->query($sql, array($tgla, $tglb))->result();
-        } else {
-            $sql = "SELECT *, MAX(tanggal_berangkat) as tanggal_berangkat_terakhir, COUNT(*) as jumlah_perdin
-                    FROM keu_perdin
-                    WHERE DATE(tanggal_berangkat) BETWEEN ? AND ?
-                    AND (user_id = ? OR user_id = 443)
-                     GROUP BY no_grup_perdin, id_tim 
-                    ORDER BY tanggal_berangkat_terakhir DESC";
-            $result = $this->db->query($sql, array($tgla, $tglb, $iduser))->result();
+        }elseif ($iduser == 182) {
+           $sql = "
+                SELECT 
+                    kp.*, 
+                    MAX(kp.tanggal_berangkat) AS tanggal_berangkat_terakhir, 
+                    COUNT(*) AS jumlah_perdin,
+                    kp.status_approve,
+                    lp.status_approve as log_status_approve,
+                    lp.catatan_approve,
+                    lp.tanggal_pembuatan AS log_terakhir
+                FROM 
+                    keu_perdin kp
+                LEFT JOIN 
+                    log_perjalanan_dinas lp 
+                        ON lp.id_data_utama = kp.id
+                        AND lp.tanggal_pembuatan = (
+                            SELECT MAX(tanggal_pembuatan)
+                            FROM log_perjalanan_dinas
+                            WHERE id_data_utama = kp.id
+                        )
+                WHERE 
+                    DATE(kp.tanggal_berangkat) BETWEEN ? AND ?
+                GROUP BY 
+                    kp.no_grup_perdin, kp.id_tim
+                ORDER BY 
+                    id DESC";
+
+            $result = $this->db->query($sql, array($tgla, $tglb))->result();
+
+        $result = $this->db->query($sql, array($tgla, $tglb))->result();
+
+        }elseif ($iduser == 57) {
+           $sql = "
+                SELECT 
+                    kp.*,
+                    MAX(kp.tanggal_berangkat) AS tanggal_berangkat_terakhir,
+                    COUNT(*) AS jumlah_perdin,
+                    kp.status_approve,
+                    lp.status_approve as log_status_approve,
+                    lp.catatan_approve,
+                    lp.tanggal_pembuatan AS log_terakhir
+                FROM 
+                    keu_perdin kp
+                LEFT JOIN 
+                    log_perjalanan_dinas lp 
+                        ON lp.id_data_utama = kp.id 
+                        AND lp.tanggal_pembuatan = (
+                            SELECT MAX(tanggal_pembuatan)
+                            FROM log_perjalanan_dinas
+                            WHERE id_data_utama = kp.id
+                        )
+                WHERE 
+                    DATE(kp.tanggal_berangkat) BETWEEN ? AND ?
+                  AND (
+                        (kp.user_id = 57 AND (kp.status_approve IN (0, 1, 2) OR kp.status_approve IS NULL))
+                        OR 
+                        (kp.user_id != 57 AND (kp.status_approve IN (0, 1) OR kp.status_approve IS NULL))
+                    )
+                GROUP BY 
+                    kp.no_grup_perdin, kp.id_tim
+                ORDER BY 
+                    id DESC
+            ";
+
+            // Eksekusi query
+            $result = $this->db->query($sql, array($tgla, $tglb))->result();
+
+
+
+        }
+        else {
+                $sql = "
+                    SELECT 
+                        kp.*, 
+                        MAX(kp.tanggal_berangkat) AS tanggal_berangkat_terakhir, 
+                        COUNT(*) AS jumlah_perdin,
+                        kp.status_approve,
+                        lp.status_approve as log_status_approve,
+                        lp.catatan_approve,
+                        lp.tanggal_pembuatan AS log_terakhir
+                    FROM 
+                        keu_perdin kp
+                    LEFT JOIN 
+                        log_perjalanan_dinas lp 
+                            ON lp.id_data_utama = kp.id
+                            AND lp.tanggal_pembuatan = (
+                                SELECT MAX(tanggal_pembuatan)
+                                FROM log_perjalanan_dinas
+                                WHERE id_data_utama = kp.id
+                            )
+                    WHERE 
+                        DATE(kp.tanggal_berangkat) BETWEEN ? AND ?
+                        AND (kp.user_id = ? OR kp.user_id = 443)
+                    GROUP BY 
+                        kp.no_grup_perdin, kp.id_tim
+                    ORDER BY 
+                        id DESC
+                ";
+
+                // Eksekusi query
+                $result = $this->db->query($sql, array($tgla, $tglb, $iduser))->result();
+
         }
         
                 // var_dump($tglb);die();
@@ -313,6 +456,36 @@ class M_perdin extends Model {
 
         return $kegiatan;
     }
+
+    public function get_kepala_dinas($id) {
+        $kegiatan = $this->db->select('id_pegawai')
+                     ->from('struktural')
+                     ->where('id_posisi', $id)
+                     ->get()->row();
+
+        return $kegiatan->id_pegawai;
+    }
+
+    public function get_id_pengecualian($id) {
+        $get_user_id = $this->db->select('user_id')
+                     ->from('tmpegawai_user')
+                     ->where('tmpegawai_id', $id)
+                     ->get()->row();
+
+       $user_id = $get_user_id->user_id;
+        $get_user_auth_id = $this->db->select('user_auth_id')
+                     ->from('user_user_auth')
+                     ->where('user_id', $user_id)
+                     ->where('user_auth_id', '56')
+                     ->get()->row();
+        if(!empty($get_user_auth_id)){
+            $id = TRUE;
+        } else {
+            $id = FALSE; // Atau bisa juga memberikan nilai default seperti 0 atau string kosong
+        }
+       return $id;
+    }
+
      public function get_sektor2() {
         $sql = "SELECT * from trsektor";
         $result = $this->db->query($sql)->result();
@@ -431,12 +604,26 @@ class M_perdin extends Model {
     }
    
     public function get_perdin($id, $id_tim) {
-        // var_dump($id_tim);die();
-
         $kegiatan = $this->db->select('*')
                              ->from('keu_perdin')
                              ->where('no_grup_perdin', $id)
                              ->where('id_tim', $id_tim)
+                            //  ->where('mksd_pemberangkatan', $mksd_pemberangkatan)
+                             ->get();
+        
+        if (!$kegiatan) {
+            echo $this->db->last_query();
+            die('Query failed');
+        }
+    
+        return $kegiatan->result();
+    }
+
+    public function get_user_id($id) {
+
+        $kegiatan = $this->db->select('*')
+                             ->from('user')
+                             ->where('id', $id)
 
                              ->get();
         
@@ -521,7 +708,7 @@ class M_perdin extends Model {
     public function get_list_tim() {
         $kegiatan = $this->db->select('*')
                              ->from('ketua_tot')
-                             ->where('thn_anggaran', 2025)  // Menambahkan filter thn_anggaran = 2025
+                             ->where_in('thn_anggaran', [2025, 2026])  // Menambahkan filter thn_anggaran = 2025 & 2026
                              ->get();
         
         if (!$kegiatan) {
@@ -536,15 +723,16 @@ class M_perdin extends Model {
         // Query database untuk mendapatkan data berdasarkan 'thn_anggaran' dan 'id'
         $kegiatan = $this->db->select('*')
                              ->from('ketua_tot')
-                             ->where('thn_anggaran', 2025)  // Filter tahun anggaran 2025
+                             ->where_in('thn_anggaran', [2025, 2026])  // Filter tahun anggaran 2025
                              ->where('id', $id)  // Filter berdasarkan ID
                              ->get();
         
         // Cek apakah query menghasilkan hasil
         if ($kegiatan->num_rows() == 0) {
             // Jika tidak ada hasil, tampilkan query terakhir yang dijalankan
-            echo $this->db->last_query();
-            die('Query failed, no data found');
+            // echo $this->db->last_query();
+            // die('Query failed, no data found');
+            return [];
         }
         
         // Mengembalikan hasil query sebagai array
@@ -691,7 +879,7 @@ class M_perdin extends Model {
         return $data;
     }
 
-     public function get_n_pegawai($id) {
+    public function get_n_pegawai($id) {
         $data = " - ";
 
         if ($data != "0") {
@@ -1117,7 +1305,6 @@ class M_perdin extends Model {
     public function save_e_perdin($data) {
         // Debug: Menampilkan data yang akan disimpan jika log debug diaktifkan
         log_message('debug', 'Data yang akan disimpan: ' . print_r($data, true));
-        // var_dump($data);die();
         // Cek apakah data yang dikirimkan valid
         if (empty($data)) {
             log_message('error', 'Data kosong!');
@@ -1127,6 +1314,39 @@ class M_perdin extends Model {
     
         // Menyimpan data ke tabel keu_perdin
         $insert = $this->db->insert('keu_perdin', $data);
+        // var_dump($data);die();
+        // var_dump($insert);die();
+    
+        // Mengecek apakah query berhasil
+        if ($insert) {
+            // Mengambil ID data yang baru saja disimpan
+            $insertedId = $this->db->insert_id();
+        
+    
+            // Mengembalikan ID data yang baru saja disimpan
+            return $insertedId;
+        } else {
+            // Debug: Menampilkan error jika insert gagal
+            log_message('error', 'Gagal menyimpan data ke tabel keu_perdin.');
+            log_message('error', 'Error Code: ' . $this->db->_error_number());
+            echo 'Error Message: ' . $this->db->_error_message();
+            return false;
+        }
+
+    }
+    public function save_log_e_perdin($data) {
+        // Debug: Menampilkan data yang akan disimpan jika log debug diaktifkan
+        log_message('debug', 'Data yang akan disimpan: ' . print_r($data, true));
+        // var_dump($data);die();
+        // Cek apakah data yang dikirimkan valid
+        if (empty($data)) {
+            log_message('error', 'Data kosong!');
+            return false;  // Mengembalikan false jika data kosong
+        }
+        // var_dump($data);die;
+    
+        // Menyimpan data ke tabel keu_perdin
+        $insert = $this->db->insert('log_perjalanan_dinas', $data);
     
         // Mengecek apakah query berhasil
         if ($insert) {
@@ -1188,34 +1408,65 @@ class M_perdin extends Model {
     }
     public function hapus_perdin_by_no_grup_perdin($no_grup_perdin, $id_tim)
     {
-        log_message('debug', 'Memulai hapus_perdin_by_no_grup_perdin: no_grup_perdin = ' . $no_grup_perdin . ', id_tim = ' . $id_tim);
-    
-        // Mulai transaksi database
-        $this->db->trans_start();
-    
-        // Hapus dari keu_perdin
+        log_message('debug', ">> Mulai hapus perdin: Grup = {$no_grup_perdin}, Tim = {$id_tim}");
+
+        $user_id = $this->session->userdata('user_id');
+
+        // Ambil ID keu_perdin dulu berdasarkan no_grup_perdin dan id_tim
+        $this->db->select('id');
         $this->db->where('no_grup_perdin', $no_grup_perdin);
         $this->db->where('id_tim', $id_tim);
-        if (!$this->db->delete('keu_perdin')) {
-            log_message('error', 'Gagal menghapus dari keu_perdin. Error: ' . $this->db->_error_number() . ' - ' . $this->db->_error_message());
+        $keu_row = $this->db->get('keu_perdin')->row();
+
+        if (!$keu_row) {
+            log_message('warning', ">> Data keu_perdin tidak ditemukan untuk grup: {$no_grup_perdin} dan tim: {$id_tim}");
+            return false;
         }
-    
-        // Hapus dari tujuan_keberangkatan_perdin
+
+        $keu_perdin_id = $keu_row->id;
+
+        $this->db->trans_start();
+
+        // Hapus log yang terkait agar tidak kena FK constraint error
+        $this->db->where('id_data_utama', $keu_perdin_id);
+        $this->db->delete('log_perjalanan_dinas');
+
+        // Hapus data tujuan keberangkatan perdin
         $this->db->where('keu_perdin_id', $no_grup_perdin);
         $this->db->where('id_tim', $id_tim);
-        if (!$this->db->delete('tujuan_keberangkatan_perdin')) {
-            echo 'Gagal menghapus dari tujuan_keberangkatan_perdin. Error: ' . $this->db->_error_number() . ' - ' . $this->db->_error_message();
-        }
-    
-        // Selesaikan transaksi
+        $this->db->delete('tujuan_keberangkatan_perdin');
+        $deleted_tujuan = $this->db->affected_rows();
+
+        // Hapus data keu_perdin
+        $this->db->where('no_grup_perdin', $no_grup_perdin);
+        $this->db->where('id_tim', $id_tim);
+        $this->db->delete('keu_perdin');
+        $deleted_keu = $this->db->affected_rows();
+
         $this->db->trans_complete();
-    
-        // Periksa status transaksi
         $status = $this->db->trans_status();
-        log_message('debug', 'Status transaksi hapus_perdin_by_no_grup_perdin: ' . ($status ? 'BERHASIL' : 'GAGAL'));
-    
+
+        log_message('debug', ">> Status Transaksi: " . ($status ? 'BERHASIL' : 'GAGAL'));
+
+        if ($status && ($deleted_keu > 0 || $deleted_tujuan > 0)) {
+            log_message('info', ">> Penghapusan sukses untuk grup: {$no_grup_perdin}");
+        } elseif ($status) {
+            log_message('warning', ">> Transaksi sukses, tapi tidak ada data yang dihapus untuk grup: {$no_grup_perdin}");
+        } else {
+            // CI versi lama belum support $this->db->error(), jadi kasih notice manual
+            log_message('error', '>> Terjadi kesalahan saat menghapus data perdin. Aktifkan db_debug untuk melihat error detail.');
+            echo "<pre>";
+            echo "❌ TERJADI ERROR SAAT PENGHAPUSAN PERDIN ❌\n";
+            echo "Silakan aktifkan 'db_debug = TRUE' di application/config/database.php\n";
+            echo "</pre>";
+        }
+
         return $status;
     }
+
+
+
+
     
     
     
@@ -1356,35 +1607,48 @@ class M_perdin extends Model {
              return false;
          }
      }
-        public function update_e_perdin_by_no_grup_perdin($id,$id_tim,$data) {
-            // var_dump($id);die();
-            
-            // Debug: Menampilkan data yang akan diupdate jika log debug diaktifkan
-            log_message('debug', 'Data yang akan diupdate: ' . print_r($data, true));
-            
-            // Cek apakah data yang dikirimkan valid
-            if (empty($data) || empty($id)) {
-                log_message('error', 'Data kosong atau ID tidak ada!');
-                return false;  // Mengembalikan false jika data kosong atau ID tidak ada
+        public function update_e_perdin_by_no_grup_perdin($no_grup_perdin, $id_tim, $data, $mksd_pemberangkatan)
+        {
+            if (empty($data) || empty($no_grup_perdin)) {
+                log_message('error', 'Data kosong atau no_grup_perdin tidak ada!');
+                return false;
             }
-        
-            // Memperbarui data di tabel keu_perdin berdasarkan ID
-            $this->db->where('no_grup_perdin', $id);
+
+            // Ambil ID dan user_id terlebih dahulu
+            $this->db->select('id, user_id');
+            $this->db->where('no_grup_perdin', $no_grup_perdin);
+            $this->db->where('id_tim', $id_tim);
+            $row = $this->db->get('keu_perdin')->row();
+
+            if (!$row) {
+                log_message('error', "Data keu_perdin tidak ditemukan. no_grup_perdin: {$no_grup_perdin}, id_tim: {$id_tim}");
+                return false;
+            }
+
+            $keu_perdin_id = $row->id;
+            $user_id = $row->user_id;
+            $mksd_pemberangkatan = $row->mksd_pemberangkatan;
+
+            // Lanjutkan proses update
+            $this->db->where('no_grup_perdin', $no_grup_perdin);
             $this->db->where('id_tim', $id_tim);
             $update = $this->db->update('keu_perdin', $data);
-            // Mengecek apakah query berhasil
+
             if ($update) {
-                // Debug: Jika update berhasil, beri tahu di log (jika diperlukan)
-                log_message('debug', 'Data berhasil diperbarui di tabel keu_perdin. ID: ' . $id);
-                return true;
+                log_message('debug', "Berhasil update keu_perdin. ID: {$keu_perdin_id}, User ID: {$user_id}");
+                return [
+                    'id' => $keu_perdin_id,
+                    'mksd_pemberangkatan' => $mksd_pemberangkatan,
+                    'user_id' => $user_id
+                ];
             } else {
-                // Debug: Menampilkan error jika update gagal
-                log_message('error', 'Gagal memperbarui data di tabel keu_perdin. ID: ' . $id);
-                log_message('error', 'Error Code: ' . $this->db->_error_number());
-                log_message('error', 'Error Message: ' . $this->db->_error_message());
+                log_message('error', "Gagal update keu_perdin. no_grup_perdin: {$no_grup_perdin}, id_tim: {$id_tim}");
+                log_message('error', 'DB Error: ' . $this->db->_error_message());
                 return false;
             }
         }
+
+
         public function update_tujuan_berangkat($id,$id_tim, $data) {
             // var_dump($data);die();
             
@@ -1616,6 +1880,9 @@ class M_perdin extends Model {
         $settings = new settings();
         $settings->where('name', 'smsGateway')->get();
         $statsms = $settings->status;
+        if ($n_hp == "" || $n_hp == null ) {
+            return false;
+        }
         if($statsms == '1'){
           // URL API Mekari Qontak
           $apiUrl = "https://service-chat.qontak.com/api/open/v1/broadcasts/whatsapp/direct";
@@ -1656,7 +1923,7 @@ class M_perdin extends Model {
                 ]
             ];
             // Inisialisasi cURL
-            var_dump($data);
+            // var_dump($data);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1686,13 +1953,57 @@ class M_perdin extends Model {
         // var_dump($http_code);die();
                 return true;
             } else {
-                echo "Gagal mengirim pesan. Respons: " . $response;die();
+                echo "Gagal mengirim pesan. Respons: " . $response;
                 echo '<br>#'.$formatted_number.'#<br>';
         // var_dump($http_code);die();
                 return false;
             }
           }
     }
+    public function get_total_uang_hari_bulanan($bulan, $tahun) {
+        $result = $this->db->select('SUM(uang_hari) as total_bulanan')
+                        ->from('keu_perdin')
+                        ->where('MONTH(tanggal_berangkat)', $bulan)
+                        ->where('YEAR(tanggal_berangkat)', $tahun)
+                        ->get()
+                        ->row();
+
+        return $result ? $result->total_bulanan : 0;
+    }
+    public function get_rekap_per_bulan($tahun) {
+        $sql = "
+            SELECT 
+                YEAR(tanggal_berangkat) AS tahun,
+                MONTH(tanggal_berangkat) AS bulan,
+                COUNT(*) AS total_sp,
+                SUM(uang_hari) AS total_uang_harian,
+                MIN(DATE(tanggal_berangkat)) AS tanggal_awal,
+                MAX(DATE(tanggal_berangkat)) AS tanggal_akhir
+            FROM keu_perdin
+            WHERE 
+                YEAR(tanggal_berangkat) = ?
+                AND no__sppd IS NOT NULL
+            GROUP BY YEAR(tanggal_berangkat), MONTH(tanggal_berangkat)
+
+            UNION ALL
+
+            SELECT 
+                ? AS tahun,
+                NULL AS bulan,
+                COUNT(*) AS total_sp,
+                SUM(uang_hari) AS total_uang_harian,
+                MIN(DATE(tanggal_berangkat)) AS tanggal_awal,
+                MAX(DATE(tanggal_berangkat)) AS tanggal_akhir
+            FROM keu_perdin
+            WHERE 
+                YEAR(tanggal_berangkat) = ?
+                AND no__sppd IS NOT NULL
+        ";
+
+        return $this->db->query($sql, [$tahun, $tahun, $tahun])->result_array();
+    }
+
+
 
     
 }

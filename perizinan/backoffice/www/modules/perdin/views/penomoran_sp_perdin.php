@@ -96,6 +96,7 @@
                                                         <td colspan='5' style='border: 1px solid #ddd; padding: 8px; text-align: center;'>No data available</td>
                                                     </tr>";
                                             }
+                                            
                                             ?>
                                         </tbody>
                                     </table>

@@ -1,10 +1,10 @@
 <?php
-register_shutdown_function(function () {
-    $error = error_get_last();
-    // echo '<pre>';
-    // var_dump($error);
-    // echo '</pre>';
-});
+// register_shutdown_function(function () {
+//     $error = error_get_last();
+//     echo '<pre>';
+//     var_dump($error);
+//     echo '</pre>';
+// });
 define('PHP_FIREWALL_REQUEST_URI', strip_tags($_SERVER['REQUEST_URI']));
 define('PHP_FIREWALL_ACTIVATION', false);
 if (is_file(@dirname(__FILE__) . '/php-firewall/firewall.php'))

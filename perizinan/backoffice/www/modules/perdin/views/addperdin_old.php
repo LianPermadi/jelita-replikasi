@@ -42,18 +42,8 @@
                 <ul>
                     <li><a href="#tabs-1">Input Barang</a></li>
                 </ul>
-                <?php
-                    $script_filename = $_SERVER["PHP_SELF"];
-                    // Cek apakah "index.php" ada di dalam string
-                    if (strpos($script_filename, 'index.php') !== false) {
-                        // Hapus "index.php" dari string
-                        $clean_path = str_replace('index.php', '', $script_filename);
-                    } else {
-                        $clean_path = $script_filename;
-                    } 
-                ?>
                 <div id="tabs-1">
-                    <form action="<?= $clean_path ?>perdin/inputrekapperdin" method="post" enctype="multipart/form-data">
+                    <form action="/jelita/backoffice/perdin/inputrekapperdin" method="post" enctype="multipart/form-data">
                         <table cellpadding="0" cellspacing="0" border="0" class="display">
                             <tbody>
                                 <tr>

@@ -411,6 +411,7 @@ class Petugas extends WRC_AdminCont {
                    ->update(array('nik' => $this->input->post('nik'),
                                   'nip' => $this->input->post('nip'),
                                   'n_jabatan' => $this->input->post('n_jabatan'),
+                                  'unitkerja_id' => $this->input->post('unitkerja'),
                                   'tgl_jabat' => $this->input->post('tmt_jabat'),
                                   'tgl_pensiun' => $this->input->post('tmt_pensiun'),
                                   'status' => $this->input->post('ststtd'),

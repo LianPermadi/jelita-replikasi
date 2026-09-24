@@ -38,12 +38,12 @@ $active_group = "default";
 $active_record = TRUE;
 
 $username = 'root';
-$password = 'm4nokw4r1';
+$password = '';
 
 $db['default']['hostname'] = "localhost";
 $db['default']['username'] = $username;
 $db['default']['password'] = $password;
-$db['default']['database'] = "manokwari_backoffice";
+$db['default']['database'] = "backoffice";
 
 $db['default']['dbdriver'] = "mysql";
 $db['default']['dbprefix'] = "";
@@ -58,7 +58,7 @@ $db['default']['dbcollat'] = "utf8_general_ci";
 $db['otherdb']['hostname'] = "localhost";
 $db['otherdb']['username'] = $username;
 $db['otherdb']['password'] = $password;
-$db['otherdb']['database'] = "manokwari_portal";
+$db['otherdb']['database'] = "portal";
 
 $db['otherdb']['dbdriver'] = "mysql";
 $db['otherdb']['dbprefix'] = "";

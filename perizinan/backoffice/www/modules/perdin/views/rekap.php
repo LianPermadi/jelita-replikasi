@@ -1,3 +1,4 @@
+
 <div id="content">
   <div class="post">
     <div class="title">
@@ -22,15 +23,91 @@
 <div id="tabs">
           <ul>
             <li><a href="#tabs-1">Data Perdin</a></li>
+            <li><a href="#tabs-2">Data Rekap Anggaran Perjalanan Dinas</a></li>
             <!-- <li><a href="#tabs-2">Grafik dan Chart Data</a></li> -->
           </ul>
+          <div id="tabs-2">
+
+     <?php
+// Array bulan Indonesia (index 1 sampai 12)
+$array_bulan = [
+    1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April",
+    5 => "Mei", 6 => "Juni", 7 => "Juli", 8 => "Agustus",
+    9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+];
+?>
+
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="data_rekap_anggaran">
+    <thead>
+    <tr>
+        <th style="display:none;">Bulan Sort</th> <!-- kolom tersembunyi -->
+        <th>Bulan</th>
+        <th>Total SP</th>
+        <th>Total Uang Harian</th>
+          <th>Periode</th>
+      </tr>
+  </thead>
+
+    <tbody>
+        <?php 
+            $total_row = null;
+
+            // Pisahkan baris total (bulan = NULL)
+            foreach ($rekap_anggaran as $key => $row) {
+                if ($row['bulan'] === null) {
+                    $total_row = $row;
+                    unset($rekap_anggaran[$key]);
+                    break;
+                }
+            }
+
+            // Urutkan berdasarkan bulan (1 - 12)
+         
+
+            if (!empty($rekap_anggaran) && is_array($rekap_anggaran)) :
+                foreach ($rekap_anggaran as $row) :
+        ?>
+      <tr>
+          <td style="display:none;"><?= $row['bulan'] ?></td> <!-- bulan angka -->
+          <td><?= $array_bulan[$row['bulan']] ?></td>
+          <td><?= $row['total_sp'] ?></td>
+          <td>Rp <?= number_format($row['total_uang_harian'], 0, ',', '.') ?></td>
+          <td><?= $row['tanggal_awal'] ?> s/d <?= $row['tanggal_akhir'] ?></td>
+      </tr>
+
+
+        <?php 
+                endforeach;
+            else: 
+        ?>
+            <tr><td colspan="4">Data tidak tersedia</td></tr>
+        <?php endif; ?>
+    </tbody>    
+
+    <?php if ($total_row): ?>
+        <tfoot>
+            <tr>
+                <th>Total Keseluruhan</th>
+                <th><?= $total_row['total_sp'] ?></th>
+                <th>Rp <?= number_format($total_row['total_uang_harian'], 0, ',', '.') ?></th>
+                <th><?= $total_row['tanggal_awal'] ?> s/d <?= $total_row['tanggal_akhir'] ?></th>
+            </tr>
+        </tfoot>
+    <?php endif; ?>
+</table>
+
+
+
+
+
+</div>
             <div id="tabs-1">
      <div class="entry">
 
         <fieldset id="half">
         <legend>Filter Data Berdasarkan Tanggal Keberangkatan</legend>
         <?php
-        echo form_open('perdin/index');
+        echo form_open('perdin/rekap');
 
          //$asal_permohonan = array('0' => '------ Seluruhnya ------','Pusat' => 'Pusat'); // Untuk daerah lain
             $esselon_id = array('0' => '-------- Seluruhnya --------','1' => 'Esselon 4','4' => 'Esselon 3',
@@ -105,7 +182,8 @@
        // echo form_hidden('kd_filter', '2');
         echo form_close();
         ?>
-      </div></div>
+      </div>
+    </div>
       </fieldset>
     </div> 
 
@@ -163,109 +241,48 @@
           <!-- <td><span>Export Data Perdin (Format Pimpinan)</span></td> -->
         </tr>
       </table>
-            <br><br>
-            <?php
-      $ctk_list = array('name' => 'button',
-                        'content' => 'Cetak Rekap Perdin',
-                        'value' => 'Cetak Rekap Perdin',
-                        'class' => 'button-wrc',
-                        'onclick' => 'parent.location=\''.site_url('perdin/cetak_excel_rekap').'\''
-                       );
-      echo form_button($ctk_list);  
-      ?>
-<?php
-if($rekap == 1){        
-            header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-            header("Content-Disposition: attachment; filename=Rekap_perdin.xls"); 
-            header("Expires: 0");
-            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Cache-Control: private",false);
-ob_start();
-}
-?>
-      <table cellpadding="0" cellspacing="0" border="0" class="display" id="pendataan">
-        <thead>
-          <tr>
-            <th width="2%">No</th>
-            <th width="10%">Nama Pelaksana </th>
-            <th width="10%">NIP</th>
-            <th width="10%">Jabatan</th>
-            <th width="10%">Tanggal  Berangkat</th>
-            <th width="15%">Tujuan</th>
-            <th width="28%">Uraian</th>
-            <th width="28%">Jumlah Perdin</th>
+      <br><br>
+      <form method="post" action="<?= site_url('perdin/cetak_excel_rekap') ?>" target="_blank">
+  <input type="hidden" name="tgla" value="<?= $tgla ?>" />
+  <input type="hidden" name="tglb" value="<?= $tglb ?>" />
+  <button type="submit" class="button-wrc">Cetak Rekap Perdin</button>
+  </form>
 
-            <!-- <th width="10%">Aksi</th> -->
-          </tr>   
-        </thead>
-        <tbody>
-        <?php 
-          $processed_ids = []; // Array untuk menyimpan id_pegawai yang sudah ditampilkan
-          $i = 1; // Inisialisasi nomor urut
+         <table cellpadding="0" cellspacing="0" border="0" class="display" id="pendataan">
+            <thead>
+                <tr>
+                    <th width="2%">No</th>
+                    <th width="10%">Nama Pelaksana</th>
+                    <th width="28%">Jumlah Perdin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = 1;
+                foreach ($search as $data):
+                ?>
+                <tr>
+                    <td style="text-align: center;"><?= $i ?></td>
+                    <td style="text-align: center;"><?= $data['n_pegawai'] ?></td>
+                    <td style="text-align: center;"><?= $data['total_sp'] ?></td>
+                </tr>
+                <?php
+                $i++;
+                endforeach;
+                ?>
+            </tbody>
+        </table>
 
-          foreach ($search as $row) { 
-              // Cek apakah id_pegawai sudah diproses sebelumnya
-              if (in_array($row->id_pegawai, $processed_ids)) {
-                  continue; // Lewati iterasi jika id_pegawai sudah ada
-              }
-
-              // Tandai id_pegawai sebagai sudah diproses
-              $processed_ids[] = $row->id_pegawai;
-
-              // Cek apakah tujuan kosong untuk menentukan warna teks
-              if ($row->tujuan == '') {
-                  $b = '<span style="color: Red">';
-                  $be = '</span>';
-              } else {
-                  $b = '';
-                  $be = '';
-              }
-          ?>
-              <tr>
-                  <td><?php echo $i; ?></td>
-                  <td><?php echo $b . $this->m_perdin->get_n_pegawai($row->id_pegawai) . $be; ?></td>
-                  <td><?php echo $b . $this->m_perdin->get_n_nip($row->id_pegawai) . $be; ?> </td>
-                  <td><?php echo $b . $this->m_perdin->get_n_jabatan($row->id_pegawai) . $be; ?></td>
-                  <td><?php echo $b . $this->lib_date->mysql_to_human($row->tanggal_berangkat) . $be; ?></td>
-                  <td><?php echo $b . $this->m_perdin->get_n_kabupaten($row->tujuan) . $be; ?></td>
-                  <td>
-                      <?php  
-                      $string = $row->uraian;
-                      $kata_kunci_awal = "dalam rangka";
-                      $kata_kunci_akhir = "an.";
-
-                      // Mengambil kata setelah kata kunci awal
-                      $hasil_awal = strstr($string, $kata_kunci_awal);
-                      $hasil_awal = str_replace($kata_kunci_awal, "", $hasil_awal);
-
-                      // Mengambil kata sebelum kata kunci akhir
-                      $posisi_akhir = strpos($hasil_awal, $kata_kunci_akhir);
-                      $hasil_akhir = substr($hasil_awal, 0, $posisi_akhir);
-
-                      echo $hasil_akhir;
-                      ?>
-                  </td>
-                  <td>
-                      <?php  
-                      echo $row->total_sp;
-                      ?>
-                  </td>
-              </tr>
-          <?php 
-              $i++; 
-          } 
-          ?>
-
-        </tbody>
-      </table>
-<?php
-if($rekap == 1){
-ob_end_flush();
-exit;
-}
-?>
+  <?php
+  if($rekap == 1){
+  ob_end_flush();
+  exit;
+  }
+  ?>
     </div>
-</div>
+
+
+  </div>
 </div>
 </div>
   <br style="clear: both;" />

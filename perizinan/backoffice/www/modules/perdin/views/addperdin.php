@@ -1,4 +1,5 @@
 <?php 
+        // var_dump($list);die();
  
   //   if(!empty($lokasi)){
   //    $lokasi       = print_r($lokasi[0]);
@@ -19,6 +20,7 @@
     </div>
 
     <?php 
+
         $alert = $this->session->flashdata("sukses");
         if(!empty($alert)){
       ?>
@@ -49,7 +51,7 @@
               <form method="post" action="<?php echo site_url().'perdin/'.$step; ?>" enctype="multipart/form-data">
                 <?php 
                   if ($step == "update") { ?>
-                    <input type="hidden" name="id" value="<?php echo $id; ?>">
+                    <input type="hidden" name="id" value="<?php echo $id; ?>"> 
                   <?php } ?>
                 <table cellpadding="0" cellspacing="0" border="0" class="display">
                   <tbody>
@@ -59,7 +61,7 @@
                       </td>
                       <td class="bg-grid">
                         <div class="contentForm">
-                          <input type="radio" name="ttd_sendiri" value="1" />Ya
+                          <input type="radio" name="ttd_sendiri" value="1" />Ya 
                           <input type="radio" name="ttd_sendiri" value="0" checked/>Tidak
                         </div>
                       </td>
@@ -251,7 +253,6 @@
                         </td>
                       </tr>
 
-                      <?php if ($iduser === "121") : ?>
                         <!-- Pilihan Tanggal Back Date -->
                                 <tr>
                                     <td align="left" width="15%" class="bg-grid">
@@ -299,7 +300,6 @@
                                 }
                                 </script>
 
-                      <?php endif; ?>
 
                       <tr>
                         <td align="left" width="15%" class="bg-grid">
@@ -322,6 +322,7 @@
                         <select id="listizin" name="listizin[]" multiple="multiple" style="width: 85%;" required>
                             <?php
                             if ($step === "update") {
+
                                 foreach ($list as $data) {
                                     // Pastikan pegawai dari DPMPTSP dan statusnya aktif
                                     if ($data->golongan != "PS") {
@@ -378,6 +379,19 @@
                           <option value="2">Tidak</option>
                           
                           <option value="1">Ya</option>
+                        </select>
+                      </td>
+                    </tr>
+                       <tr>
+                      <td align="left" width="15%">
+                        <b>Jenis Dinas Luar</b>
+                      </td>
+                      <td>
+                        <select  class="pilihan"  name="jenis_dinas_luar" id="jenis_dinas_luar" onchange="file_surat()" style="width: 100%;">
+                          <option value="-">-</option>
+                          <option value="1">kunjungan kerja/rapat/pertemuan tidak di hotel</option>
+                          <option value="2">kunjungan kerja/rapat/pertemuan di hotel</option>
+                          <option value="3">pelatihan</option>
                         </select>
                       </td>
                     </tr>
@@ -476,22 +490,20 @@
                             $('#selected_value_2').text(kodeRing);  // Display the kode_ring
                         });
                     </script>
-                      <tr>
-                        <td align="left" width="15%">
-                          <b>Tim Berangkat</b>
-                        </td>
-                        <td>
-                          <select name="id_tim" id="list_tim">
-                          <option value="-" selected>
-                                      -
-                                  </option>
-                          <?php foreach ($list_tims as $list_tim) {   ?>
-                            <option value="<?php echo $list_tim->id; ?>"><?php echo $list_tim->nama_tim; ?></option>
-                            <?php } ?>
-                          </select>
-                        </td>
-                      </tr>
+                    <tr>
+                      <td align="left" width="15%">
+                        <b>Tim Berangkat</b>
+                      </td>
+                      <td>
+                        <select name="id_tim" id="list_tim" required>
+                          <option value="" selected disabled>-- Pilih Tim --</option>
+                          <?php foreach ($list_tims as $list_tim) { ?>
+                            <option value="<?php echo $list_tim->id; ?>"><?php echo $list_tim->nama_tim.' ('.$list_tim->thn_anggaran.')'; ?></option>
+                          <?php } ?>
+                        </select>
+                      </td>
                     </tr>
+
                    
                
                     <tr>

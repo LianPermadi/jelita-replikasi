@@ -7,6 +7,7 @@ $id_pegawai       = $perdin->id_pegawai;
 // var_dump($id_pegawai);die();
 $no_bku       = $perdin->no_bku;
 $uraian       = $perdin->uraian;
+$mksd_pemberangkatan       = $perdin->mksd_pemberangkatan;
 $tgl_pembayaran       = $perdin->tgl_pembayaran;
 $tujuan       = $perdin->tujuan;
 $nama_pelaksana       = $perdin->nama_pelaksana;
@@ -281,8 +282,14 @@ $keterangan       = $perdin->keterangan;
                          <td class="bg-grid">
                            <div   class="contentForm">
                                 <?php
+                                if (!empty($perdin->uraian)) {
+                                  $uraian_mksd = $uraian;
+                                } else {
+                                  $uraian_mksd = 'Pembayaran'.' '.$mksd_pemberangkatan;
+                                }
+                                
                                 $uraian_input = array('name' => 'uraian',
-                                                      'value' => $uraian,
+                                                      'value' => $uraian_mksd,
                                                       'style' => 'width:100%',
                                                       'class' => 'input-area-wrc'
                                                      );

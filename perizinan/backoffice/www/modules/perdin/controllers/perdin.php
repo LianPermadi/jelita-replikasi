@@ -1,6 +1,6 @@
 <?php
 /*
- * Created By : Jonas Banurea / 25-02-2022
+ * Created By : Jonas Banurea sani / 25-02-2022
  */
 
 class Perdin extends WRC_AdminCont {
@@ -84,8 +84,11 @@ class Perdin extends WRC_AdminCont {
       }
   }
   
+    public function testing() {
+      $this->template->build('perbaikan', $this->session_info);
+    }
+
     public function index() {
-      
        $now = $this->lib_date->get_date_now();
            $admin = "";
       if ($this->All) { 
@@ -161,356 +164,687 @@ class Perdin extends WRC_AdminCont {
 
 
 
-    public function cetak_excel($tgla = 0, $tglb = 0){
-           $iduser = $this->session->userdata('id_auth');
-            if ($this->All) { 
-              $admin = 1;
-            } else {
-              $admin = 0;
-            }
-           if ($admin == 1 OR $iduser ==197 OR $iduser ==218 OR $iduser ==550 OR $iduser== 543 OR $iduser== 683) {
-             $sql = "SELECT * 
-                    FROM keu_perdin 
-                    WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
-                    
-                    ORDER BY  tgl_pembayaran  ASC";
-    
-            $list_perdin = $this->db->query($sql, array($tgla, $tglb))->result();
-           }
-           else{
-               $sql = "SELECT * 
-                    FROM keu_perdin 
-                    WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
-                     AND user_id = ? or user_id = 443
-                    ORDER BY  tgl_pembayaran  ASC";
-    
-            $list_perdin = $this->db->query($sql, array($tgla, $tglb, $iduser))->result();
-           }
+    // public function cetak_excel($tgla = 0, $tglb = 0){
+    //        $iduser = $this->session->userdata('id_auth');
+    //         if ($this->All) { 
+    //           $admin = 1;
+    //         } else {
+    //           $admin = 0;
+    //         }
+    //   if ($admin == 1 || $iduser == 197 || $iduser == 218 || $iduser == 550 || $iduser == 543 || $iduser == 683) {
+
+    //     $sql = "SELECT *
+    //             FROM keu_perdin
+    //             WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+    //             ORDER BY tgl_pembayaran ASC";
+
+    //     $list_perdin = $this->db->query($sql, array($tgla, $tglb))->result();
+
+    //     // kalau kosong → ambil dari keu_perdin_2024
+    //     if (empty($list_perdin)) {
+    //         $sql = "SELECT *
+    //                 FROM keu_perdin_2024
+    //                 WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+    //                 ORDER BY tgl_pembayaran ASC";
+
+    //         $list_perdin = $this->db->query($sql, array($tgla, $tglb))->result();
+    //     }
+
+    //     // var_dump($list_perdin); die();
+
+    //   } else {
+
+    //     $sql = "SELECT *
+    //             FROM keu_perdin
+    //             WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+    //               AND (user_id = ? OR user_id = 443)
+    //             ORDER BY tgl_pembayaran ASC";
+
+    //     $list_perdin = $this->db->query($sql, array($tgla, $tglb, $iduser))->result();
+
+    //     // kalau kosong → ambil dari keu_perdin_2024
+    //     if (empty($list_perdin)) {
+    //         $sql = "SELECT *
+    //                 FROM keu_perdin_2024
+    //                 WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+    //                   AND (user_id = ? OR user_id = 443)
+    //                 ORDER BY tgl_pembayaran ASC";
+
+    //         $list_perdin = $this->db->query($sql, array($tgla, $tglb, $iduser))->result();
+    //     }
+
+    //     // var_dump($list_perdin); die();
+    //   }
 
           
             
-            header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-            header("Content-Disposition: attachment; filename=REKAP_E-PERDIN_FORMAT_BPK_(DPMPTSP_JABAR).xls");
-            header("Expires: 0");
-            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Cache-Control: private",false);
+    //         header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+    //         header("Content-Disposition: attachment; filename=REKAP_E-PERDIN_FORMAT_BPK_(DPMPTSP_JABAR).xls");
+    //         header("Expires: 0");
+    //         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    //         header("Cache-Control: private",false);
 
-            echo "<table width='100%' border='0' font-size:15px;font-style:bold;'>";
-            echo "E-PERDIN (REKAP PERJALANAN DINAS) DPMPTSP JAWA BARAT (FORMAT BPK)";
-            echo "<tr>PERIODE : ".$this->lib_date->mysql_to_human($tgla)." - ".$this->lib_date->mysql_to_human($tglb)."</tr>";
-            echo "</table>";
+    //         echo "<table width='100%' border='0' font-size:15px;font-style:bold;'>";
+    //         echo "E-PERDIN (REKAP PERJALANAN DINAS) DPMPTSP JAWA BARAT (FORMAT BPK)";
+    //         echo "<tr>PERIODE : ".$this->lib_date->mysql_to_human($tgla)." - ".$this->lib_date->mysql_to_human($tglb)."</tr>";
+    //         echo "</table>";
            	
 
-           	 $jd2= " <tr>
-                      <td colspan='8'>".''."</td>
-                      <td colspan='39' align='center'>".'Biaya Perjalanan Dinas perorangan (Rp)'."</td>
-                      <td colspan='4'>".''."</td>
-                      <td colspan='20' align='center'>".'Informasi Tiket Perjalanan Dinas'."</td>
-                      <td colspan='2'>".''."</td>
+    //        	 $jd2= " <tr>
+    //                   <td colspan='8'>".''."</td>
+    //                   <td colspan='39' align='center'>".'Biaya Perjalanan Dinas perorangan (Rp)'."</td>
+    //                   <td colspan='4'>".''."</td>
+    //                   <td colspan='20' align='center'>".'Informasi Tiket Perjalanan Dinas'."</td>
+    //                   <td colspan='2'>".''."</td>
                 
                                         
-                    </tr>";
-                      // echo "<table width='100%' border='0' align='center' font-size:16px;'>";
-                       echo "</table>";
+    //                 </tr>";
+    //                   // echo "<table width='100%' border='0' align='center' font-size:16px;'>";
+    //                    echo "</table>";
 
-             echo "<table width='100%' cellspacing='0' cellpadding='0'  border='1' style='border-style:solid; border-width:thin;font-size:14px;font-weight:bold;'>";
-             echo $jd2; 
+    //          echo "<table width='100%' cellspacing='0' cellpadding='0'  border='1' style='border-style:solid; border-width:thin;font-size:14px;font-weight:bold;'>";
+    //          echo $jd2; 
 
-              $jd3= " <tr>
-                      <td colspan='8' align='center'>".''."</td>
-                      <td colspan='4' align='center'>".'Uang Harian'."</td>
-                      <td colspan='4' align='center'>".'Representasi'."</td>
-                      <td colspan='4' align='center'>".'Uang Saku Peserta'."</td>
-                      <td colspan='4' align='center'>".'Penginapan'."</td>
-                      <td colspan='3' align='center'>".'Tiket/E-Tol'."</td>
-                      <td colspan='4' align='center'>".'Sewa Taksi (Kota Asal)'."</td>
-                      <td colspan='4' align='center'>".'Sewa Taksi (Kota Tujuan)'."</td>
-                      <td colspan='4' align='center'>".'Sewa Kendaraan'."</td>
-                      <td colspan='4' align='center'>".'BBM'."</td>
-                      <td colspan='3' align='center'>".'Swab'."</td>
-                      <td colspan='1' align='center'>".'Jumlah Total'."</td>
-                      <td colspan='4' align='center'>".''."</td>
-                      <td colspan='10' align='center'>".'Berangkat'."</td>
-                      <td colspan='10' align='center'>".'Kembali'."</td>
-                      <td colspan='2'>".''."</td>
+    //           $jd3= " <tr>
+    //                   <td colspan='8' align='center'>".''."</td>
+    //                   <td colspan='4' align='center'>".'Uang Harian'."</td>
+    //                   <td colspan='4' align='center'>".'Representasi'."</td>
+    //                   <td colspan='4' align='center'>".'Uang Saku Peserta'."</td>
+    //                   <td colspan='4' align='center'>".'Penginapan'."</td>
+    //                   <td colspan='3' align='center'>".'Tiket/E-Tol'."</td>
+    //                   <td colspan='4' align='center'>".'Sewa Taksi (Kota Asal)'."</td>
+    //                   <td colspan='4' align='center'>".'Sewa Taksi (Kota Tujuan)'."</td>
+    //                   <td colspan='4' align='center'>".'Sewa Kendaraan'."</td>
+    //                   <td colspan='4' align='center'>".'BBM'."</td>
+    //                   <td colspan='3' align='center'>".'Swab'."</td>
+    //                   <td colspan='1' align='center'>".'Jumlah Total'."</td>
+    //                   <td colspan='4' align='center'>".''."</td>
+    //                   <td colspan='10' align='center'>".'Berangkat'."</td>
+    //                   <td colspan='10' align='center'>".'Kembali'."</td>
+    //                   <td colspan='2'>".''."</td>
 
                 
                                         
-                    </tr>";
-                      // echo "<table width='100%' border='0' align='center' font-size:16px;'>";
-                       echo "</table>";
+    //                 </tr>";
+    //                   // echo "<table width='100%' border='0' align='center' font-size:16px;'>";
+    //                    echo "</table>";
 
-             echo "<table width='100%' cellspacing='0' cellpadding='0'  border='1' style='border-style:solid; border-width:thin;font-size:12px;font-weight:bold;'>";
-             echo $jd3; 
+    //          echo "<table width='100%' cellspacing='0' cellpadding='0'  border='1' style='border-style:solid; border-width:thin;font-size:12px;font-weight:bold;'>";
+    //          echo $jd3; 
 
  
-            $jdl= " <tr>
-                      <td align='center'>".'NO.'."</td>
-                      <td align='center'>".'Bulan '."</td>
-                      <td align='center'>".'No BKU'."</td>
-                      <td align='center'>".'Uraian'."</td>
-                      <td align='center'>".'Tujuan'."</td>
-                      <td align='center'>".'Nama Pelaksana'."</td>
-                      <td align='center'>".'Jabatan'."</td>
-                      <td align='center'>".'SKPD'."</td>
-                      <td align='center'>".'Hari'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                      <td align='center'>".'Hari'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                      <td align='center'>".'Hari'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                      <td align='center'>".'Hari'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                      <td align='center'>".'Pulang'."</td>
-                      <td align='center'>".'Pergi'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                       <td align='center'>".'Hari'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                       <td align='center'>".'Hari'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                       <td align='center'>".'Hari'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                       <td align='center'>".'Liter'."</td>
-                      <td align='center'>".'Satuan'."</td>
-                      <td align='center'>".'Harga'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                      <td align='center'>".'Di Kota Asal'."</td>
-                      <td align='center'>".'Dikota Tujuan'."</td>
-                      <td align='center'>".'Jumlah'."</td>
-                      <td align='center'>".'Jumlah Total '."</td>
-                      <td align='center'>".'No. SPPD'."</td>
-                      <td align='center'>".'Lama perjalanan dinas (Hari)'."</td>
-                      <td align='center'>".'Tanggal berangkat '."</td>
-                      <td align='center'>".'Tanggal kembali'."</td>
-                      <td align='center'>".'Maskapai'."</td>
-                      <td align='center'>".'Nama'."</td>
-                      <td align='center'>".'No Tiket'."</td>
-                      <td align='center'>".'Kode Booking'."</td>
-                      <td align='center'>".'No penerbangan'."</td>
-                      <td align='center'>".'Asal Daerah '."</td>
-                      <td align='center'>".'Tujuan '."</td>
-                      <td align='center'>".'Tanggal '."</td>
-                      <td align='center'>".'Kelas'."</td>
-                      <td align='center'>".'Harga Tiket (Rp)'."</td>
-                      <td align='center'>".'Maskapai'."</td>
-                      <td align='center'>".'Nama'."</td>
-                      <td align='center'>".'No Tiket'."</td>
-                      <td align='center'>".'Kode Booking'."</td>
-                      <td align='center'>".'No penerbangan'."</td>
-                      <td align='center'>".'Asal Daerah '."</td>
-                      <td align='center'>".'Tujuan '."</td>
-                      <td align='center'>".'Tanggal '."</td>
-                      <td align='center'>".'Kelas'."</td>
-                      <td align='center'>".'Harga Tiket (Rp)'."</td>
-                      <td align='center'>".'Nama Penginapan/Hotel'."</td>
-                      <td align='center'>".'Keterangan'."</td>
+    //         $jdl= " <tr>
+    //                   <td align='center'>".'NO.'."</td>
+    //                   <td align='center'>".'Bulan '."</td>
+    //                   <td align='center'>".'No BKU'."</td>
+    //                   <td align='center'>".'Uraian'."</td>
+    //                   <td align='center'>".'Tujuan'."</td>
+    //                   <td align='center'>".'Nama Pelaksana'."</td>
+    //                   <td align='center'>".'Jabatan'."</td>
+    //                   <td align='center'>".'SKPD'."</td>
+    //                   <td align='center'>".'Hari'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                   <td align='center'>".'Hari'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                   <td align='center'>".'Hari'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                   <td align='center'>".'Hari'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                   <td align='center'>".'Pulang'."</td>
+    //                   <td align='center'>".'Pergi'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                    <td align='center'>".'Hari'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                    <td align='center'>".'Hari'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                    <td align='center'>".'Hari'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                    <td align='center'>".'Liter'."</td>
+    //                   <td align='center'>".'Satuan'."</td>
+    //                   <td align='center'>".'Harga'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                   <td align='center'>".'Di Kota Asal'."</td>
+    //                   <td align='center'>".'Dikota Tujuan'."</td>
+    //                   <td align='center'>".'Jumlah'."</td>
+    //                   <td align='center'>".'Jumlah Total '."</td>
+    //                   <td align='center'>".'No. SPPD'."</td>
+    //                   <td align='center'>".'Lama perjalanan dinas (Hari)'."</td>
+    //                   <td align='center'>".'Tanggal berangkat '."</td>
+    //                   <td align='center'>".'Tanggal kembali'."</td>
+    //                   <td align='center'>".'Maskapai'."</td>
+    //                   <td align='center'>".'Nama'."</td>
+    //                   <td align='center'>".'No Tiket'."</td>
+    //                   <td align='center'>".'Kode Booking'."</td>
+    //                   <td align='center'>".'No penerbangan'."</td>
+    //                   <td align='center'>".'Asal Daerah '."</td>
+    //                   <td align='center'>".'Tujuan '."</td>
+    //                   <td align='center'>".'Tanggal '."</td>
+    //                   <td align='center'>".'Kelas'."</td>
+    //                   <td align='center'>".'Harga Tiket (Rp)'."</td>
+    //                   <td align='center'>".'Maskapai'."</td>
+    //                   <td align='center'>".'Nama'."</td>
+    //                   <td align='center'>".'No Tiket'."</td>
+    //                   <td align='center'>".'Kode Booking'."</td>
+    //                   <td align='center'>".'No penerbangan'."</td>
+    //                   <td align='center'>".'Asal Daerah '."</td>
+    //                   <td align='center'>".'Tujuan '."</td>
+    //                   <td align='center'>".'Tanggal '."</td>
+    //                   <td align='center'>".'Kelas'."</td>
+    //                   <td align='center'>".'Harga Tiket (Rp)'."</td>
+    //                   <td align='center'>".'Nama Penginapan/Hotel'."</td>
+    //                   <td align='center'>".'Keterangan'."</td>
                                         
-                    </tr>";
-                      // echo "<table width='100%' border='0' font-size:16px;'>";
-                       echo "</table>";
+    //                 </tr>";
+    //                   // echo "<table width='100%' border='0' font-size:16px;'>";
+    //                    echo "</table>";
 
-             echo "<table width='100%' cellspacing='0' cellpadding='0' border='1' style='border-style:solid; border-width:thin;font-size:10px;font-weight:bold;'>";
-             echo $jdl; 
+    //          echo "<table width='100%' cellspacing='0' cellpadding='0' border='1' style='border-style:solid; border-width:thin;font-size:10px;font-weight:bold;'>";
+    //          echo $jdl; 
 
-              $jd4= " <tr font-style: italic>
-                     <td align='center'>".'1'."</td>
-					<td align='center'>".'2'."</td>
-					<td align='center'>".'3'."</td>
-					<td align='center'>".'4'."</td>
-					<td align='center'>".'5'."</td>
-					<td align='center'>".'6'."</td>
-					<td align='center'>".'7'."</td>
-					<td align='center'>".'8'."</td>
-					<td align='center'>".'9'."</td>
-					<td align='center'>".'10'."</td>
-					<td align='center'>".'11'."</td>
-					<td align='center'>".'12=9x11'."</td>
-					<td align='center'>".'13'."</td>
-					<td align='center'>".'14'."</td>
-					<td align='center'>".'15'."</td>
-					<td align='center'>".'16=13x15'."</td>
-					<td align='center'>".'17'."</td>
-					<td align='center'>".'18'."</td>
-					<td align='center'>".'19'."</td>
-					<td align='center'>".'20=17x19'."</td>
-					<td align='center'>".'21'."</td>
-					<td align='center'>".'22'."</td>
-					<td align='center'>".'23'."</td>
-					<td align='center'>".'24=21x23'."</td>
-					<td align='center'>".'25'."</td>
-					<td align='center'>".'26'."</td>
-					<td align='center'>".'27=25+26'."</td>
-					<td align='center'>".'28'."</td>
-					<td align='center'>".'29'."</td>
-					<td align='center'>".'30'."</td>
-					<td align='center'>".'31=28x30'."</td>
-					<td align='center'>".'32'."</td>
-					<td align='center'>".'33'."</td>
-					<td align='center'>".'34'."</td>
-					<td align='center'>".'35=32x34'."</td>
-					<td align='center'>".'36'."</td>
-					<td align='center'>".'37'."</td>
-					<td align='center'>".'38'."</td>
-					<td align='center'>".'39=36x38'."</td>
-					<td align='center'>".'40'."</td>
-					<td align='center'>".'41'."</td>
-					<td align='center'>".'42'."</td>
-					<td align='center'>".'43=40x42'."</td>
-					<td align='center'>".'44'."</td>
-					<td align='center'>".'45'."</td>
-					<td align='center'>".'46=44+45'."</td>
-					<td align='center'>".'47=12+16+20+24+27+31+35+39+43+46'."</td>
-					<td align='center'>".'48'."</td>
-					<td align='center'>".'49'."</td>
-					<td align='center'>".'50'."</td>
-					<td align='center'>".'51'."</td>
-					<td align='center'>".'52'."</td>
-					<td align='center'>".'53'."</td>
-					<td align='center'>".'54'."</td>
-					<td align='center'>".'55'."</td>
-					<td align='center'>".'56'."</td>
-					<td align='center'>".'57'."</td>
-					<td align='center'>".'58'."</td>
-					<td align='center'>".'59'."</td>
-					<td align='center'>".'60'."</td>
-					<td align='center'>".'61'."</td>
-					<td align='center'>".'62'."</td>
-					<td align='center'>".'63'."</td>
-					<td align='center'>".'64'."</td>
-					<td align='center'>".'65'."</td>
-					<td align='center'>".'66'."</td>
-					<td align='center'>".'67'."</td>
-					<td align='center'>".'68'."</td>
-					<td align='center'>".'69'."</td>
-					<td align='center'>".'70'."</td>
-					<td align='center'>".'71'."</td>
-					<td align='center'>".'72'."</td>
-					<td align='center'>".'73'."</td>
+    //           $jd4= " <tr font-style: italic>
+    //                  <td align='center'>".'1'."</td>
+		// 			<td align='center'>".'2'."</td>
+		// 			<td align='center'>".'3'."</td>
+		// 			<td align='center'>".'4'."</td>
+		// 			<td align='center'>".'5'."</td>
+		// 			<td align='center'>".'6'."</td>
+		// 			<td align='center'>".'7'."</td>
+		// 			<td align='center'>".'8'."</td>
+		// 			<td align='center'>".'9'."</td>
+		// 			<td align='center'>".'10'."</td>
+		// 			<td align='center'>".'11'."</td>
+		// 			<td align='center'>".'12=9x11'."</td>
+		// 			<td align='center'>".'13'."</td>
+		// 			<td align='center'>".'14'."</td>
+		// 			<td align='center'>".'15'."</td>
+		// 			<td align='center'>".'16=13x15'."</td>
+		// 			<td align='center'>".'17'."</td>
+		// 			<td align='center'>".'18'."</td>
+		// 			<td align='center'>".'19'."</td>
+		// 			<td align='center'>".'20=17x19'."</td>
+		// 			<td align='center'>".'21'."</td>
+		// 			<td align='center'>".'22'."</td>
+		// 			<td align='center'>".'23'."</td>
+		// 			<td align='center'>".'24=21x23'."</td>
+		// 			<td align='center'>".'25'."</td>
+		// 			<td align='center'>".'26'."</td>
+		// 			<td align='center'>".'27=25+26'."</td>
+		// 			<td align='center'>".'28'."</td>
+		// 			<td align='center'>".'29'."</td>
+		// 			<td align='center'>".'30'."</td>
+		// 			<td align='center'>".'31=28x30'."</td>
+		// 			<td align='center'>".'32'."</td>
+		// 			<td align='center'>".'33'."</td>
+		// 			<td align='center'>".'34'."</td>
+		// 			<td align='center'>".'35=32x34'."</td>
+		// 			<td align='center'>".'36'."</td>
+		// 			<td align='center'>".'37'."</td>
+		// 			<td align='center'>".'38'."</td>
+		// 			<td align='center'>".'39=36x38'."</td>
+		// 			<td align='center'>".'40'."</td>
+		// 			<td align='center'>".'41'."</td>
+		// 			<td align='center'>".'42'."</td>
+		// 			<td align='center'>".'43=40x42'."</td>
+		// 			<td align='center'>".'44'."</td>
+		// 			<td align='center'>".'45'."</td>
+		// 			<td align='center'>".'46=44+45'."</td>
+		// 			<td align='center'>".'47=12+16+20+24+27+31+35+39+43+46'."</td>
+		// 			<td align='center'>".'48'."</td>
+		// 			<td align='center'>".'49'."</td>
+		// 			<td align='center'>".'50'."</td>
+		// 			<td align='center'>".'51'."</td>
+		// 			<td align='center'>".'52'."</td>
+		// 			<td align='center'>".'53'."</td>
+		// 			<td align='center'>".'54'."</td>
+		// 			<td align='center'>".'55'."</td>
+		// 			<td align='center'>".'56'."</td>
+		// 			<td align='center'>".'57'."</td>
+		// 			<td align='center'>".'58'."</td>
+		// 			<td align='center'>".'59'."</td>
+		// 			<td align='center'>".'60'."</td>
+		// 			<td align='center'>".'61'."</td>
+		// 			<td align='center'>".'62'."</td>
+		// 			<td align='center'>".'63'."</td>
+		// 			<td align='center'>".'64'."</td>
+		// 			<td align='center'>".'65'."</td>
+		// 			<td align='center'>".'66'."</td>
+		// 			<td align='center'>".'67'."</td>
+		// 			<td align='center'>".'68'."</td>
+		// 			<td align='center'>".'69'."</td>
+		// 			<td align='center'>".'70'."</td>
+		// 			<td align='center'>".'71'."</td>
+		// 			<td align='center'>".'72'."</td>
+		// 			<td align='center'>".'73'."</td>
 
                                         
-                    </tr>";
-                      // echo "<table width='100%' border='0' font-size:16px;'>";
-                       echo "</table>";
+    //                 </tr>";
+    //                   // echo "<table width='100%' border='0' font-size:16px;'>";
+    //                    echo "</table>";
 
-             echo "<table width='100%' cellspacing='0' cellpadding='0' border='1' style='border-style:solid; border-width:thin;font-size:10px;font-style:italic;'>";
-             echo $jd4; 
+    //          echo "<table width='100%' cellspacing='0' cellpadding='0' border='1' style='border-style:solid; border-width:thin;font-size:10px;font-style:italic;'>";
+    //          echo $jd4; 
 
-            $i=1;
-            foreach ($list_perdin as $row){
-                  $isi = "<tr>
-                        <td>".$i."</td>                        
-                        <td>".$this->lib_date->set_month_name(date('m',strtotime($row->tgl_pembayaran)), 'id')."</td>
-                        <td>".$row->no_bku."</td>
-                        <td>".$row->uraian."</td>
-                        <td>".$this->m_perdin->get_n_kabupaten($row->tujuan)."</td>
-                        <td>".$this->m_perdin->get_n_pegawai($row->id_pegawai)."</td>
-                        <td>".$this->m_perdin->get_n_jabatan($row->id_pegawai)."</td>
-                        <td>".$row->skpd."</td>
+    //         $i=1;
+    //         foreach ($list_perdin as $row){
+    //               $isi = "<tr>
+    //                     <td>".$i."</td>                        
+    //                     <td>".$this->lib_date->set_month_name(date('m',strtotime($row->tgl_pembayaran)), 'id')."</td>
+    //                     <td>".$row->no_bku."</td>
+    //                     <td>".$row->uraian."</td>
+    //                     <td>".$this->m_perdin->get_n_kabupaten($row->tujuan)."</td>
+    //                     <td>".$this->m_perdin->get_n_pegawai($row->id_pegawai)."</td>
+    //                     <td>".$this->m_perdin->get_n_jabatan($row->id_pegawai)."</td>
+    //                     <td>".$row->skpd."</td>
 
-                        <td>".$row->uang_hari."</td>
-                        <td align='center'>".'Hari'."</td>
-                        <td>".$this->rupiah($row->harga_hari)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->jumlah_uang)."</td>
+    //                     <td>".$row->uang_hari."</td>
+    //                     <td align='center'>".'Hari'."</td>
+    //                     <td>".$this->rupiah($row->harga_hari)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->jumlah_uang)."</td>
 
-                        <td>".$row->representasi_hari."</td>
-                        <td align='center'>".'Hari'."</td>
-                        <td>".$this->rupiah($row->representasi_harga)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->jumlah_representasi)."</td>
+    //                     <td>".$row->representasi_hari."</td>
+    //                     <td align='center'>".'Hari'."</td>
+    //                     <td>".$this->rupiah($row->representasi_harga)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->jumlah_representasi)."</td>
 
-                        <td>".$row->uang_sakuhari."</td>
-                        <td align='center'>".'Hari'."</td>
-                        <td>".$this->rupiah($row->uang_sakuharga)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->uang_sku_p_j)."</td>
+    //                     <td>".$row->uang_sakuhari."</td>
+    //                     <td align='center'>".'Hari'."</td>
+    //                     <td>".$this->rupiah($row->uang_sakuharga)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->uang_sku_p_j)."</td>
 
-                        <td>".$row->penginapan_malam."</td>
-                        <td align='center'>".'Malam'."</td>
-                        <td>".$this->rupiah($row->penginapan_harga)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->penginapan_jumlah)."</td>
+    //                     <td>".$row->penginapan_malam."</td>
+    //                     <td align='center'>".'Malam'."</td>
+    //                     <td>".$this->rupiah($row->penginapan_harga)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->penginapan_jumlah)."</td>
 
-                        <td>".$this->rupiah($row->tikettol_pulang)."</td>
-                        <td>".$this->rupiah($row->tikettol_pergi)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->tikettol_jumlah)."</td>
+    //                     <td>".$this->rupiah($row->tikettol_pulang)."</td>
+    //                     <td>".$this->rupiah($row->tikettol_pergi)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->tikettol_jumlah)."</td>
 
-                        <td>".$row->s_t_k_asal_hari."</td>
-                        <td align='center'>".'Kali'."</td>
-                        <td>".$this->rupiah($row->s_t_k_asal_harga)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->s_t_k_asal_jumlah)."</td>
+    //                     <td>".$row->s_t_k_asal_hari."</td>
+    //                     <td align='center'>".'Kali'."</td>
+    //                     <td>".$this->rupiah($row->s_t_k_asal_harga)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->s_t_k_asal_jumlah)."</td>
 
-                        <td>".$row->s_t_k_tujuan_hari."</td>
-                        <td align='center'>".'Kali'."</td>
-                        <td>".$this->rupiah($row->s_t_k_tujuan_harga)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->s_t_k_tujuan_jumlah)."</td>
+    //                     <td>".$row->s_t_k_tujuan_hari."</td>
+    //                     <td align='center'>".'Kali'."</td>
+    //                     <td>".$this->rupiah($row->s_t_k_tujuan_harga)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->s_t_k_tujuan_jumlah)."</td>
 
-                        <td>".$row->sewa_kendaraan_hari."</td>
-                        <td align='center'>".'Hari'."</td>
-                        <td>".$this->rupiah($row->sewa_kendaraan_harga)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->sewa_kendaraan_jumlah)."</td>
+    //                     <td>".$row->sewa_kendaraan_hari."</td>
+    //                     <td align='center'>".'Hari'."</td>
+    //                     <td>".$this->rupiah($row->sewa_kendaraan_harga)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->sewa_kendaraan_jumlah)."</td>
 
                          
-                          <td>=\"$row->bbm_liter\"</td>
-                        <td align='center'>".'Liter'."</td>
-                        <td>".$this->rupiah($row->bbm_harga)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->bbm_jumlah)."</td>
+    //                       <td>=\"$row->bbm_liter\"</td>
+    //                     <td align='center'>".'Liter'."</td>
+    //                     <td>".$this->rupiah($row->bbm_harga)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->bbm_jumlah)."</td>
 
-                        <td>".$this->rupiah($row->swabdi_kota_asal)."</td>
-                        <td>".$this->rupiah($row->swabdi_kota_tujuan)."</td>
-                        <td style='background-color:#fce4d6'>".$this->rupiah($row->swab_jumlah)."</td>
+    //                     <td>".$this->rupiah($row->swabdi_kota_asal)."</td>
+    //                     <td>".$this->rupiah($row->swabdi_kota_tujuan)."</td>
+    //                     <td style='background-color:#fce4d6'>".$this->rupiah($row->swab_jumlah)."</td>
 
-                        <td style='background-color:#f8cbad'>".$this->rupiah($row->jumlah_total)."</td>
+    //                     <td style='background-color:#f8cbad'>".$this->rupiah($row->jumlah_total)."</td>
 
-                        <td>".$row->no__sppd."</td>
-                        <td>".$row->lama_p_d."</td>
-                        <td>".$this->lib_date->mysql_to_human($row->tanggal_berangkat)."</td>
-                        <td>".$this->lib_date->mysql_to_human($row->tanggal_kembali)."</td>
+    //                     <td>".$row->no__sppd."</td>
+    //                     <td>".$row->lama_p_d."</td>
+    //                     <td>".$this->lib_date->mysql_to_human($row->tanggal_berangkat)."</td>
+    //                     <td>".$this->lib_date->mysql_to_human($row->tanggal_kembali)."</td>
 
-                        <td>".$row->itberangkat_maskapai."</td>
-                        <td>".$this->m_perdin->get_n_pegawai($row->id_pegawai)."</td>
-                        <td>".$row->itberangkat_no_tiket."</td>
-                        <td>".$row->itberangkat_kodebooking."</td>
-                        <td>".$row->itberangkat_no_penerbangan."</td>
-                        <td>".$this->m_perdin->get_n_kabupaten($row->itberangkat_asal_daerah)."</td>
-                        <td>".$this->m_perdin->get_n_kabupaten($row->itberangkat_tujuan)."</td>
-                        <td>".$this->lib_date->mysql_to_human($row->itberangkat_tanggal)."</td>
-                        <td>".$row->itberangkat_kelas."</td>
-                        <td>".$this->rupiah($row->itberangkat_harga_tiket)."</td>
+    //                     <td>".$row->itberangkat_maskapai."</td>
+    //                     <td>".$this->m_perdin->get_n_pegawai($row->id_pegawai)."</td>
+    //                     <td>".$row->itberangkat_no_tiket."</td>
+    //                     <td>".$row->itberangkat_kodebooking."</td>
+    //                     <td>".$row->itberangkat_no_penerbangan."</td>
+    //                     <td>".$this->m_perdin->get_n_kabupaten($row->itberangkat_asal_daerah)."</td>
+    //                     <td>".$this->m_perdin->get_n_kabupaten($row->itberangkat_tujuan)."</td>
+    //                     <td>".$this->lib_date->mysql_to_human($row->itberangkat_tanggal)."</td>
+    //                     <td>".$row->itberangkat_kelas."</td>
+    //                     <td>".$this->rupiah($row->itberangkat_harga_tiket)."</td>
 
-                        <td>".$row->itkembali_maskapai."</td>
-                        <td>".$this->m_perdin->get_n_pegawai($row->id_pegawai)."</td>
-                        <td>".$row->itkembali_no_tiket."</td>
-                        <td>".$row->itkembali_kode_booking."</td>
-                        <td>".$row->itkembali_no_penerbangan."</td>
-                        <td>".$this->m_perdin->get_n_kabupaten($row->itkembali_asal_daerah)."</td>
-                        <td>".$this->m_perdin->get_n_kabupaten($row->itberangkat_tujuan)."</td>
-                        <td>".$this->lib_date->mysql_to_human($row->itberangkat_tanggal)."</td>
-                        <td>".$row->itberangkat_kelas."</td>
-                        <td>".$this->rupiah($row->itberangkat_harga_tiket)."</td>                        
+    //                     <td>".$row->itkembali_maskapai."</td>
+    //                     <td>".$this->m_perdin->get_n_pegawai($row->id_pegawai)."</td>
+    //                     <td>".$row->itkembali_no_tiket."</td>
+    //                     <td>".$row->itkembali_kode_booking."</td>
+    //                     <td>".$row->itkembali_no_penerbangan."</td>
+    //                     <td>".$this->m_perdin->get_n_kabupaten($row->itkembali_asal_daerah)."</td>
+    //                     <td>".$this->m_perdin->get_n_kabupaten($row->itberangkat_tujuan)."</td>
+    //                     <td>".$this->lib_date->mysql_to_human($row->itberangkat_tanggal)."</td>
+    //                     <td>".$row->itberangkat_kelas."</td>
+    //                     <td>".$this->rupiah($row->itberangkat_harga_tiket)."</td>                        
 
-                        <td>".$row->nama_penginapan."</td>
-                        <td>".$row->keterangan."</td>
+    //                     <td>".$row->nama_penginapan."</td>
+    //                     <td>".$row->keterangan."</td>
                         
 
-                  </tr>";
+    //               </tr>";
 
-                    echo "<table width='100%' cellspacing='0' cellpadding='0' border='1' style='border-style:solid; border-width:thin;font-size:10px;font-style:normal;'>";
-            echo $isi; 
-             $i++;
-          }
+    //                 echo "<table width='100%' cellspacing='0' cellpadding='0' border='1' style='border-style:solid; border-width:thin;font-size:10px;font-style:normal;'>";
+    //         echo $isi; 
+    //          $i++;
+    //       }
 
-             echo "</table>";
+    //          echo "</table>";
+    // }
+    public function cetak_excel_2024($tgla = 0, $tglb = 0){
+        $iduser = $this->session->userdata('id_auth');
+        if ($this->All) { 
+            $admin = 1;
+        } else {
+            $admin = 0;
+        }
+
+        if ($admin == 1 || in_array($iduser, [197, 218, 550, 543, 683])) {
+            $sql = "SELECT * FROM keu_perdin
+                    WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                    ORDER BY tgl_pembayaran ASC";
+            $list_perdin = $this->db->query($sql, [$tgla, $tglb])->result();
+
+            if (empty($list_perdin)) {
+                $sql = "SELECT * FROM keu_perdin_2024
+                        WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                        ORDER BY tgl_pembayaran ASC";
+                $list_perdin = $this->db->query($sql, [$tgla, $tglb])->result();
+            }
+        } else {
+            $sql = "SELECT * FROM keu_perdin
+                    WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                      AND (user_id = ? OR user_id = 443)
+                    ORDER BY tgl_pembayaran ASC";
+            $list_perdin = $this->db->query($sql, [$tgla, $tglb, $iduser])->result();
+
+            if (empty($list_perdin)) {
+                $sql = "SELECT * FROM keu_perdin_2024
+                        WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                          AND (user_id = ? OR user_id = 443)
+                        ORDER BY tgl_pembayaran ASC";
+                $list_perdin = $this->db->query($sql, [$tgla, $tglb, $iduser])->result();
+            }
+        }
+
+        // === Load PHPExcel ===
+        require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel.php';
+        $objPHPExcel = new PHPExcel();
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+        // Judul
+        $sheet->setCellValue("A1", "E-PERDIN (REKAP PERJALANAN DINAS) DPMPTSP JAWA BARAT (FORMAT BPK)");
+        $sheet->mergeCells("A1:S1");
+        $sheet->setCellValue("A2", "PERIODE : ".$this->lib_date->mysql_to_human($tgla)." - ".$this->lib_date->mysql_to_human($tglb));
+
+        // Header sesuai echo table
+        $header = [
+            'NO','Bulan','No BKU','Uraian','Tujuan','Nama Pelaksana','Jabatan','SKPD',
+            'Uang Harian','Jumlah','Representasi','Jumlah','Uang Saku','Jumlah',
+            'Penginapan','Jumlah','Tiket/E-Tol','Jumlah','Jumlah Total'
+        ];
+
+        $col = "A";
+        foreach ($header as $h) {
+            $sheet->setCellValue($col."4", $h);
+            $sheet->getStyle($col."4")->getFont()->setBold(true);
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+            $col++;
+        }
+
+        // Isi data sesuai echo table
+        $rowExcel = 5;
+        $no = 1;
+        foreach($list_perdin as $row){
+            $sheet->setCellValue("A".$rowExcel, $no++);
+            $sheet->setCellValue("B".$rowExcel, $this->lib_date->set_month_name(date('m',strtotime($row->tgl_pembayaran)), 'id'));
+            $sheet->setCellValue("C".$rowExcel, $row->no_bku);
+            $sheet->setCellValue("D".$rowExcel, $row->uraian);
+            $sheet->setCellValue("E".$rowExcel, $this->m_perdin->get_n_kabupaten($row->tujuan));
+            $sheet->setCellValue("F".$rowExcel, $this->m_perdin->get_n_pegawai($row->id_pegawai));
+            $sheet->setCellValue("G".$rowExcel, $this->m_perdin->get_n_jabatan($row->id_pegawai));
+            $sheet->setCellValue("H".$rowExcel, $row->skpd);
+            $sheet->setCellValue("I".$rowExcel, $row->uang_hari);
+            $sheet->setCellValue("J".$rowExcel, $row->jumlah_uang);
+            $sheet->setCellValue("K".$rowExcel, $row->representasi_hari);
+            $sheet->setCellValue("L".$rowExcel, $row->jumlah_representasi);
+            $sheet->setCellValue("M".$rowExcel, $row->uang_sakuhari);
+            $sheet->setCellValue("N".$rowExcel, $row->uang_sku_p_j);
+            $sheet->setCellValue("O".$rowExcel, $row->penginapan_malam);
+            $sheet->setCellValue("P".$rowExcel, $row->penginapan_jumlah);
+            $sheet->setCellValue("Q".$rowExcel, $row->tikettol_pergi + $row->tikettol_pulang);
+            $sheet->setCellValue("R".$rowExcel, $row->tikettol_jumlah);
+            $sheet->setCellValue("S".$rowExcel, $row->jumlah_total);
+
+            $rowExcel++;
+        }
+
+        // Nama Sheet
+        $objPHPExcel->getActiveSheet()->setTitle("Rekap Perdin");
+
+        // Output ke browser
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="REKAP_E-PERDIN_FORMAT_BPK.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    public function cetak_excel_2025($tgla = 0, $tglb = 0){
+        $iduser = $this->session->userdata('id_auth');
+        if ($this->All) { 
+            $admin = 1;
+        } else {
+            $admin = 0;
+        }
+
+        if ($admin == 1 || in_array($iduser, [197, 218, 550, 543, 683])) {
+            $sql = "SELECT * FROM keu_perdin
+                    WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                    ORDER BY tgl_pembayaran ASC";
+            $list_perdin = $this->db->query($sql, [$tgla, $tglb])->result();
+
+            if (empty($list_perdin)) {
+                $sql = "SELECT * FROM keu_perdin_2024
+                        WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                        ORDER BY tgl_pembayaran ASC";
+                $list_perdin = $this->db->query($sql, [$tgla, $tglb])->result();
+            }
+        } else {
+            $sql = "SELECT * FROM keu_perdin
+                    WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                      AND (user_id = ? OR user_id = 443)
+                    ORDER BY tgl_pembayaran ASC";
+            $list_perdin = $this->db->query($sql, [$tgla, $tglb, $iduser])->result();
+
+            if (empty($list_perdin)) {
+                $sql = "SELECT * FROM keu_perdin_2024
+                        WHERE DATE(tgl_pembayaran) BETWEEN ? AND ?
+                          AND (user_id = ? OR user_id = 443)
+                        ORDER BY tgl_pembayaran ASC";
+                $list_perdin = $this->db->query($sql, [$tgla, $tglb, $iduser])->result();
+            }
+        }
+
+        // === Load PHPExcel ===
+        require_once APPPATH . 'third_party/PHPExcel/Classes/PHPExcel.php';
+        $objPHPExcel = new PHPExcel();
+        $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+        // Judul
+        $sheet->setCellValue("A1", "E-PERDIN (REKAP PERJALANAN DINAS) DPMPTSP JAWA BARAT (FORMAT BPK)");
+        $sheet->mergeCells("A1:Q1");
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+
+        $sheet->setCellValue("A2", "PERIODE : ".$this->lib_date->mysql_to_human($tgla)." - ".$this->lib_date->mysql_to_human($tglb));
+        $sheet->mergeCells("A2:Q2");
+
+
+          // ==========================
+          // HEADER (baris 4 & 5)
+          // ==========================
+          $sheet->setCellValue("A4", "No"); $sheet->mergeCells("A4:A5");
+          $sheet->setCellValue("B4", "Nama"); $sheet->mergeCells("B4:B5");
+          $sheet->setCellValue("C4", "Jabatan"); $sheet->mergeCells("C4:C5");
+          $sheet->setCellValue("D4", "Tempat Tujuan"); $sheet->mergeCells("D4:D5");
+          $sheet->setCellValue("E4", "Jumlah Hari Penugasan"); $sheet->mergeCells("E4:E5");
+          $sheet->setCellValue("F4", "Tanggal Berangkat"); $sheet->mergeCells("F4:F5");
+          $sheet->setCellValue("G4", "Tanggal Kembali"); $sheet->mergeCells("G4:G5");
+
+          // Header gabungan Biaya Perjalanan Dinas
+          $sheet->setCellValue("H4", "Biaya Perjalanan Dinas");
+          $sheet->mergeCells("H4:N4");
+
+          $sheet->setCellValue("H5", "Uang Harian (Rp)");
+          $sheet->setCellValue("I5", "Uang Penginapan (Rp)");
+          $sheet->setCellValue("J5", "Transport (Rp)");
+          $sheet->setCellValue("K5", "Uang Representasi (Rp)");
+          $sheet->setCellValue("L5", "Sewa Kendaraan (Rp)");
+          $sheet->setCellValue("M5", "Harga Tiket (Rp)");
+          $sheet->setCellValue("N5", "Airport Tax (Rp)");
+
+          $sheet->setCellValue("O4", "Total"); $sheet->mergeCells("O4:O5");
+
+          // Header gabungan Keberangkatan
+          $sheet->setCellValue("P4", "Keberangkatan");
+          $sheet->mergeCells("P4:W4");
+
+          $sheet->setCellValue("P5", "Maskapai");
+          $sheet->setCellValue("Q5", "Nomor Flight");
+          $sheet->setCellValue("R5", "No Tiket/Kode Boking");
+          $sheet->setCellValue("S5", "Asal");
+          $sheet->setCellValue("T5", "Tujuan");
+          $sheet->setCellValue("U5", "Tanggal Penerbangan");
+          $sheet->setCellValue("V5", "Jam");
+          $sheet->setCellValue("W5", "Harga Tiket");
+
+          // Header gabungan Keberangkatan
+          $sheet->setCellValue("X4", "Kembali");
+          $sheet->mergeCells("X4:AE4");
+
+          $sheet->setCellValue("X5", "Maskapai");
+          $sheet->setCellValue("Y5", "Nomor Flight");
+          $sheet->setCellValue("Z5", "No Tiket/Kode Boking");
+          $sheet->setCellValue("AA5", "Asal");
+          $sheet->setCellValue("AB5", "Tujuan");
+          $sheet->setCellValue("AC5", "Tanggal Penerbangan");
+          $sheet->setCellValue("AD5", "Jam");
+          $sheet->setCellValue("AE5", "Harga Tiket");
+
+          // Header gabungan Hotel
+          $sheet->setCellValue("AF4", "HOTEL");
+          $sheet->mergeCells("AF4:AK4");
+
+          $sheet->setCellValue("AF5", "Kegiatan");
+          $sheet->setCellValue("AG5", "Nama Hotel");
+          $sheet->setCellValue("AH5", "Tanggal Menginap");
+          $sheet->setCellValue("AI5", "Nomor Kamar");
+          $sheet->setCellValue("AJ5", "Biaya Hotel");
+          $sheet->setCellValue("AK5", "Keterangan");
+
+
+        // Style tebal
+        $sheet->getStyle("A4:AK4")->getFont()->setBold(true);
+
+
+        // Atur lebar kolom otomatis
+        foreach (range('A','Z') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+
+        // Isi data sesuai echo table
+       $rowExcel = 6; // data mulai setelah header
+        $no = 1;
+        $currentMonth = "";
+        foreach($list_perdin as $row){
+
+              // Ambil nama bulan dari tanggal berangkat (atau pembayaran sesuai kebutuhan)
+    $bulan = $this->lib_date->set_month_name(date('m', strtotime($row->tgl_pembayaran)), 'id');
+
+    // Jika bulan berubah, tampilkan nama bulan di 1 baris penuh
+    if ($bulan != $currentMonth) {
+        $sheet->setCellValue("A".$rowExcel, strtoupper($bulan));
+        $sheet->mergeCells("A".$rowExcel.":O".$rowExcel);
+        $sheet->getStyle("A".$rowExcel)->getFont()->setBold(true);
+        $currentMonth = $bulan;
+        $rowExcel++;
+
+        // Reset nomor urut ke 1 setiap bulan baru
+        $no = 1;
+    }
+$sheet->setCellValue("A".$rowExcel, $no++);
+            $sheet->setCellValue("B".$rowExcel, $this->m_perdin->get_n_pegawai($row->id_pegawai));
+            $sheet->setCellValue("C".$rowExcel, $this->m_perdin->get_n_jabatan($row->id_pegawai));
+            $sheet->setCellValue("D".$rowExcel, $this->m_perdin->get_n_kabupaten($row->tujuan));
+            $sheet->setCellValue("E".$rowExcel, $row->uang_hari);
+            $sheet->setCellValue("F".$rowExcel, $row->tanggal_berangkat);
+            $sheet->setCellValue("G".$rowExcel, $row->tanggal_kembali);
+            $sheet->setCellValue("H".$rowExcel, $row->jumlah_uang);
+            $sheet->setCellValue("I".$rowExcel, $row->penginapan_jumlah);
+            $sheet->setCellValue("J".$rowExcel, $row->bbm_harga+$row->tikettol_pergi+$row->tikettol_pulang);
+            $sheet->setCellValue("K".$rowExcel, $row->jumlah_representasi);
+            $sheet->setCellValue("L".$rowExcel, $row->sewa_kendaraan_jumlah);
+            $sheet->setCellValue("M".$rowExcel, $row->itberangkat_harga_tiket + $row->itkembali_harga_tiket);
+            $sheet->setCellValue("N".$rowExcel, '');
+            // $sheet->setCellValue("O".$rowExcel, $row->jumlah_total);
+            $sheet->setCellValue("O".$rowExcel, $row->jumlah_uang+$row->penginapan_jumlah+$row->bbm_harga+$row->tikettol_pergi+$row->tikettol_pulang+$row->uang_sku_p_j+$row->jumlah_representasi+$row->sewa_kendaraan_jumlah+$row->itberangkat_harga_tiket + $row->itkembali_harga_tiket);
+
+            $sheet->setCellValue("P".$rowExcel, $row->itberangkat_maskapai);
+            $sheet->setCellValue("Q".$rowExcel, $row->itberangkat_no_penerbangan);
+            $sheet->setCellValue("R".$rowExcel, $row->itberangkat_no_tiket);
+            $sheet->setCellValue("S".$rowExcel, $this->m_perdin->get_n_kabupaten($row->itberangkat_asal_daerah));
+            $sheet->setCellValue("T".$rowExcel, $this->m_perdin->get_n_kabupaten($row->itberangkat_tujuan));
+            $sheet->setCellValue("U".$rowExcel, $row->itberangkat_tanggal);
+            $sheet->setCellValue("V".$rowExcel, '');
+            $sheet->setCellValue("W".$rowExcel, $row->itberangkat_harga_tiket);
+
+            $sheet->setCellValue("X".$rowExcel, $row->itkembali_maskapai);
+            $sheet->setCellValue("Y".$rowExcel, $row->itkembali_no_penerbangan);
+            $sheet->setCellValue("Z".$rowExcel, $row->itkembali_no_tiket);
+            $sheet->setCellValue("AA".$rowExcel, $this->m_perdin->get_n_kabupaten($row->itkembali_asal_daerah));
+            $sheet->setCellValue("AB".$rowExcel, $this->m_perdin->get_n_kabupaten($row->itkembali_tujuan));
+            $sheet->setCellValue("AC".$rowExcel, $row->itkembali_tanggal);
+            $sheet->setCellValue("AD".$rowExcel, '');
+            $sheet->setCellValue("AE".$rowExcel, $row->itkembali_harga_tiket);
+            if (empty($row->uraian)) {
+              $maksud = $row->mksd_pemberangkatan;
+            } else {
+              $maksud = $row->uraian;
+            }
+            $sheet->setCellValue("AF".$rowExcel, $maksud);
+            $sheet->setCellValue("AG".$rowExcel, $row->nama_penginapan);
+            $sheet->setCellValue("AH".$rowExcel, '');
+            $sheet->setCellValue("AI".$rowExcel, '');
+            $sheet->setCellValue("AJ".$rowExcel, '');
+            $sheet->setCellValue("AK".$rowExcel, '');
+
+            $rowExcel++;
+        }
+
+        // Nama Sheet
+        $objPHPExcel->getActiveSheet()->setTitle("Rekap Perdin");
+
+        // Output ke browser
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="REKAP_E-PERDIN_FORMAT_BPK2025.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
 
     public function cetak_excel_pimpinan($tgla = 0, $tglb = 0){
@@ -686,71 +1020,108 @@ class Perdin extends WRC_AdminCont {
  
 }
 
-    public function cetak_excel_rekap() {
-       $now = $this->lib_date->get_date_now();
-      // if ($rekap == FALSE) {
-      //     redirect('dashboard');
-      // }
+public function cetak_excel_rekap($tgla = null, $tglb = null) {
+  $now = $this->lib_date->get_date_now();
+  $admin = "";
+      $petugas = new tmpegawai();
 
-      $admin = "";
-      if ($this->All) { 
-        $admin = 1;
-      } else {
-        $admin = 0;
+  $list = $petugas->where('unitkerja_id', 1)->order_by('golongan', "DESC")->get();
+
+  if ($this->All) { 
+      $admin = 1;
+  } else {
+      $admin = 0;
+  }
+
+  $tanggal_awal = date('Y-m-d');
+  // Ubah format tanggal
+  $tanggal_baru = date('Y-m-d', strtotime($tanggal_awal . ' -1 year'));
+
+  $awalyear =  $tanggal_baru;
+  $akhiryear =  $tanggal_awal;
+
+  $tgla = !empty($this->input->post('tgla')) ? $this->input->post('tgla') : $awalyear; 
+  $tglb = !empty($this->input->post('tglb')) ? $this->input->post('tglb') : $akhiryear;
+
+  $iduser = $this->session->userdata('id_user');
+
+  // Ambil data rekap
+  $search = $this->m_perdin->get_rekap_sp_by_pegawai($tgla, $tglb, $admin, $iduser);
+  // Set header untuk download Excel
+  header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+  header("Content-Disposition: attachment; filename=REKAP_E-PERDIN_PELAKSANA.xls");
+  header("Expires: 0");
+  header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+  header("Cache-Control: private", false);
+
+  // Output Excel
+  echo "<table border='1'>";
+  echo "<thead>
+          <tr>
+              <th>No</th>
+              <th>Nama Pelaksana</th>
+              <th>Jumlah Perdin</th>
+          </tr>
+      </thead>";
+  echo "<tbody>";
+
+  $i = 1;
+  $rekap = [];
+
+  // Kumpulkan dan kelompokkan data berdasarkan nama pegawai
+  foreach ($search as $row) {
+      $nama_pelaksana = $this->m_perdin->get_n_pegawai($row->id_pegawai);
+
+      if (!isset($rekap[$nama_pelaksana])) {
+          $rekap[$nama_pelaksana] = [
+              'total_sp' => 0,
+              'kab_kota_array' => [],
+              'nama_pelaksana' => $nama_pelaksana
+          ];
       }
-       $awalyear =  date('Y').'-01-01';
-       $akhiryear =  date('Y').'-12-31';
-      $tgla = !empty($this->input->post('tgla')) ? $this->input->post('tgla') : $awalyear; 
-      $tglb = !empty($this->input->post('tglb')) ? $this->input->post('tglb') :   $akhiryear;
+
+      // Tambahkan total SP
+      $rekap[$nama_pelaksana]['total_sp'] += $row->total_sp;
+
+      // Tambahkan kabupaten/kota tujuan (gabungan)
+      $tujuan = $this->m_perdin->get_tujuan_keberangkatan_perdin($row->no_grup_perdin, $row->id_tim);
+      if (!empty($tujuan)) {
+          foreach ($tujuan as $tujuan_row) {
+              $decoded = json_decode($tujuan_row->kab_kota, true);
+              if (is_array($decoded)) {
+                  $rekap[$nama_pelaksana]['kab_kota_array'] = array_merge($rekap[$nama_pelaksana]['kab_kota_array'], $decoded);
+              } elseif (!empty($tujuan_row->kab_kota)) {
+                  $rekap[$nama_pelaksana]['kab_kota_array'][] = $tujuan_row->kab_kota;
+              }
+          }
+      }
+  }
+
+  // Tampilkan hasil
+  $i = 1;
+  foreach ($rekap as $data) {
+      $kab_kota_list = !empty($data['kab_kota_array']) ? implode(", ", array_unique($data['kab_kota_array'])) : "Tidak tersedia";
+
+      echo "<tr>
+              <td>{$i}</td>
+              <td>{$data['nama_pelaksana']}</td>
+              <td>{$data['total_sp']}</td>
+              <td>{$kab_kota_list}</td>
+            </tr>";
+      $i++;
+  }
 
 
-      $tglc = (!empty($this->input->post('tglc')) ? $this->input->post('tglc') : $this->lib_date->set_date($now, -30));
-      $tgld = (!empty($this->input->post('tgld')) ? $this->input->post('tgld') : $this->lib_date->set_date($now, 0));
+    echo "</tbody></table>";
+ }
 
-      $mark = $this->input->post('mark');
-      $statusizin = $this->input->post('statusizin');
-       $iduser = $this->session->userdata('id_auth');
-
-       $data['tgla'] = $tgla;
-      $data['tglb'] = $tglb;
-
-      $data['tglc'] = $tglc;
-      $data['tgld'] = $tgld;
-
-      $search  = $this->m_perdin->get_data($tgla, $tglb, $admin, $iduser);
-        $data['search'] = $search;
-        $data['rekap'] = 1;
-  
-   
-      $this->load->vars($data);
-
-      $js = "function confirm_link(text){
-              if(confirm(text)){ return true;
-              }else{ return false; }
-            }
-            
-            $(document).ready(function() {
-              oTable = $('#pendataan').dataTable({
-                \"bJQueryUI\": true,
-                \"sPaginationType\": \"full_numbers\"
-              });
-            });
-
-            $(function() {
-               $(\"#tabs\").tabs();
-              $(\".monbulan\").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: 'yy-mm-dd',
-                closeText: 'X'
-              });
-              $('#form').validate();
-            });";
-
-      $this->template->set_metadata_javascript($js);
-      $this->session_info['page_name'] = "Rekap Perdin";
-      $this->template->build('rekap', $this->session_info);
-    }
+private function normalize_name($nama) {
+    $nama = strtolower($nama);
+    $hapus = ['[tidak aktif]'];
+    $nama = str_ireplace($hapus, '', $nama);
+    $nama = preg_replace('/\s+/', ' ', $nama); // Hilangkan spasi ganda
+    return trim($nama);
+}
 
     public function rekap() {
        $now = $this->lib_date->get_date_now();
@@ -783,36 +1154,91 @@ class Perdin extends WRC_AdminCont {
 
       $data['tglc'] = $tglc;
       $data['tgld'] = $tgld;
+      $tahun = date('Y', strtotime($tgla)); 
+      $data['rekap_anggaran'] = $this->m_perdin->get_rekap_per_bulan($tahun);
+        $data['array_bulan'] = [
+               1 => "Januari", 2 => "Februari", 3 => "Maret", 4 => "April",
+                5 => "Mei", 6 => "Juni", 7 => "Juli", 8 => "Agustus",
+                9 => "September", 10 => "Oktober", 11 => "November", 12 => "Desember"
+        ];
 
-      $search  = $this->m_perdin->get_rekap_sp_by_pegawai($tgla, $tglb, $admin, $iduser);
+      $petugas = new tmpegawai();
+
+      $data['list'] = $petugas->where('unitkerja_id', 1)->order_by('golongan', "DESC")->get();
+
+      // $search  = $this->m_perdin->get_rekap_sp_by_pegawai($tgla, $tglb, $admin, $iduser);
+      $data_mentah = $this->m_perdin->get_rekap_sp_by_pegawai($tgla, $tglb);
+
+      $search = [];
+
+    foreach ($data_mentah as $row) {
+        $nama_asli = trim($row->n_pegawai);
+        $nama_key = $this->normalize_name($nama_asli); // Pakai method, bukan fungsi global
+
+        if (!isset($search[$nama_key])) {
+            $search[$nama_key] = [
+                'n_pegawai' => $nama_asli,
+                'total_sp' => 0,
+                'tanggal_awal' => $row->tanggal_berangkat_awal,
+                'tanggal_akhir' => $row->tanggal_berangkat_akhir
+            ];
+        }
+
+        $search[$nama_key]['total_sp'] += $row->total_sp;
+        $search[$nama_key]['tanggal_awal'] = min($search[$nama_key]['tanggal_awal'], $row->tanggal_berangkat_awal);
+        $search[$nama_key]['tanggal_akhir'] = max($search[$nama_key]['tanggal_akhir'], $row->tanggal_berangkat_akhir);
+    }
+
+
+
         $data['search'] = $search;
+        // var_dump($data['search']);die();
+
+        // $data['search'] = $search;
         $data['rekap'] = 0;
       // var_dump($search);die();
    
       $this->load->vars($data);
 
       $js = "function confirm_link(text){
-              if(confirm(text)){ return true;
-              }else{ return false; }
-            }
-            
-            $(document).ready(function() {
-              oTable = $('#pendataan').dataTable({
-                \"bJQueryUI\": true,
-                \"sPaginationType\": \"full_numbers\"
-              });
-            });
+                  if(confirm(text)){ return true;
+                  } else { return false; }
+              }
 
-            $(function() {
-               $(\"#tabs\").tabs();
-              $(\".monbulan\").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: 'yy-mm-dd',
-                closeText: 'X'
+              $(document).ready(function() {
+                  // DataTable untuk tabel #pendataan
+                  oTable = $('#pendataan').dataTable({
+                      \"bJQueryUI\": true,
+                      \"sPaginationType\": \"full_numbers\"
+                  });
+
+                  // DataTable untuk #data_rekap_anggaran dengan sorting bulan berdasarkan angka
+                  oTable = $('#data_rekap_anggaran').dataTable({
+                      \"bJQueryUI\": true,
+                      \"sPaginationType\": \"full_numbers\",
+                      \"aaSorting\": [[0, \"asc\"]],
+                      \"aoColumns\": [
+                          { \"iDataSort\": 0 }, // Kolom Bulan, baca dari data-order
+                          null, // Bulan (teks)
+                          null, // Total SP
+                          null, // Total Uang Harian
+                          null  // Periode
+                      ]
+                  });
               });
-              $('#form').validate();
-            });";
+
+              // jQuery UI Tabs dan Datepicker
+              $(function() {
+                  $(\"#tabs\").tabs();
+                  $(\".monbulan\").datepicker({
+                      changeMonth: true,
+                      changeYear: true,
+                      dateFormat: 'yy-mm-dd',
+                      closeText: 'X'
+                  });
+                  $('#form').validate();
+              });";
+
 
       $this->template->set_metadata_javascript($js);
       $this->session_info['page_name'] = "Rekap Perdin";
@@ -826,6 +1252,11 @@ class Perdin extends WRC_AdminCont {
       // $data['perdin'] = $this->m_perdin->get_perdin_sppd($no__sppd);
       // $data['perdin'] = $this->m_perdin->get_perdin_sppd($no__sppd);
       // $data['perdin1'] = $this->m_perdin->get_perdin($id);
+      if ($this->All) { 
+        $data['admin'] = 1;
+      } else {
+        $data['admin'] = 0;
+      }
       // $data['step'] = "update";
       $data['step'] = "simpan_perdin";
       $method = "save";
@@ -833,7 +1264,6 @@ class Perdin extends WRC_AdminCont {
       $data['kabupaten'] = $this->m_perdin->get_kabupaten();
       $data['lokasi'] = "";
       $data['iduser'] = $this->session->userdata('id_auth');
-      // var_dump($data['iduser']);die();
       $pendaftaran = new tmpermohonan();
       $pendaftaran->where('id', $id)->get();
       $pendaftaran->tmpemohon->get();
@@ -850,6 +1280,8 @@ class Perdin extends WRC_AdminCont {
       
       $petugas = new tmpegawai();
       $data['list'] = $petugas->where('unitkerja_id', 1)->order_by('golongan', "DESC")->get();
+      // var_dump($petugas);die();
+
 
       $data['itberangkat_asal_daerah1'] = $this->m_perdin->get_kabupaten();
       $data['itberangkat_tujuan1'] = $this->m_perdin->get_kabupaten();
@@ -859,7 +1291,6 @@ class Perdin extends WRC_AdminCont {
       $data['pegawai'] = $this->m_perdin->get_pegawai(); 
       $data['surat_kode_reg'] = $this->m_perdin->get_kode_reg();
       $data['list_tims'] = $this->m_perdin->get_list_tim();
-      // var_dump($data['list_tim']);die();
       $js_date = " $(function() {
                    $(\".survey\").datepicker({
                      changeMonth: true,
@@ -903,8 +1334,10 @@ class Perdin extends WRC_AdminCont {
     
       $this->template->set_metadata_javascript($js);
       // $this->template->set_metadata_javascript($js_date);
+      
       $this->load->vars($data);
       $this->session_info['page_name'] = "Penomoran Surat Perintah Perjalanan Dinas";
+
       $this->template->build('addperdin', $this->session_info);
   }
 
@@ -946,9 +1379,9 @@ class Perdin extends WRC_AdminCont {
       $data['tgld'] = $tgld;
       $data['detailpage'] = '0';
 
-      // var_dump($iduser);die();
       $data['admin'] = $admin;
       $data['iduser'] = $iduser;
+      // var_dump($iduser);die();
 
       
       $search  = $this->m_perdin->get_data_surat_perintah($tgla, $tglb, $admin, $iduser);
@@ -1273,6 +1706,11 @@ class Perdin extends WRC_AdminCont {
     // $data['perdin'] = $this->m_perdin->get_perdin_sppd($no__sppd);
     // $data['perdin1'] = $this->m_perdin->get_perdin($id);
     // $data['step'] = "update";
+    if ($this->All) { 
+      $data['admin'] = 1;
+    } else {
+      $data['admin'] = 0;
+    }
     $data['perdin_grup'] = $this->m_perdin->get_perdin_sp($id);
     // var_dump($data['perdin_grup']);die();
     $data['perdin_no_grup'] = $this->m_perdin->get_perdin($data['perdin_grup']->no_grup_perdin, $data['perdin_grup']->id_tim);
@@ -1381,7 +1819,110 @@ public function penomoran_surat($id = NULL , $id_tim = NULL) {
   // $data['perdin1'] = $this->m_perdin->get_perdin($id);
   // $data['step'] = "update";
   $data['perdin_grup'] = $this->m_perdin->get_perdin_sp($id);
+  // var_dump($data['perdin_grup']);die();
+
   $data['perdin_no_grup'] = $this->m_perdin->get_perdin_join_tim_tot($data['perdin_grup']->no_grup_perdin, $data['perdin_grup']->id_tim);
+
+  $data['step'] = "update";
+  $method = "save";
+  $data['save_method'] = $method;
+  $data['kabupaten'] = $this->m_perdin->get_kabupaten();
+
+  $data['lokasi'] = "";
+
+  $pendaftaran = new tmpermohonan();
+  $pendaftaran->where('id', $id)->get();
+  $pendaftaran->tmpemohon->get();
+  $pendaftaran->trperizinan->get();
+  $pendaftaran->trtanggal_survey->get();
+
+  $survey_date = new trtanggal_survey();
+  $survey_date->where('id', $pendaftaran->trtanggal_survey->id)->get();
+  $survey_date->tmpegawai->get();
+
+  $petugas = new tmpegawai();
+  $data['petugas'] = $petugas->where('status = 1 OR status = 2')->get();
+  $data['petugas_id'] = $survey_date->tmpegawai->id;
+  
+  $petugas = new tmpegawai();
+  $data['list'] = $petugas->where('unitkerja_id', 1)->order_by('golongan', "DESC")->get();
+  // var_dump( $data['list']);die();
+  $data['itberangkat_asal_daerah1'] = $this->m_perdin->get_kabupaten();
+  $data['itberangkat_tujuan1'] = $this->m_perdin->get_kabupaten();
+  $data['itkembali_tujuan1'] = $this->m_perdin->get_kabupaten();
+  $data['itkembali_asal_daerah1'] = $this->m_perdin->get_kabupaten();
+
+  $data['pegawai'] = $this->m_perdin->get_pegawai(); 
+  $data['surat_kode_reg'] = $this->m_perdin->get_kode_reg();
+
+  $js_date = " $(function() {
+               $(\".survey\").datepicker({
+                 changeMonth: true,
+                 changeYear: true,
+                 dateFormat: 'yy-mm-dd',
+                 closeText: 'X'
+               });
+             });
+           ";
+
+  $js_date .= "$(document).ready(
+               function() {
+                 $('#listizin').multiselect().multiselectfilter({
+                   show:'blind',
+                   hide:'blind',
+                   selectedText:'# dari # terpilih'
+                 }
+               );
+             });
+            ";
+  $js =  "
+             $(document).ready(function() {
+              oTable = $('#pendataan').dataTable({
+                \"bJQueryUI\": true,
+                \"sPaginationType\": \"full_numbers\"
+              });
+            });
+          $(document).ready(function() {
+              $(\"#tabs\").tabs();
+              $('.monbulan').datepicker({
+                  changeMonth: true,
+                  changeYear: true,
+                  dateFormat: 'yy-mm-dd',
+                  closeText: 'X'
+              });
+              $('#form').validate();
+              $('.pilihan').select2();
+          });
+  
+          function finishAjax(id, response){
+              $('#'+id).html(unescape(response));
+              $('#'+id).fadeIn();
+          } 
+      ";
+
+  $this->template->set_metadata_javascript($js);
+  // $this->template->set_metadata_javascript($js_date);
+  $this->load->vars($data);
+  $this->session_info['page_name'] = "Penomoran Surat Perintah Perjalanan Dinas";
+  $this->template->build('penomoran_sp_perdin', $this->session_info);
+}
+
+public function approve_surat_perdin($id = NULL , $id_tim = NULL) {
+  // $no__sppd = $this->m_perdin->get_no_sppd($id);
+  // $data['perdin'] = $this->m_perdin->get_perdin_sppd($no__sppd);
+  // $data['perdin'] = $this->m_perdin->get_perdin_sppd($no__sppd);
+  // $data['perdin1'] = $this->m_perdin->get_perdin($id);
+  // $data['step'] = "update";
+     $admin = "";
+      if ($this->All) { 
+        $data['admin'] = 1;
+      } else {
+        $data['admin'] = 0;
+      }
+  $data['perdin_grup'] = $this->m_perdin->get_perdin_sp($id);
+  $data['perdin_no_grup'] = $this->m_perdin->get_perdin_join_tim_tot($data['perdin_grup']->no_grup_perdin, $data['perdin_grup']->id_tim);
+  // var_dump($data['perdin_grup']);die();
+  $data['user_id'] = $this->session->userdata('id_auth'); 
 
   $data['step'] = "update";
   $method = "save";
@@ -1464,8 +2005,8 @@ public function penomoran_surat($id = NULL , $id_tim = NULL) {
   $this->template->set_metadata_javascript($js);
   // $this->template->set_metadata_javascript($js_date);
   $this->load->vars($data);
-  $this->session_info['page_name'] = "Penomoran Surat Perintah Perjalanan Dinas";
-  $this->template->build('penomoran_sp_perdin', $this->session_info);
+  $this->session_info['page_name'] = "Approve Surat Perintah Perjalanan Dinas";
+  $this->template->build('approve_surat', $this->session_info);
 }
 //   public function ubah_sp_perdin($id) {
 //     $data['perdin_grup'] = $this->m_perdin->get_perdin_sp($id);
@@ -1649,16 +2190,12 @@ public function penomoran_surat($id = NULL , $id_tim = NULL) {
     $tgl_srt_undangan = $this->input->post('tgl_srt_undangan');
     $tipe_undangan = $this->input->post('tipe_undangan');
     $srt_instansi_undangan = $this->input->post('srt_instansi_undangan');
-
-
-    
-    
-        require_once 'assets/phpword/src/PhpWord/Autoloader.php';
+         require_once 'assets/phpword/src/PhpWord/Autoloader.php';
         \PhpOffice\PhpWord\Autoloader::register();
           foreach ($data as $key => $data_file) {
             $kode_tim_file = $this->m_perdin->get_tim_details($data_file->id_tim);
             // Path ke file template yang sudah ada
-            if ($data_file->id_pegawai == "1061") {
+            if ($data_file->id_pegawai == "1152") {
                 continue;
             }elseif ($data_file->id_pegawai == "31"){
               $templateFile = "assets/file_surat_perdin/kadis_sekdis/{$data_file->file_srt}";
@@ -1681,23 +2218,14 @@ public function penomoran_surat($id = NULL , $id_tim = NULL) {
             $tujuan = json_decode($get_tujuan[0]->kab_kota, true);
             $tanggal_berangkat = date("d-F-Y", strtotime($get_tim[0]->tanggal_berangkat));
             $nama_tim = ucwords(strtolower($get_tim[0]->nama_tim));
-            $protocol = $_SERVER['REQUEST_SCHEME'];
-            $domain = $_SERVER['http_host'];
-            $script_filename = $_SERVER["PHP_SELF"];
-            // Cek apakah "index.php" ada di dalam string
-            if (strpos($script_filename, 'index.php') !== false) {
-                // Hapus "index.php" dari string
-                $clean_path = str_replace('index.php', '', $script_filename);
-            } else {
-                $clean_path = $script_filename;
-            }
+
             $n_pesan = "Anda ditugaskan untuk perjalanan dinas pada kegiatan {$data_file->mksd_pemberangkatan} 
             dari tim {$nama_tim} pada tanggal {$tanggal_berangkat} 
             ke {$tujuan[0]}. 
 
-            Surat perintah dapat dilihat pada link berikut:".
-            $protocol."://".$domain.$clean_path."survey/sp_saya";
-            // var_dump($n_pesan);die();
+            Surat perintah dapat dilihat pada link berikut:
+            https://dpmptsp.jabarprov.go.id/jelita/backoffice/survey/sp_saya";
+            // var_dump($get_data_pegawai['telepon']);die();
             
             $kirim_notif = $this->m_perdin->postWaSms($get_data_pegawai['telepon'], $n_pesan);
             
@@ -1787,6 +2315,63 @@ public function penomoran_surat($id = NULL , $id_tim = NULL) {
 
     }
 }
+ public function update_approve_surat($id, $id_tim) {
+    // Ambil data input dari form
+
+    $data = $this->m_perdin->get_perdin($id,$id_tim);
+ 
+    $status_approve = $this->input->post('status_approve');
+    
+    
+
+    $no__sppd = $this->input->post('no__sppd');
+    $tanggal_berangkat = $this->input->post('tglberangkat');
+    $tanggal_kembali = $this->input->post('tglkembali');
+    $tgl_surat = $this->input->post('tgl_surat');
+    
+    $detail_tempat_pemberangkatan = $this->input->post('detail_tempat_pemberangkatan');
+    $kendaraan = $this->input->post('kendaraan');
+
+    $mksd_pemberangkatan = $this->input->post('mksd_pemberangkatan');
+    $kode_rek_sub_req = $this->input->post('kode_rek_sub_req');
+    $perihal_srt_undangan = $this->input->post('perihal_srt_undangan');
+    $nmr_srt_undangan = $this->input->post('nmr_srt_undangan');
+    $tgl_srt_undangan = $this->input->post('tgl_srt_undangan');
+    $tipe_undangan = $this->input->post('tipe_undangan');
+    $srt_instansi_undangan = $this->input->post('srt_instansi_undangan');
+    $data = [
+            'status_approve' => $status_approve, // Format: 2024-01-30
+        ];
+        $simpan = $this->m_perdin->update_e_perdin_by_no_grup_perdin($id,$id_tim,$data,$mksd_pemberangkatan);
+        // var_dump($simpan);die(); 
+
+        $data_log_perdin = [
+              'id_user_pembuat' => $simpan['user_id'],
+              'tanggal_pembuatan' => date('Y-m-d H:i:s'),
+              'tanggal_approve' => date('Y-m-d H:i:s'),
+              'status_approve' => $status_approve,
+              'mksd_pemberangkatan' => $simpan['mksd_pemberangkatan'],
+              'id_data_utama' => $simpan['id']
+          ];
+
+
+          $save_log_perdin  = $this->m_perdin->save_log_e_perdin($data_log_perdin);
+          // var_dump($save_log_perdin);die();
+    // Cek apakah update berhasil
+    if ($simpan) {
+        $this->session->set_flashdata('sukses', "Berhasil Mengupdate Data.");
+            redirect('/perdin/suratperintah/');
+        
+
+    } else {
+        $this->session->set_flashdata('gagal', "Gagal Mengupdate Data");
+            redirect('/perdin/suratperintah/');
+        
+
+
+
+    }
+}
 public function konvert_pdf($name_file) {
   // Setup API client
   $opts = array('http' => array('header' => "User-Agent:MyAgent/1.0\r\n"));
@@ -1804,25 +2389,14 @@ public function konvert_pdf($name_file) {
   // die();
   $json = json_decode($data);
 
-  $script_filename = $_SERVER["SCRIPT_FILENAME"];
-  // Cek apakah "index.php" ada di dalam string
-  if (strpos($script_filename, 'index.php') !== false) {
-      // Hapus "index.php" dari string
-      $clean_path = str_replace('index.php', '', $script_filename);
-  } else {
-      $clean_path = $script_filename;
-  }
   if ($json->status && $json->status == 'success') {
-      // Path file PDF dari API
+      // === Ambil PDF dari API ===
       $dtpdf = 'http://103.122.5.250/siapi/web/assets/pdf/' . preg_replace('/\s/i', '%20', $namafile) . '.pdf';
-      // Path penyimpanan sementara di server
-      $newfile = $clean_path.'assets/file_surat_perdin/' . $namafile . '.pdf';
+      $newfile = $_SERVER['DOCUMENT_ROOT'] . '/jelita/backoffice/assets/file_surat_perdin/' . $namafile . '.pdf';
 
-      // Salin file PDF ke server
       if (copy($dtpdf, $newfile)) {
-          // Cek apakah file berhasil disimpan
           if (file_exists($newfile)) {
-              // Mengirim file ke browser untuk diunduh
+              // === Kirim file ke browser ===
               header('Content-Description: File Transfer');
               header('Content-Type: application/pdf');
               header('Content-Disposition: attachment; filename="' . basename($newfile) . '"');
@@ -1831,25 +2405,49 @@ public function konvert_pdf($name_file) {
               header('Pragma: public');
               header('Content-Length: ' . filesize($newfile));
               readfile($newfile);
-
-              // Hapus file sementara setelah diunduh
-              // unlink($newfile);
-
-              exit; // Menghentikan eksekusi setelah unduhan
+              exit;
           } else {
               echo "File tidak ditemukan: {$newfile}";
               return false;
           }
       } else {
-          echo "Gagal menyalin file dari API.";
-          return false;
+          // === Jika gagal menyalin, buat file di server ===
+          buat_pdf_local($namafile);
       }
   } else {
-      echo "Gagal mendapatkan data dari API atau status API tidak sukses.";
-      return false;
+      // === Jika status API tidak sukses, buat file di server ===
+      buat_pdf_local($namafile);
   }
-}
 
+}
+function buat_pdf_local($namafile)
+{
+    require_once(APPPATH . 'libraries/fpdf/fpdf.php'); // pastikan FPDF tersedia
+    $path = $_SERVER['DOCUMENT_ROOT'] . '/jelita/backoffice/assets/file_surat_perdin/' . $namafile . '.pdf';
+
+    $pdf = new FPDF();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(0, 10, 'Gagal Mengambil File dari API', 0, 1, 'C');
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->MultiCell(0, 8, "File ini dibuat otomatis di server karena proses pengambilan data dari API gagal.", 0, 'L');
+    $pdf->Output('F', $path);
+
+    // === Kirim file ke browser ===
+    if (file_exists($path)) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+    } else {
+        echo "Gagal membuat file PDF di server.";
+    }
+}
 public function konvert_pdf_sekdis_kadis($name_file) {
   // Setup API client
   $opts = array('http' => array('header' => "User-Agent:MyAgent/1.0\r\n"));
@@ -1867,20 +2465,11 @@ public function konvert_pdf_sekdis_kadis($name_file) {
   // die();
   $json = json_decode($data);
 
-  $script_filename = $_SERVER["SCRIPT_FILENAME"];
-  // Cek apakah "index.php" ada di dalam string
-  if (strpos($script_filename, 'index.php') !== false) {
-      // Hapus "index.php" dari string
-      $clean_path = str_replace('index.php', '', $script_filename);
-  } else {
-      $clean_path = $script_filename;
-  }
-
   if ($json->status && $json->status == 'success') {
       // Path file PDF dari API
       $dtpdf = 'http://103.122.5.250/siapi/web/assets/pdf/' . preg_replace('/\s/i', '%20', $namafile) . '.pdf';
       // Path penyimpanan sementara di server
-      $newfile = $clean_path . 'assets/file_surat_perdin/' . $namafile . '.pdf';
+      $newfile = $_SERVER['DOCUMENT_ROOT'] . '/jelita/backoffice/assets/file_surat_perdin/' . $namafile . '.pdf';
 
       // Salin file PDF ke server
       if (copy($dtpdf, $newfile)) {
@@ -1978,7 +2567,7 @@ public function update_e_perdin() {
   $uang_hari = ($this->input->post('uang_hari'));
   $harga_hari = $this->m_perdin->get_number($this->input->post('harga_hari'));
   $jumlah_uang = $uang_hari*$harga_hari;
-  // var_dump($jumlah_uang);die();
+  var_dump($jumlah_uang);die();
   $representasi_hari = ($this->input->post('representasi_hari'));
   $representasi_harga = $this->m_perdin->get_number($this->input->post('representasi_harga'));
   $jumlah_representasi = $representasi_hari*$representasi_harga;
@@ -2072,7 +2661,7 @@ public function update ($id,$id_tim_parameter) {
     }
 
     // ID yang harus dipindahkan ke akhir
-    $prioritas = [1061, 31];
+    $prioritas = [1152, 31];
 
     // Cek apakah ID prioritas ada dalam array
     $adaPrioritas = array_intersect($id_pegawai, $prioritas);
@@ -2169,7 +2758,8 @@ public function update ($id,$id_tim_parameter) {
           $detail_tempat_pemberangkatan = $this->input->post('detail_tempat_pemberangkatan');
           $kendaraan = $this->input->post('kendaraan');
           $tanggal_sp_backdate = $this->input->post('tanggal_sp_backdate');
-
+          $status_approve = $this->input->post('status_approve');
+          // var_dump($status_approve);die();
           $mksd_pemberangkatan = $this->input->post('mksd_pemberangkatan');
           $kode_rek_sub_req = $this->input->post('kode_rek_sub_req');
 
@@ -2187,10 +2777,10 @@ public function update ($id,$id_tim_parameter) {
           $id_tim = $this->input->post('id_tim');
           $lama_p_d = $total_hari;
           
-        
           
               
           $data = [
+            'user_id' => $user_id,
             'lama_p_d' => $lama_p_d,
             'uraian' => $uraian,
             'tujuan' => $tujuan,
@@ -2214,6 +2804,7 @@ public function update ($id,$id_tim_parameter) {
             'titik_lokasi' => $titik_lokasi,
             'kendaraan' => $kendaraan,
             'tanggal_sp_backdate' => $tanggal_sp_backdate,
+            'status_approve' => $status_approve,
             
           ];
 
@@ -2236,44 +2827,45 @@ public function update ($id,$id_tim_parameter) {
           $date_value_akhir = date('Y-m-d', strtotime("$tglberangkat + $jml_hari_akhir days"));
           $date_value_pertama = date('Y-m-d', strtotime("$tglberangkat - $nilai_hari_sebelum days"));
         
-
+          // var_dump($row);die();
           if ($tipe_undangan != 2) {
-
-            if ($lama_p_d > 2) {
-               
-                  $this->session->set_flashdata('gagal',"Batas melakukan perjalan dinas adalah 2 hari dalam minggu pemilihan tanggal" );
-                  redirect('/perdin/ubah_sp_perdin/' . $id_perdin );
-
-            }else{
-
-              foreach ($pkepada as $row) {
-                $data_pegawai_sudah_perdin = $this->m_perdin->get_data_pegawai_sudah_perdin($date_value_pertama , $date_value_akhir, $row);
-         
-                if (!empty($data_pegawai_sudah_perdin) && 
-                    ($tglberangkat != $data_pegawai_sudah_perdin[0]->tanggal_berangkat || 
-                    $row != $data_pegawai_sudah_perdin[0]->id_pegawai)) {
-                  $data = [
-                      'lama_p_d' => null,
-                  ];
-                  $update_perdin = $this->m_perdin->update_e_perdin($id_perdin, $data);
-                  $tambah_lama_p_d = $data_pegawai_sudah_perdin[0]->total_lama_p_d + $lama_p_d;
-                  // var_dump($data_pegawai_sudah_perdin[0]->total_lama_p_d);die();
-                  if($data_pegawai_sudah_perdin[0]->total_lama_p_d > 2) {
-                      $data_pegawai = $this->m_perdin->get_n_pegawai($row);
-                      
-                      $this->db->trans_rollback();
-                      if (is_array($data_pegawai) || is_object($data_pegawai)) {
-                        // Jika $data_pegawai adalah array atau objek, kita ubah menjadi JSON atau format string lainnya
-                        $data_pegawai = json_encode($data_pegawai);
-                      }
-                    // Set flashdata dengan pesan yang lebih jelas
-                  
-                    $this->session->set_flashdata('gagal',$data_pegawai. " sudah melakukan 2 hari perjalanan dinas dalam minggu ini" );
+            if ($row != 1152) {
+              if ($lama_p_d > 2) {
+                
+                    $this->session->set_flashdata('gagal',"Batas melakukan perjalan dinas adalah 2 hari dalam minggu pemilihan tanggal" );
                     redirect('/perdin/ubah_sp_perdin/' . $id_perdin );
+
+              }else{
+
+                foreach ($pkepada as $row) {
+                  $data_pegawai_sudah_perdin = $this->m_perdin->get_data_pegawai_sudah_perdin($date_value_pertama , $date_value_akhir, $row);
+          
+                  if (!empty($data_pegawai_sudah_perdin) && 
+                      ($tglberangkat != $data_pegawai_sudah_perdin[0]->tanggal_berangkat || 
+                      $row != $data_pegawai_sudah_perdin[0]->id_pegawai)) {
+                    $data = [
+                        'lama_p_d' => null,
+                    ];
+                    $update_perdin = $this->m_perdin->update_e_perdin($id_perdin, $data);
+                    $tambah_lama_p_d = $data_pegawai_sudah_perdin[0]->total_lama_p_d + $lama_p_d;
+                    // var_dump($data_pegawai_sudah_perdin[0]->total_lama_p_d);die();
+                    if($data_pegawai_sudah_perdin[0]->total_lama_p_d > 2) {
+                        $data_pegawai = $this->m_perdin->get_n_pegawai($row);
+                        
+                        $this->db->trans_rollback();
+                        if (is_array($data_pegawai) || is_object($data_pegawai)) {
+                          // Jika $data_pegawai adalah array atau objek, kita ubah menjadi JSON atau format string lainnya
+                          $data_pegawai = json_encode($data_pegawai);
+                        }
+                      // Set flashdata dengan pesan yang lebih jelas
+                    
+                      $this->session->set_flashdata('gagal',$data_pegawai. " sudah melakukan 2 hari perjalanan dinas dalam minggu ini" );
+                      redirect('/perdin/ubah_sp_perdin/' . $id_perdin );
+                    }
                   }
                 }
               }
-            }  
+            }
           }
         }
           $test = $this->m_perdin->hapus_perdin_by_no_grup_perdin($id,$id_tim_parameter);
@@ -2313,6 +2905,7 @@ public function update ($id,$id_tim_parameter) {
       
           foreach ($id_pegawai as $row) {
             $data_insert = [
+              'user_id' => $user_id,
               'id_pegawai' => $row,
               'lama_p_d' => $total_hari,
               'skpd' => $skpd,
@@ -2337,6 +2930,7 @@ public function update ($id,$id_tim_parameter) {
               'id_tim' => $id_tim,
               'kendaraan' => $kendaraan,
               'tanggal_sp_backdate' => $tanggal_sp_backdate,
+              'status_approve' => $status_approve,
 
             ];
             // var_dump($data_insert);die();
@@ -2351,7 +2945,16 @@ public function update ($id,$id_tim_parameter) {
 
             $id_perdin = $this->m_perdin->save_e_perdin($data_insert);
             // var_dump($id_perdin);die();
+            $data_log_perdin = [
+              'id_user_pembuat' => $user_id,
+              'tanggal_pembuatan' => date('Y-m-d H:i:s'),
+              'status_approve' => $status_approve,
+              'mksd_pemberangkatan' => $mksd_pemberangkatan,
+              'id_data_utama' => $id_perdin
+            ];
 
+
+          $save_log_perdin  = $this->m_perdin->save_log_e_perdin($data_log_perdin);
             // if (!$id_perdin) {
             //     $this->db->trans_rollback();
             //     $this->session->set_flashdata('gagal', "Gagal menyimpan data perjalanan dinas.");
@@ -2383,6 +2986,8 @@ public function update ($id,$id_tim_parameter) {
                 'no__sppd' => $no__sppd,
                 'kendaraan' => $kendaraan,
                 'tanggal_sp_backdate' => $tanggal_sp_backdate,
+                'status_approve' => $status_approve,
+
                 'tgl_Surat' => isset($tgl_Surat) ? $tgl_Surat : null,  // This works on older PHP versions
 
             ];
@@ -2404,10 +3009,9 @@ public function update ($id,$id_tim_parameter) {
         
         // Simpan data ke database
         $id_perdin = $this->m_perdin->save_e_perdin_tujuan_pemberangkatan($data_keberangkatan);
-        
           if (is_array($pkepada)) {
 
-            if (in_array("31", $pkepada) || in_array("1061", $pkepada)) {
+            if (in_array("31", $pkepada) || in_array("1152", $pkepada)) {
   
                 // Jika kedua nilai ada dalam array
                 if (in_array("31", $pkepada)) {
@@ -2530,7 +3134,6 @@ public function update ($id,$id_tim_parameter) {
                     // Pastikan "Februari" ditulis dengan 'F' bukan 'P'
                     $tglKeberangkatan = str_replace('Pebruari', 'Februari', $tglKeberangkatan);
                     $tglKepulangan = str_replace('Pebruari', 'Februari', $tglKepulangan);
-                    // var_dump($tglKeberangkatan);die();
                     
                     if ($tanggalBerangkat_1 == "0000-00-00") {
                       $templateProcessor->setValue("tglKeberangkatan_1", '');
@@ -2538,22 +3141,30 @@ public function update ($id,$id_tim_parameter) {
                       $templateProcessor->setValue("tgl_kepulangan#1", $tanggal_pulang_1);
         
                     }else{
+
                       $templateProcessor->setValue("tglKeberangkatan_1", $tglKeberangkatan_1);
                       $templateProcessor->setValue("tanggal_pulang_1", $tanggal_pulang_1);
                       
                       if ($tanggalBerangkat_2 === "0000-00-00") {
-                          if ($pegawai['lama_p_d'] == 1) {
-                              $templateProcessor->setValue("tgl_kepulangan_sp1", '');
-                          } else {
-                              $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_2);
-                          }
-                          $templateProcessor->setValue("tgl_kepulangan1", $tanggal_pulang_1);
-        
-                      } else {
-                          $templateProcessor->setValue("tgl_kepulangan_sp1", '');
-                          $templateProcessor->setValue("tgl_kepulangan1", '');
-        
-                      }
+
+                        if ($pegawai['lama_p_d'] == 1) {
+                            $templateProcessor->setValue("tgl_kepulangan_sp1", '');
+                        } elseif (!empty($tanggal_pulang_2)) {
+                            // Jika $tanggal_pulang_2 ada nilainya
+                            $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_2);
+                        }else {
+                          // var_dump("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_1);die();
+
+                          $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_1);
+                        }
+                    
+                        $templateProcessor->setValue("tgl_kepulangan1", $tanggal_pulang_1);
+                    
+                    } else {
+                        $templateProcessor->setValue("tgl_kepulangan_sp1", '');
+                        $templateProcessor->setValue("tgl_kepulangan1", '');
+                    }
+                    
                     
         
                     }
@@ -2567,8 +3178,16 @@ public function update ($id,$id_tim_parameter) {
                       if ($tanggalBerangkat_3 == "0000-00-00") {
                         if ($pegawai['lama_p_d'] == 1) {
                           $templateProcessor->setValue("tgl_kepulangan_sp2", '');
-                        } else {
-                            $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
+                        } elseif (!empty($tanggal_pulang_2)) {
+                          // Jika $tanggal_pulang_2 ada nilainya
+                          $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
+                        }else {
+                          // var_dump("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_1);die();
+
+                          // $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_1);
+
+                          $templateProcessor->setValue("tgl_kepulangan_sp2", '');
+                          
                         }
                       }else{
                         $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_3);
@@ -2616,7 +3235,7 @@ public function update ($id,$id_tim_parameter) {
                         $kabupatenKota = '';  // Or some default value
                       }
 
-                      if ($pegawai['tanggal_sp_backdate'] == '0000-00-00' || $pegawai['tanggal_sp_backdate'] === false) {
+                      if ($pegawai['tanggal_sp_backdate'] == '0000-00-00' || $pegawai['tanggal_sp_backdate'] === false || $pegawai['backdate'] === '-' || $pegawai['backdate'] === 'tidak' ) {
 
                       }else{
                         $tanggal_sp_backdate = strftime('%d %B %Y', strtotime($pegawai['tanggal_sp_backdate']));
@@ -2730,10 +3349,11 @@ public function update ($id,$id_tim_parameter) {
                 $update_perdin = $this->m_perdin->update_e_perdin($pegawai['id_perdin'], $data);
                 // var_dump($filename_pa_sekdis);die();
                 } 
-                if (in_array("1061", $pkepada)) {
+                if (in_array("1152", $pkepada)) {
                   $filtered_data_bu_kadis = array_filter($data_pegawai, function($item) {
-                      return $item['id_pegawai'] == 1061;
+                      return $item['id_pegawai'] == 1152;
                   });
+
                   if ($tipe_undangan == 1) {
                       $templateFile = 'assets/file_surat_perdin/template_surat_perdin/surat_perintah_template_bu_kadis.docx';
                        // Memproses file template yang dipilih
@@ -2765,7 +3385,7 @@ public function update ($id,$id_tim_parameter) {
                       $kode_tim = $kode_tim_file->kode_tim_ketua;
                         foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                           // Hanya proses data dengan ID tertentu
-                          if ($pegawai['id_pegawai'] != 1061) {
+                          if ($pegawai['id_pegawai'] != 1152) {
                               continue; // Lewati iterasi jika ID tidak sesuai
                           }
                           //  var_dump($pegawai);die();
@@ -3024,6 +3644,8 @@ public function update ($id,$id_tim_parameter) {
                           $update_perdin = $this->m_perdin->update_e_perdin($pegawai['id_perdin'], $data);
   
                           $templateProcessor->saveAs($filename_bukadis);
+                          // var_dump($filename_bukadis);die();
+
                         }
                           $templateFile = 'assets/file_surat_perdin/template_surat_perdin/visum_kadis.docx';
                           // Memproses file template yang dipilih
@@ -3057,7 +3679,7 @@ public function update ($id,$id_tim_parameter) {
     
                           foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                             // Hanya proses data dengan ID tertentu
-                            if ($pegawai['id_pegawai'] != 1061) {
+                            if ($pegawai['id_pegawai'] != 1152) {
                                 continue; // Lewati iterasi jika ID tidak sesuai
                             }
                             //  var_dump($pegawai);die();
@@ -3367,7 +3989,7 @@ public function update ($id,$id_tim_parameter) {
   
                         foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                           // Hanya proses data dengan ID tertentu
-                          if ($pegawai['id_pegawai'] != 1061) {
+                          if ($pegawai['id_pegawai'] != 1152) {
                               continue; // Lewati iterasi jika ID tidak sesuai
                           }
                           //  var_dump($pegawai);die();
@@ -3655,7 +4277,7 @@ public function update ($id,$id_tim_parameter) {
     
                           foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                             // Hanya proses data dengan ID tertentu
-                            if ($pegawai['id_pegawai'] != 1061) {
+                            if ($pegawai['id_pegawai'] != 1152) {
                                 continue; // Lewati iterasi jika ID tidak sesuai
                             }
                             //  var_dump($pegawai);die();
@@ -3943,7 +4565,7 @@ public function update ($id,$id_tim_parameter) {
   
                         foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                           // Hanya proses data dengan ID tertentu
-                          if ($pegawai['id_pegawai'] != 1061) {
+                          if ($pegawai['id_pegawai'] != 1152) {
                               continue; // Lewati iterasi jika ID tidak sesuai
                           }
                           //  var_dump($pegawai);die();
@@ -4229,7 +4851,7 @@ public function update ($id,$id_tim_parameter) {
     
                           foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                             // Hanya proses data dengan ID tertentu
-                            if ($pegawai['id_pegawai'] != 1061) {
+                            if ($pegawai['id_pegawai'] != 1152) {
                                 continue; // Lewati iterasi jika ID tidak sesuai
                             }
                             //  var_dump($pegawai);die();
@@ -4512,7 +5134,7 @@ public function update ($id,$id_tim_parameter) {
               log_message('error', 'File tidak ditemukan atau sudah terhapus: ' . $file_path);
           }
             $filtered_data = array_filter($data_pegawai, function($item) {
-              return $item['id_pegawai'] != 1061 && $item['id_pegawai'] != 31;
+              return $item['id_pegawai'] != 1152 && $item['id_pegawai'] != 31;
             });
             $file = $_FILES["file_srt"]["name"];
             $ext = pathinfo($file, PATHINFO_EXTENSION);
@@ -4543,8 +5165,8 @@ public function update ($id,$id_tim_parameter) {
 
                 $kode_tim_file = $this->m_perdin->get_tim_details($pegawai['id_tim']);
                 // Tentukan path template berdasarkan ID pegawai
-                if ($pegawai->id_pegawai == "1061") {
-                    continue; // Skip jika ID pegawai 1061
+                if ($pegawai->id_pegawai == "1152") {
+                    continue; // Skip jika ID pegawai 1152
                 } elseif ($pegawai->id_pegawai == "31") {
                     $templateFile = "assets/file_surat_perdin/kadis_sekdis/{$pegawai->file_srt}";
                 } else {
@@ -4599,7 +5221,7 @@ public function update ($id,$id_tim_parameter) {
         
                 // Update database dengan informasi file yang telah disimpan
                 $data = ['file_srt' => $filename_simpan];
-                var_dump($data);die();
+                // var_dump($data);die();
 
                 $update_perdin = $this->m_perdin->update_e_perdin($pegawai['id_perdin'], $data);
                 // Cek hasil update
@@ -4628,7 +5250,7 @@ public function update ($id,$id_tim_parameter) {
             redirect('/perdin/suratperintah');
         }elseif(strpos($file_srt, 'upload') !== false){
           $filtered_data = array_filter($data_pegawai, function($item) {
-            return $item['id_pegawai'] != 1061 && $item['id_pegawai'] != 31;
+            return $item['id_pegawai'] != 1152 && $item['id_pegawai'] != 31;
           });
 
           foreach ($filtered_data as $index => $pegawai) {
@@ -4655,7 +5277,7 @@ public function update ($id,$id_tim_parameter) {
           redirect('/perdin/suratperintah');
         }else{
           $filtered_data = array_filter($data_pegawai, function($item) {
-              return $item['id_pegawai'] != 1061 && $item['id_pegawai'] != 31;
+              return $item['id_pegawai'] != 1152 && $item['id_pegawai'] != 31;
           });
           $filtered_data = array_values($filtered_data);
           
@@ -4849,7 +5471,7 @@ public function update ($id,$id_tim_parameter) {
                 $templateProcessor->setValue("tgl_surat", $tanggal_sp_backdate);
               }
               // Pastikan "Februari" ditulis dengan 'F' bukan 'P'
-              $tgl_srt_undangan = str_replace('Pebruari', 'Februari', $tglKeberangkatan);
+              $tgl_srt_undangan = str_replace('Pebruari', 'Februari', $tgl_srt_undangan);
               $templateProcessor->setValue("tgl_srt_undangan#{$index}", $tgl_srt_undangan);
   
               $location_details = [];
@@ -4876,6 +5498,7 @@ public function update ($id,$id_tim_parameter) {
               $templateProcessor->setValue("arahan_pimpinan#{$index}", $pegawai['dasar_arahan_pimpiman']);
               $templateProcessor->setValue("kendaraan", $pegawai['kendaraan']);
               $templateProcessor->setValue("kabupaten_kota_bertempatan#{$index}", $kabupatenKota);
+
               if ($tanggalBerangkat_1 == "0000-00-00") {
                 $templateProcessor->setValue("tglKeberangkatan_1", '');
                 $templateProcessor->setValue("tanggal_pulang_1", '');
@@ -4889,7 +5512,7 @@ public function update ($id,$id_tim_parameter) {
                     if ($pegawai['lama_p_d'] == 1) {
                         $templateProcessor->setValue("tgl_kepulangan_sp1", '');
                     } else {
-                        $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_2);
+                        $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_1);
                     }
                     $templateProcessor->setValue("tgl_kepulangan1", $tanggal_pulang_1);
   
@@ -4902,17 +5525,23 @@ public function update ($id,$id_tim_parameter) {
   
               }
               if ($tanggalBerangkat_2 == "0000-00-00") {
-                // var_dump($tanggalBerangkat_2);die();
   
                 $templateProcessor->setValue("tglKeberangkatan_2", '');
                 $templateProcessor->setValue("tanggal_pulang_2", '');
                 
                 $templateProcessor->setValue("tgl_kepulangan2", "");
+                // var_dump($tanggal_pulang_2);die();
+
                 if ($tanggalBerangkat_3 == "0000-00-00") {
+
                   if ($pegawai['lama_p_d'] == 1) {
                     $templateProcessor->setValue("tgl_kepulangan_sp2", '');
+
+                  } elseif ($tanggal_pulang_1 == "") {
+                    $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
+                    
                   } else {
-                      $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
+                    $templateProcessor->setValue("tgl_kepulangan_sp2", '');
                   }
                 }else{
                   $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_3);
@@ -5151,7 +5780,7 @@ public function update ($id,$id_tim_parameter) {
       }
 
       // ID yang harus dipindahkan ke akhir
-      $prioritas = [1061, 31];
+      $prioritas = [1152, 31];
 
     // Cek apakah ID prioritas ada dalam array
     $adaPrioritas = array_intersect($pkepada, $prioritas);
@@ -5197,7 +5826,6 @@ public function update ($id,$id_tim_parameter) {
     $hari_akhir = $pil_tgl_saja + $jml_hari_akhir;
     $date_value_akhir = date('Y-m-d', strtotime("$tglberangkat + $jml_hari_akhir days"));
     $date_value_pertama = date('Y-m-d', strtotime("$tglberangkat - $nilai_hari_sebelum days"));
-    // var_dump($date_value_pertama);die();
     
     
 
@@ -5246,23 +5874,6 @@ public function update ($id,$id_tim_parameter) {
             $total_hari = $hari1 + $hari2 + $hari3;
         }
     }
-
-    
-    // // Debugging output menggunakan var_dump
-    // var_dump([
-    //     'tglberangkat' => $tglberangkat,
-    //     'tglkembali' => $tglkembali,
-    //     'hari1' => $hari1,
-    //     'tglberangkat2' => $tglberangkat2,
-    //     'tglkembali2' => $tglkembali2,
-    //     'hari2' => $hari2,
-    //     'tglberangkat3' => $tglberangkat3,
-    //     'tglkembali3' => $tglkembali3,
-    //     'hari3' => $hari3,
-    //     'total_hari' => $total_hari
-    // ]);
-    // die;
-      
     if (count($tujuan) > 3) {
         // Jika jumlah tujuan lebih dari 3, hentikan proses dan kembalikan pesan error
         echo json_encode(['status' => 'error', 'message' => 'Maksimal 3 tujuan diperbolehkan.']);
@@ -5322,7 +5933,7 @@ public function update ($id,$id_tim_parameter) {
     
  
 
-        // Cek jika jumlah elemen lebih dari 4, kecuali jika mengandung 1061 dan 31
+        // Cek jika jumlah elemen lebih dari 4, kecuali jika mengandung 1152 dan 31
     
         // Data umum
 
@@ -5352,11 +5963,13 @@ public function update ($id,$id_tim_parameter) {
         $tanggal_sp_backdate = $this->input->post('tanggal_sp_backdate');
         $kode_rek = $this->input->post('kode_rek');
         $kendaraan = $this->input->post('kendaraan');
+        $jenis_dinas_luar = $this->input->post('jenis_dinas_luar');
         
        
 
         
         $lama_p_d = $total_hari;
+
           // Mendapatkan nomor grup terakhir
           $no_grup_terakhir = $this->m_perdin->get_no_grup_terakhir();
 
@@ -5375,38 +5988,90 @@ public function update ($id,$id_tim_parameter) {
         // Mulai transaksi\
         $this->db->trans_start();
         $data_pegawai_sudah_perdin = [];
-        if ($tipe_undangan != 2) {
-          if ($lama_p_d > 2) {
-             
-                $this->session->set_flashdata('gagal',"Batas melakukan perjalan dinas adalah 2 hari dalam minggu pemilihan tanggal" );
-                redirect('/perdin/addrekap/');
-          }else{
-            foreach ($pkepada as $row) {
-              $data_pegawai_sudah_perdin = $this->m_perdin->get_data_pegawai_sudah_perdin($date_value_pertama , $date_value_akhir, $row);
-              // var_dump($data_pegawai_sudah_perdin);die();
-              if($data_pegawai_sudah_perdin[0]->total_lama_p_d >= 2) {
-            
-                  
-                  $data_pegawai = $this->m_perdin->get_n_pegawai($row);
-                  
-                  $this->db->trans_rollback();
-                  if (is_array($data_pegawai) || is_object($data_pegawai)) {
-                    // Jika $data_pegawai adalah array atau objek, kita ubah menjadi JSON atau format string lainnya
-                    $data_pegawai = json_encode($data_pegawai);
+        if ($tipe_undangan != 2 || $tipe_undangan != 3 ) {
+              foreach ($pkepada as $row) {
+                $id_kepala = $this->m_perdin->get_kepala_dinas(2);
+                $id_pengecualian = $this->m_perdin->get_id_pengecualian($row);
+                // var_dump($id_tim);die();
+            if ($lama_p_d > 2 &&  $id_kepala != $row && $id_pengecualian == FALSE && $id_tim != 73) {
+              
+                // var_dump($id_kepala, $id_pengecualian, $row);die();
+                  $this->session->set_flashdata('gagal',"Batas melakukan perjalan dinas adalah 2 hari dalam minggu pemilihan tanggal" );
+                  redirect('/perdin/addrekap/');
+            }else{
+                if ($id_kepala != $row && $id_pengecualian == FALSE && $id_tim != 73) {
+                  $bulan_ini = date('m', strtotime($tanggal_berangkat)); // hasil: '07' jika Juli
+                  $tahun_ini = date('Y', strtotime($tanggal_berangkat)); // hasil: '2025' jika tahun 2025
+                  // Cek lama perjalanan minggu ini
+                  $data_pegawai_sudah_perdin = $this->m_perdin->get_data_pegawai_sudah_perdin($date_value_pertama, $date_value_akhir, $row);
+
+                  // Cek jumlah total anggaran dalam bulan ini
+                  $total_uang_hari_bulanan = $this->m_perdin->get_total_uang_hari_bulanan($bulan_ini, $tahun_ini);
+                  // var_dump($total_uang_hari_bulanan);die();
+                  // Cek kondisi: minggu ini sudah 2 hari atau total anggaran dalam bulan ini >= 72jt
+                 // var_dump($data_pegawai_sudah_perdin);die();
+                 $limit = 1000000000000;
+                  if (
+                      (!empty($data_pegawai_sudah_perdin) && $data_pegawai_sudah_perdin[0]->total_lama_p_d >= 2  && $id_kepala != $row && $id_pengecualian == FALSE)
+                      || ($total_uang_hari_bulanan >= $limit && $id_kepala != $row && $id_pengecualian == FALSE) && ($id_tim != 73)
+                  ) {
+                      $data_pegawai = $this->m_perdin->get_n_pegawai($row);
+
+                      $this->db->trans_rollback();
+
+                      $nama_pegawai = is_array($data_pegawai) || is_object($data_pegawai) ? json_encode($data_pegawai) : $data_pegawai;
+
+                      // Buat pesan error yang jelas tergantung kondisi
+                      $pesan = "tidak bisa diajukan perjalanan dinas karena: ";
+                      if (!empty($data_pegawai_sudah_perdin) && $data_pegawai_sudah_perdin[0]->total_lama_p_d >= 2 && $id_kepala != $row && $id_pengecualian == FALSE) {
+                          $pesan .= "sudah melakukan 2 hari perjalanan dinas minggu ini. ";
+                      }
+                      if ($total_uang_hari_bulanan >= $limit && $id_kepala != $row && $id_pengecualian == FALSE) {
+                          $pesan .= "Total anggaran bulan ini telah mencapai Rp " . number_format($total_uang_hari_bulanan, 0, ',', '.') . ".";
+                      }
+
+                      $this->session->set_flashdata('gagal', $pesan);
+                      redirect('/perdin/addrekap/');
                   }
-                // Set flashdata dengan pesan yang lebih jelas
-                $this->session->set_flashdata('gagal',$data_pegawai. " sudah melakukan 2 hari perjalanan dinas dalam minggu ini" );
-                redirect('/perdin/addrekap/');
+                }
+                
               }
-            }
-          }  
+
+            }  
         }
        
        
   
         foreach ($pkepada as $row) {
+          $kab_kota_jabar = [
+              'Bandung', 'Bekasi', 'Bogor', 'Depok', 'Cimahi', 'Cirebon', 'Sukabumi', 'Tasikmalaya', 
+              'Garut', 'Sumedang', 'Majalengka', 'Subang', 'Indramayu', 'Karawang', 'Purwakarta', 
+              'Cianjur', 'Kuningan', 'Pangandaran', 'Banjar'
+          ];
 
-      
+          // Default uang_hari
+          $uang_hari = 0;
+          if ($user_id == 57) {
+              $status_approve = 2;
+          }else{
+              $status_approve = 1;
+          }
+
+          // Cek kondisi jenis_dinas_luar dan lokasi
+          if ($jenis_dinas_luar == 1) {
+              foreach ($kab_kota_jabar as $kab_jabar) {
+                  if (stripos($nama_tujuan, $kab_jabar) !== false) {
+                      $uang_hari = 430000;
+                      break; // berhenti jika sudah ketemu
+                  }
+              }
+          } elseif ($jenis_dinas_luar == 2 || $jenis_dinas_luar == 3) {
+              $uang_hari = 105000;
+          }
+         
+          // var_dump($user_id);die();
+
+
           $data = [
               'id_pegawai' => $row,
               'user_id' => $user_id,
@@ -5434,20 +6099,33 @@ public function update ($id,$id_tim_parameter) {
               'kode_rek' => $kode_rek,
               'titik_lokasi' => $titik_lokasi,
               'kendaraan' => $kendaraan,
-
+              'jenis_dinas_luar' => $jenis_dinas_luar,
+              'uang_hari' => $uang_hari,
+              'status_approve' => $status_approve,
           ];
-
+         
           $pegawai = $this->m_perdin->get_n_pegawai_perdin($row);
-          // var_dump($pegawai);die();
           $nip = $this->m_perdin->get_n_nip($row);
           $jabatan = $this->m_perdin->get_n_jabatan($row);
           $kode_tim_file = $this->m_perdin->get_tim_details($id_tim);
-      
+          $this->db->trans_start();
           // Simpan data dan ambil ID yang dihasilkan
           $id_perdin = $this->m_perdin->save_e_perdin($data);
-      
-          
-      
+          // Contoh daftar kabupaten/kota di Jawa Barat
+         
+          $data_log_perdin = [
+              'id_user_pembuat' => $user_id,
+              'tanggal_pembuatan' => date('Y-m-d H:i:s'),
+              'status_approve' => $status_approve,
+              'mksd_pemberangkatan' => $mksd_pemberangkatan,
+              'id_data_utama' => $id_perdin
+          ];
+
+
+          $save_log_perdin  = $this->m_perdin->save_log_e_perdin($data_log_perdin);
+                  // var_dump($save_log_perdin);die();
+          $this->db->trans_complete();
+
           // Gabungkan data pegawai ke dalam array
           $data_pegawai[] = [
               'id_perdin' => $id_perdin, // Tambahkan ID Perdin
@@ -5475,6 +6153,8 @@ public function update ($id,$id_tim_parameter) {
               'kode_rek' => $kode_rek,
               'kab_kota_array' => $kab_kota_array,
               'kendaraan' => $kendaraan,
+              'jenis_dinas_luar' => $jenis_dinas_luar,
+              'uang_hari' => $uang_hari,
               'tanggal_sp_backdate' => $tanggal_sp_backdate,
           ];
         
@@ -5497,7 +6177,6 @@ public function update ($id,$id_tim_parameter) {
         }
         // // Debug: Tampilkan data pegawai dengan ID perjalanan dinas      
         // Commit transaksi jika semua sukses
-        $this->db->trans_complete();
         
         
         require_once 'assets/phpword/src/PhpWord/Autoloader.php';
@@ -5509,7 +6188,7 @@ public function update ($id,$id_tim_parameter) {
         
         if (is_array($pkepada)) {
 
-          if (in_array("31", $pkepada) || in_array("1061", $pkepada)) {
+          if (in_array("31", $pkepada) || in_array("1152", $pkepada)) {
 
               // Jika kedua nilai ada dalam array
               if (in_array("31", $pkepada)) {
@@ -6395,9 +7074,9 @@ public function update ($id,$id_tim_parameter) {
                   $update_perdin = $this->m_perdin->update_e_perdin($pegawai['id_perdin'], $data);
                 }
               } 
-              if (in_array("1061", $pkepada)) {
+              if (in_array("1152", $pkepada)) {
                 $filtered_data_bu_kadis = array_filter($data_pegawai, function($item) {
-                    return $item['id_pegawai'] == 1061;
+                    return $item['id_pegawai'] == 1152;
                 });
                 if ($tipe_undangan == 1) {
                     $templateFile = 'assets/file_surat_perdin/template_surat_perdin/surat_perintah_template_bu_kadis.docx';
@@ -6430,7 +7109,7 @@ public function update ($id,$id_tim_parameter) {
                     $kode_tim = $kode_tim_file->kode_tim_ketua;
                       foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                         // Hanya proses data dengan ID tertentu
-                        if ($pegawai['id_pegawai'] != 1061) {
+                        if ($pegawai['id_pegawai'] != 1152) {
                             continue; // Lewati iterasi jika ID tidak sesuai
                         }
                         //  var_dump($pegawai);die();
@@ -6716,7 +7395,7 @@ public function update ($id,$id_tim_parameter) {
   
                         foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                           // Hanya proses data dengan ID tertentu
-                          if ($pegawai['id_pegawai'] != 1061) {
+                          if ($pegawai['id_pegawai'] != 1152) {
                               continue; // Lewati iterasi jika ID tidak sesuai
                           }
                           //  var_dump($pegawai);die();
@@ -7006,7 +7685,7 @@ public function update ($id,$id_tim_parameter) {
 
                       foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                         // Hanya proses data dengan ID tertentu
-                        if ($pegawai['id_pegawai'] != 1061) {
+                        if ($pegawai['id_pegawai'] != 1152) {
                             continue; // Lewati iterasi jika ID tidak sesuai
                         }
                         //  var_dump($pegawai);die();
@@ -7293,7 +7972,7 @@ public function update ($id,$id_tim_parameter) {
   
                         foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                           // Hanya proses data dengan ID tertentu
-                          if ($pegawai['id_pegawai'] != 1061) {
+                          if ($pegawai['id_pegawai'] != 1152) {
                               continue; // Lewati iterasi jika ID tidak sesuai
                           }
                           //  var_dump($pegawai);die();
@@ -7581,7 +8260,7 @@ public function update ($id,$id_tim_parameter) {
 
                       foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                         // Hanya proses data dengan ID tertentu
-                        if ($pegawai['id_pegawai'] != 1061) {
+                        if ($pegawai['id_pegawai'] != 1152) {
                             continue; // Lewati iterasi jika ID tidak sesuai
                         }
                         //  var_dump($pegawai);die();
@@ -7867,7 +8546,7 @@ public function update ($id,$id_tim_parameter) {
   
                         foreach ($filtered_data_bu_kadis as $index => $pegawai) {
                           // Hanya proses data dengan ID tertentu
-                          if ($pegawai['id_pegawai'] != 1061) {
+                          if ($pegawai['id_pegawai'] != 1152) {
                               continue; // Lewati iterasi jika ID tidak sesuai
                           }
                           //  var_dump($pegawai);die();
@@ -8135,7 +8814,7 @@ public function update ($id,$id_tim_parameter) {
         // var_dump('tidak masuk kondisi');die();
 
         $filtered_data = array_filter($data_pegawai, function($item) {
-          return $item['id_pegawai'] != 1061 && $item['id_pegawai'] != 31;
+          return $item['id_pegawai'] != 1152 && $item['id_pegawai'] != 31;
         });
 
         // Mengatur ulang indeks array
@@ -8187,6 +8866,7 @@ public function update ($id,$id_tim_parameter) {
           // Menghitung jumlah data
           $count = count($filtered_data);
           // Kondisi default jika "31" dan "931" tidak ditemukan
+          
           if ($count == 1) {
 
               if ($tipe_undangan == 1) {
@@ -8361,9 +9041,10 @@ public function update ($id,$id_tim_parameter) {
             $templateProcessor->setValue("srt_nmr_undangan#{$index}", $pegawai['nmr_srt_undangan']);
 
             $tgl_srt_undangan = strftime('%d %B %Y', strtotime($pegawai['tgl_srt_undangan']));
-
             // Pastikan "Februari" ditulis dengan 'F' bukan 'P'
-            $tgl_srt_undangan = str_replace('Pebruari', 'Februari', $tglKeberangkatan);
+            $tgl_srt_undangan = str_replace('Pebruari', 'Februari', $tgl_srt_undangan);
+            
+
             $templateProcessor->setValue("tgl_srt_undangan#{$index}", $tgl_srt_undangan);
 
             $location_details = [];
@@ -8395,78 +9076,95 @@ public function update ($id,$id_tim_parameter) {
             $templateProcessor->setValue("arahan_pimpinan#{$index}", $pegawai['dasar_arahan_pimpiman']);
             $templateProcessor->setValue("kendaraan", $pegawai['kendaraan']);
             $templateProcessor->setValue("kabupaten_kota_bertempatan#{$index}", $kabupatenKota);
+    
 
-            if ($tanggalBerangkat_1 == "0000-00-00") {
-              $templateProcessor->setValue("tglKeberangkatan_1", '');
-              $templateProcessor->setValue("tanggal_pulang_1", '');
-              $templateProcessor->setValue("tgl_kepulangan#1", $tanggal_pulang_1);
+              if ($tanggalBerangkat_1 == "0000-00-00") {
+                      $templateProcessor->setValue("tglKeberangkatan_1", '');
+                      $templateProcessor->setValue("tanggal_pulang_1", '');
+                      $templateProcessor->setValue("tgl_kepulangan#1", $tanggal_pulang_1);
+        
+                    }else{
 
-            }else{
-              $templateProcessor->setValue("tglKeberangkatan_1", $tglKeberangkatan_1);
-              $templateProcessor->setValue("tanggal_pulang_1", $tanggal_pulang_1);
-              
-              if ($tanggalBerangkat_2 === "0000-00-00") {
-                  if ($pegawai['lama_p_d'] == 1) {
-                      $templateProcessor->setValue("tgl_kepulangan_sp1", '');
-                  } else {
-                      $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_2);
-                  }
-                  $templateProcessor->setValue("tgl_kepulangan1", $tanggal_pulang_1);
+                      $templateProcessor->setValue("tglKeberangkatan_1", $tglKeberangkatan_1);
+                      $templateProcessor->setValue("tanggal_pulang_1", $tanggal_pulang_1);
+                      
+                      if ($tanggalBerangkat_2 === "0000-00-00") {
 
-              } else {
-                  $templateProcessor->setValue("tgl_kepulangan_sp1", '');
-                  $templateProcessor->setValue("tgl_kepulangan1", '');
+                        if ($pegawai['lama_p_d'] == 1) {
+                            $templateProcessor->setValue("tgl_kepulangan_sp1", '');
+                        } elseif (!empty($tanggal_pulang_2)) {
+                            // Jika $tanggal_pulang_2 ada nilainya
+                            $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_2);
+                        }else {
+                          // var_dump("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_1);die();
 
-              }
-            
+                          $templateProcessor->setValue("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_1);
+                        }
+                    
+                        $templateProcessor->setValue("tgl_kepulangan1", $tanggal_pulang_1);
+                    
+                    } else {
+                        $templateProcessor->setValue("tgl_kepulangan_sp1", '');
+                        $templateProcessor->setValue("tgl_kepulangan1", '');
+                    }
+                    
+                    
+        
+                    }
+                    if ($tanggalBerangkat_2 == "0000-00-00") {
+                      // var_dump($tanggalBerangkat_2);die();
+        
+                      $templateProcessor->setValue("tglKeberangkatan_2", '');
+                      $templateProcessor->setValue("tanggal_pulang_2", '');
+                      
+                      $templateProcessor->setValue("tgl_kepulangan2", "");
+                      if ($tanggalBerangkat_3 == "0000-00-00") {
+                        if ($pegawai['lama_p_d'] == 1) {
+                          $templateProcessor->setValue("tgl_kepulangan_sp2", '');
+                        } elseif (!empty($tanggal_pulang_2)) {
+                          // Jika $tanggal_pulang_2 ada nilainya
+                          $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
+                        }else {
+                          // var_dump("tgl_kepulangan_sp1", "sampai dengan " . $tanggal_pulang_1);die();
 
-            }
-            if ($tanggalBerangkat_2 == "0000-00-00") {
-              // var_dump($tanggalBerangkat_2);die();
+                          // $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_1);
 
-              $templateProcessor->setValue("tglKeberangkatan_2", '');
-              $templateProcessor->setValue("tanggal_pulang_2", '');
-              
-              $templateProcessor->setValue("tgl_kepulangan2", "");
-              if ($tanggalBerangkat_3 == "0000-00-00") {
-                if ($pegawai['lama_p_d'] == 1) {
-                  $templateProcessor->setValue("tgl_kepulangan_sp2", '');
-                } else {
-                    $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
-                }
-              }else{
-                $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_3);
-              }
-            }else{
-              $templateProcessor->setValue("tglKeberangkatan_2", $tglKeberangkatan_2);
-              $templateProcessor->setValue("tanggal_pulang_2", $tanggal_pulang_2);
-              // var_dump($pegawai['lama_p_d']);die();
-
-              if ($tanggalBerangkat_3 == "0000-00-00") {
-                if ($pegawai['lama_p_d'] == 1) {
-                  $templateProcessor->setValue("tgl_kepulangan_sp2", '');
-                } else {
-                    $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
-                }
-                $templateProcessor->setValue("tgl_kepulangan2", $tanggal_pulang_2);
-
-              }else{
-                $templateProcessor->setValue("tgl_kepulangan2", "");
-                $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_3);
-              }
-
-            }
-            if ($tanggalBerangkat_3 == "0000-00-00") {
-              $templateProcessor->setValue("tglKeberangkatan_3", '');
-              $templateProcessor->setValue("tanggal_pulang_3", '');
-              $templateProcessor->setValue("tgl_kepulangan3", "");
-              $templateProcessor->setValue("tgl_kepulangan_sp3", '');
-            }else{
-              $templateProcessor->setValue("tglKeberangkatan_3", $tglKeberangkatan_3);
-              $templateProcessor->setValue("tanggal_pulang_3", $tanggal_pulang_3);
-              $templateProcessor->setValue("tgl_kepulangan3", $tanggal_pulang_3);
-              $templateProcessor->setValue("tgl_kepulangan_sp3", '');
-            }
+                          $templateProcessor->setValue("tgl_kepulangan_sp2", '');
+                          
+                        }
+                      }else{
+                        $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_3);
+                      }
+                    }else{
+                      $templateProcessor->setValue("tglKeberangkatan_2", $tglKeberangkatan_2);
+                      $templateProcessor->setValue("tanggal_pulang_2", $tanggal_pulang_2);
+                      // var_dump($pegawai['lama_p_d']);die();
+        
+                      if ($tanggalBerangkat_3 == "0000-00-00") {
+                        if ($pegawai['lama_p_d'] == 1) {
+                          $templateProcessor->setValue("tgl_kepulangan_sp2", '');
+                        } else {
+                            $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_2);
+                        }
+                        $templateProcessor->setValue("tgl_kepulangan2", $tanggal_pulang_2);
+        
+                      }else{
+                        $templateProcessor->setValue("tgl_kepulangan2", "");
+                        $templateProcessor->setValue("tgl_kepulangan_sp2", "sampai dengan " . $tanggal_pulang_3);
+                      }
+        
+                    }
+                    if ($tanggalBerangkat_3 == "0000-00-00") {
+                      $templateProcessor->setValue("tglKeberangkatan_3", '');
+                      $templateProcessor->setValue("tanggal_pulang_3", '');
+                      $templateProcessor->setValue("tgl_kepulangan3", "");
+                      $templateProcessor->setValue("tgl_kepulangan_sp3", '');
+                    }else{
+                      $templateProcessor->setValue("tglKeberangkatan_3", $tglKeberangkatan_3);
+                      $templateProcessor->setValue("tanggal_pulang_3", $tanggal_pulang_3);
+                      $templateProcessor->setValue("tgl_kepulangan3", $tanggal_pulang_3);
+                      $templateProcessor->setValue("tgl_kepulangan_sp3", '');
+                    }
           
 
 
@@ -8626,8 +9324,74 @@ public function update ($id,$id_tim_parameter) {
       // Redirect ke halaman lain setelah penghapusan
       redirect('/perdin/suratperintah');
   }
-  
-  
+  public function reload_docx($no_grup_perdin, $id_tim) {
+      $perdin_list = $this->m_perdin->get_perdin($no_grup_perdin, $id_tim);
+      if(empty($perdin_list)) {
+          $this->session->set_flashdata('gagal', 'Data perjalanan dinas tidak ditemukan.');
+          redirect('perdin/suratperintah');
+          return;
+      }
+      $first = $perdin_list[0];
+
+      $listizin = [];
+      foreach($perdin_list as $p) {
+          $listizin[] = $p->id_pegawai;
+      }
+
+      $tujuan_keberangkatan = $this->m_perdin->get_tujuan_keberangkatan_perdin($no_grup_perdin, $id_tim);
+      $tk = !empty($tujuan_keberangkatan) ? $tujuan_keberangkatan[0] : null;
+
+      $_POST['listizin'] = $listizin;
+      $_POST['tglberangkat'] = $tk ? $tk->tanggal_berangkat_1 : $first->tanggal_berangkat;
+      $_POST['tglkembali'] = $tk ? $tk->tanggal_pulang_1 : $first->tanggal_kembali;
+      $_POST['tglberangkat2'] = $tk ? $tk->tanggal_berangkat_2 : '';
+      $_POST['tglkembali2'] = $tk ? $tk->tanggal_pulang_2 : '';
+      $_POST['tglberangkat3'] = $tk ? $tk->tanggal_berangkat_3 : '';
+      $_POST['tglkembali3'] = $tk ? $tk->tanggal_pulang_3 : '';
+      $_POST['detail_tempat_1'] = $tk ? $tk->detail_tempat_1 : '';
+      $_POST['detail_tempat_2'] = $tk ? $tk->detail_tempat_2 : '';
+      $_POST['detail_tempat_3'] = $tk ? $tk->detail_tempat_3 : '';
+      $_POST['titik_lokasi'] = $first->titik_lokasi;
+      $_POST['id_perdin'] = $first->id;
+      $_POST['uraian'] = $first->uraian;
+
+      $kab_kota_array = [];
+      if($tk && $tk->kab_kota) {
+          $decoded = json_decode($tk->kab_kota, true);
+          if(is_array($decoded)) {
+              $kabupaten_db = $this->m_perdin->get_kabupaten();
+              foreach($decoded as $nama_kab) {
+                  foreach($kabupaten_db as $kdb) {
+                      if(strtoupper($kdb->n_kabupaten) == strtoupper($nama_kab)) {
+                          $kab_kota_array[] = $kdb->id;
+                          break;
+                      }
+                  }
+              }
+          }
+      }
+      $_POST['kabupaten'] = $kab_kota_array;
+      $_POST['no__sppd'] = $first->no__sppd;
+      $_POST['tgl_surat'] = $first->tgl_surat;
+      $_POST['detail_tempat_pemberangkatan'] = $first->detail_tempat_pemberangkatan;
+      $_POST['kendaraan'] = $first->kendaraan;
+      $_POST['tanggal_sp_backdate'] = $first->tanggal_sp_backdate;
+      $_POST['status_approve'] = $first->status_approve;
+      $_POST['mksd_pemberangkatan'] = $first->mksd_pemberangkatan;
+      $_POST['kode_rek_sub_req'] = $first->kode_rek_sub_req;
+      $_POST['perihal_srt_undangan'] = $first->perihal_srt_undangan;
+      $_POST['nmr_srt_undangan'] = $first->nmr_srt_undangan;
+      $_POST['tgl_srt_undangan'] = $first->tgl_srt_undangan;
+      $_POST['tipe_undangan'] = $first->tipe_undangan;
+      $_POST['srt_instansi_undangan'] = $first->srt_instansi_undangan;
+      $_POST['dasar_arahan_pimpiman'] = $first->dasar_arahan_pimpiman;
+      $_POST['pegawai_dinas_lain'] = $first->pegawai_dinas_lain;
+      $_POST['kode_rek'] = $first->kode_rek;
+      $_POST['file_srt'] = $first->file_srt;
+      $_POST['id_tim'] = $id_tim;
+
+      $this->update($no_grup_perdin, $id_tim);
+  }
   
 
 }

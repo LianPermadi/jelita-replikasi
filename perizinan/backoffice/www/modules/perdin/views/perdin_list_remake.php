@@ -176,10 +176,23 @@
             'alt' => 'Cetak Data Perdin (Format BPK)',
             'title' => 'Cetak Data Perdin (Format BPK)'
           );
-          echo anchor(site_url('perdin/cetak_excel') . '/' . (!empty($tgla) && !empty($tglb) ? $tgla . '/' . $tglb : '0/0'), img($img_cetak_excel));
+          echo anchor(site_url('perdin/cetak_excel_2024') . '/' . (!empty($tgla) && !empty($tglb) ? $tgla . '/' . $tglb : '0/0'), img($img_cetak_excel));
           ?>
         </td>
-        <td><span>Export Data Perdin (Format BPK)</span></td>
+        <td><span>Export Data Perdin (Format BPK Tahun 2024)</span></td>
+      </tr>
+      <tr>
+        <td>
+          <?php
+          $img_cetak_excel = array(
+            'src' => base_url() . 'assets/images/icon/excel.png',
+            'alt' => 'Cetak Data Perdin (Format BPK)',
+            'title' => 'Cetak Data Perdin (Format BPK)'
+          );
+          echo anchor(site_url('perdin/cetak_excel_2025') . '/' . (!empty($tgla) && !empty($tglb) ? $tgla . '/' . $tglb : '0/0'), img($img_cetak_excel));
+          ?>
+        </td>
+        <td><span>Export Data Perdin (Format BPK Tahun 2025)</span></td>
       </tr>
       <tr>
         <td>

@@ -416,7 +416,6 @@
                                 });
 
                           </script>
-                                     <?php if ($user_id === "121" || $user_id === "705") : ?>
 
                                                     <!-- Pilihan Tanggal Back Date -->
                                                             <tr>
@@ -424,10 +423,10 @@
                                                                     <b>Tanggal Back Date</b>
                                                                 </td>
                                                                 <td class="bg-grid">
-                                                                    <select class="pilihan select-wrc" name="pilihan_backdate" id="pilihan_backdate" style="width: 100%;" onchange="toggleTanggalSPBackdate()">
+                                                                    <select class="pilihan select-wrc" name="backdate" id="tanggal_sp_backdate" style="width: 100%;" onchange="toggleTanggalSPBackdate()">
                                                                         <option value="-">-</option>
-                                                                        <option value="ya" <?= ($perdin_grup->pilihan_backdate == "ya") ? 'selected' : ''; ?>>ya</option>
-                                                                        <option value="tidak" <?= ($perdin_grup->pilihan_backdate == "tidak") ? 'selected' : ''; ?>>tidak</option>
+                                                                        <option value="ya" <?= ($perdin_grup->tanggal_sp_backdate == "ya") ? 'selected' : ''; ?>>ya</option>
+                                                                        <option value="tidak" <?= ($perdin_grup->tanggal_sp_backdate == "tidak") ? 'selected' : ''; ?>>tidak</option>
                                           
                                                                     </select>
                                                                 </td>
@@ -466,7 +465,6 @@
                                                             }
                                                             </script>
 
-                                                <?php endif; ?>
                                 <tr>
                                     <td align="left" width="15%" class="bg-grid">
                                         <b>surat undangan</b>
@@ -524,7 +522,7 @@
                                         ?>
                                     </td>
                                 </tr>
-
+                           
                                 <!-- Dasar SP Arahan Pimpinan -->
                                 <tr id="dasar_arahan_row" style="display:none;">
                                     <td align="left" width="15%" class="bg-grid">
@@ -883,6 +881,35 @@
                                         </div>
 
                                 </tr>
+                                <tr>
+                                    <td align="left" width="15%" class="bg-grid">
+                                        <b>Approve Surat Perintah</b>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        if ($user_id == 57) {
+                                            // Admin atau role yang berhak
+                                            echo '<select class="pilihan" name="status_approve" id="status_approve" style="width: 100%;">';
+                                            echo '<option value="2" ' . ($perdin_grup->status_approve == 2 ? 'selected' : '') . '>Approve Surat</option>';
+                                            echo '<option value="1" ' . ($perdin_grup->status_approve == 1 ? 'selected' : '') . '>Tidak di Approve</option>';
+                                            echo '</select>';
+                                        } else {
+                                            // User biasa, tidak bisa klik
+                                            $selectedValue = $perdin_grup->status_approve;
+
+                                            echo '<select id="status_approve_readonly" style="width: 100%;">';
+                                            echo '<option value="2" ' . ($selectedValue == 2 ? 'selected' : '') . '>Approve Surat</option>';
+                                            echo '<option value="1" ' . ($selectedValue == 1 ? 'selected' : '') . '>Tidak di Approve</option>';
+                                            echo '</select>';
+
+                                            // Hidden input biar tetap dikirim ke server
+                                            echo '<input type="hidden" name="status_approve" value="' . $selectedValue . '">';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+
+
                             </tbody>
                             </table>
                             <div class="entry" style="text-align: center;">
@@ -907,6 +934,7 @@
 
                               
                               <span></span>
+                              <button name="button" type="button" class="button-wrc" onclick="if(confirm('Apakah Anda yakin ingin reload (generate ulang) file word untuk data ini?')) parent.location='<?php echo site_url('perdin/reload_docx/'.$perdin_grup->no_grup_perdin.'/'.$perdin_grup->id_tim); ?>'">Reload Template</button>
                               <button name="button" type="button" class="button-wrc" onclick="parent.location='<?php echo site_url('perdin/suratperintah'); ?>'">Batal</button>
                             </div>
                     </div>
@@ -931,6 +959,24 @@
   $(document).ready(function() {
     $('.nama_kabupaten_kota').select2();
 });
+</script>
+<script>
+    const readonlySelect = document.getElementById('status_approve_readonly');
+    if (readonlySelect) {
+        // Cegah klik, interaksi, scroll, dan semua upaya kecurangan
+        readonlySelect.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+        });
+        readonlySelect.addEventListener('keydown', function(e) {
+            e.preventDefault();
+        });
+
+        // Styling biar kelihatan "mati"
+        readonlySelect.style.pointerEvents = 'none';
+        readonlySelect.style.backgroundColor = '#e9ecef';
+        readonlySelect.style.cursor = 'not-allowed';
+        readonlySelect.style.color = '#6c757d';
+    }
 </script>
 
 <script>

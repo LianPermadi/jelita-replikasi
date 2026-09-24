@@ -49,16 +49,7 @@
 
 <body>
     <?php
-        $protocol = $_SERVER['REQUEST_SCHEME'];
-        $domain = $_SERVER['http_host'];
-        $script_filename = $_SERVER["PHP_SELF"];
-            // Cek apakah "index.php" ada di dalam string
-        if (strpos($script_filename, 'index.php') !== false) {
-                // Hapus "index.php" dari string
-            $clean_path = str_replace('index.php', '', $script_filename);
-        } else {
-            $clean_path = $script_filename;
-        }
+    // $barang = $this->m_barang->get_barang_master($id);
     ?>
     <style type="text/css">
         .justify {
@@ -98,7 +89,7 @@
                         <?php
                         echo $page_name; 
                         foreach($list as $data){
-                            $nomor = $data->nomor;
+                            $nomor = $data->nomor; 
                             $untuk = $data->untuk;
                             $dasar = $data->dasar;
                             $tanggal = $data->tanggal;
@@ -114,7 +105,7 @@
             </center>
             <div id="tag-id" style="margin: 10%;">
                 <div class="post margin">
-                    <img src="<?= $protocol."://".$domain.$clean_path  ?>www/modules/perdin/views/image/cop_surat.png" width="100%">
+                    <img src="https://dpmptsp.jabarprov.go.id/jelita/backoffice/www/modules/perdin/views/image/cop_surat.png" width="100%">
                     <center>
                         <h1>
                             <b>

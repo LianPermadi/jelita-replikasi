@@ -95,7 +95,7 @@ $log_line = "[" . $timestamp . "] $ip - $method - $uri - \"$agent\" - LAT:$lat L
 // Tulis ke file log harian
 file_put_contents($log_file, $log_line, FILE_APPEND);
 
-$link = "https" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
+$link = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
 $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 $config['base_url'] = $link . $server;
 $config['base_url'] .= preg_replace('@/+$@', '', dirname($_SERVER['SCRIPT_NAME'])) . '/';
