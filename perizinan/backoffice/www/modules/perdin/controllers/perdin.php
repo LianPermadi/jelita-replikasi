@@ -9394,4 +9394,280 @@ public function update ($id,$id_tim_parameter) {
   }
   
 
+  public function sync_enroll_table()
+  {
+      // Define the enroll table structure based on keu_perdin fields
+        $required_fields = array(
+            'id'                  => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => TRUE),
+            'user_id'             => array('type' => 'INT', 'constraint' => 11),
+            'tgl_pembayaran'      => array('type' => 'DATE'),
+            'bulan'               => array('type' => 'INT', 'constraint' => 11),
+            'id_persuratan'       => array('type' => 'INT', 'constraint' => 11),
+            'id_pegawai'          => array('type' => 'INT', 'constraint' => 11),
+            'no_bku'              => array('type' => 'VARCHAR', 'constraint' => 50),
+            'uraian'              => array('type' => 'TEXT'),
+            'tujuan'              => array('type' => 'INT', 'constraint' => 11),
+            'nama_pelaksana'      => array('type' => 'INT', 'constraint' => 11),
+            'skpd'                => array('type' => 'VARCHAR', 'constraint' => 50),
+            'no__sppd'            => array('type' => 'VARCHAR', 'constraint' => 50),
+            'lama_p_d'            => array('type' => 'INT', 'constraint' => 11),
+            'tanggal_berangkat'   => array('type' => 'DATE'),
+            'tgl_surat'           => array('type' => 'DATE'),
+            'tanggal_kembali'     => array('type' => 'DATE'),
+            'uang_hari'           => array('type' => 'INT', 'constraint' => 11),
+            'harga_hari'          => array('type' => 'INT', 'constraint' => 11),
+            'jumlah_uang'         => array('type' => 'INT', 'constraint' => 11),
+            'representasi_hari'   => array('type' => 'INT', 'constraint' => 11),
+            'representasi_harga'  => array('type' => 'INT', 'constraint' => 11),
+            'jumlah_representasi' => array('type' => 'INT', 'constraint' => 11),
+            'uang_sakuhari'       => array('type' => 'INT', 'constraint' => 11),
+            'uang_sakuharga'      => array('type' => 'INT', 'constraint' => 11),
+            'uang_sku_p_j'        => array('type' => 'INT', 'constraint' => 11),
+            'penginapan_malam'    => array('type' => 'INT', 'constraint' => 11),
+            'penginapan_harga'    => array('type' => 'INT', 'constraint' => 11),
+            'penginapan_jumlah'   => array('type' => 'INT', 'constraint' => 11),
+            'tikettol_pulang'     => array('type' => 'INT', 'constraint' => 11),
+            'tikettol_pergi'      => array('type' => 'INT', 'constraint' => 11),
+            'tikettol_jumlah'     => array('type' => 'INT', 'constraint' => 11),
+            's_t_k_asal_hari'     => array('type' => 'INT', 'constraint' => 11),
+            's_t_k_asal_harga'    => array('type' => 'INT', 'constraint' => 11),
+            's_t_k_asal_jumlah'   => array('type' => 'INT', 'constraint' => 11),
+            's_t_k_tujuan_hari'   => array('type' => 'INT', 'constraint' => 11),
+            's_t_k_tujuan_harga'  => array('type' => 'INT', 'constraint' => 11),
+            's_t_k_tujuan_jumlah' => array('type' => 'INT', 'constraint' => 11),
+            'sewa_kendaraan_hari' => array('type' => 'INT', 'constraint' => 11),
+            'sewa_kendaraan_harga'=> array('type' => 'INT', 'constraint' => 11),
+            'sewa_kendaraan_jumlah'=> array('type' => 'INT', 'constraint' => 11),
+            'bbm_liter'           => array('type' => 'VARCHAR', 'constraint' => 20),
+            'bbm_harga'           => array('type' => 'INT', 'constraint' => 11),
+            'bbm_jumlah'          => array('type' => 'INT', 'constraint' => 11),
+            'swabdi_kota_asal'    => array('type' => 'INT', 'constraint' => 11),
+            'swabdi_kota_tujuan'  => array('type' => 'INT', 'constraint' => 11),
+            'swab_jumlah'         => array('type' => 'INT', 'constraint' => 11),
+            'jumlah_total'        => array('type' => 'INT', 'constraint' => 11),
+            'itberangkat_maskapai'=> array('type' => 'VARCHAR', 'constraint' => 11),
+            'itberangkat_no_tiket'=> array('type' => 'VARCHAR', 'constraint' => 11),
+            'itberangkat_kodebooking'=> array('type' => 'VARCHAR', 'constraint' => 11),
+            'itberangkat_no_penerbangan'=> array('type' => 'VARCHAR', 'constraint' => 11),
+            'itberangkat_asal_daerah'=> array('type' => 'VARCHAR', 'constraint' => 11),
+            'itberangkat_tujuan'  => array('type' => 'VARCHAR', 'constraint' => 11),
+            'itberangkat_tanggal' => array('type' => 'DATE'),
+            'itberangkat_kelas'   => array('type' => 'VARCHAR', 'constraint' => 100),
+            'itberangkat_harga_tiket'=> array('type' => 'INT', 'constraint' => 11),
+            'itkembali_maskapai'  => array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_nama'      => array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_no_tiket'  => array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_kode_booking'=> array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_no_penerbangan'=> array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_asal_daerah'=> array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_tujuan'    => array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_tanggal'   => array('type' => 'DATE'),
+            'itkembali_kelas'     => array('type' => 'VARCHAR', 'constraint' => 100),
+            'itkembali_harga_tiket'=> array('type' => 'INT', 'constraint' => 11),
+            'nama_penginapan'     => array('type' => 'TEXT'),
+            'keterangan'          => array('type' => 'TEXT'),
+            'untuk'               => array('type' => 'TEXT'),
+            'ttd_surat'           => array('type' => 'INT', 'constraint' => 11),
+            'no_grup_perdin'      => array('type' => 'VARCHAR', 'constraint' => 255),
+            'status_approve'      => array('type' => 'INT', 'constraint' => 11),
+            'id_tim'              => array('type' => 'INT', 'constraint' => 11),
+            'file_srt'            => array('type' => 'TEXT'),
+            'tanggal_sp_backdate' => array('type' => 'VARCHAR', 'constraint' => 255),
+            'mksd_pemberangkatan' => array('type' => 'VARCHAR', 'constraint' => 255),
+            'kode_rek_sub_req'    => array('type' => 'VARCHAR', 'constraint' => 255),
+            'perihal_srt_undangan'=> array('type' => 'VARCHAR', 'constraint' => 255),
+            'nmr_srt_undangan'    => array('type' => 'VARCHAR', 'constraint' => 255),
+            'tgl_srt_undangan'    => array('type' => 'VARCHAR', 'constraint' => 255),
+            'tipe_undangan'       => array('type' => 'VARCHAR', 'constraint' => 255),
+            'srt_instansi_undangan'=> array('type' => 'VARCHAR', 'constraint' => 255),
+            'detail_tempat_pemberangkatan'=> array('type' => 'VARCHAR', 'constraint' => 255),
+            'dasar_arahan_pimpiman'=> array('type' => 'VARCHAR', 'constraint' => 255),
+            'pegawai_dinas_lain'  => array('type' => 'VARCHAR', 'constraint' => 255),
+            'kode_rek'            => array('type' => 'VARCHAR', 'constraint' => 255),
+            'titik_lokasi'        => array('type' => 'VARCHAR', 'constraint' => 255),
+            'kendaraan'           => array('type' => 'VARCHAR', 'constraint' => 225),
+            'jenis_dinas_luar'    => array('type' => 'VARCHAR', 'constraint' => 225)
+        );
+
+        $fields_def = array();
+        foreach ($required_fields as $field_name => $field_props) {
+            $def = $field_props['type'];
+            if (isset($field_props['constraint'])) {
+                $def .= '(' . $field_props['constraint'] . ')';
+            }
+            if (isset($field_props['auto_increment']) && $field_props['auto_increment'] === TRUE) {
+                $def .= ' AUTO_INCREMENT';
+            }
+            $fields_def[$field_name] = $def;
+        }
+
+        // Add primary key definition
+        $fields_def['id'] = $fields_def['id'] . ' PRIMARY KEY';
+
+        // Check if enroll table exists, create if not
+        $this->db->query("SET @table_exists := (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'enroll')");
+        $result = $this->db->query("SELECT @table_exists as table_exists")->row();
+
+        if ($result->table_exists == 0) {
+            // Create table with all required fields
+            $this->db->query("CREATE TABLE IF NOT EXISTS enroll (");
+            $field_defs = array();
+            foreach ($required_fields as $field_name => $field_props) {
+                $def = $field_props['type'];
+                if (isset($field_props['constraint'])) {
+                    $def .= '(' . $field_props['constraint'] . ')';
+                }
+                if (isset($field_props['auto_increment']) && $field_props['auto_increment'] === TRUE) {
+                    $def .= ' AUTO_INCREMENT';
+                }
+                if ($field_name === 'id') {
+                    $def .= ' PRIMARY KEY';
+                }
+                $field_defs[] = "`$field_name` $def";
+            }
+            $create_sql = "CREATE TABLE IF NOT EXISTS enroll (" . implode(', ', $field_defs) . ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+            $this->db->query($create_sql);
+            log_message('debug', 'Enroll table created successfully.');
+        } else {
+            // Table exists, check for missing fields
+            $existing_fields = $this->db->query("DESCRIBE enroll")->result();
+            $existing_field_names = array();
+            foreach ($existing_fields as $row) {
+                $existing_field_names[] = $row->Field;
+            }
+
+            $missing_fields = array();
+            foreach ($required_fields as $field_name => $field_props) {
+                if (!in_array($field_name, $existing_field_names)) {
+                    $def = $field_props['type'];
+                    if (isset($field_props['constraint'])) {
+                        $def .= '(' . $field_props['constraint'] . ')';
+                    }
+                    $missing_fields[$field_name] = $def;
+                }
+            }
+
+            if (!empty($missing_fields)) {
+                foreach ($missing_fields as $field_name => $def) {
+                    $this->db->query("ALTER TABLE enroll ADD COLUMN `$field_name` $def");
+                    log_message('debug', "Added missing field: $field_name to enroll table.");
+                }
+            }
+        }
+
+        // Synchronize data from keu_perdin to enroll
+        $perdin_data = $this->db->get('keu_perdin')->result();
+
+        foreach ($perdin_data as $row) {
+            $data = array(
+                'user_id'                    => $row->user_id,
+                'tgl_pembayaran'             => $row->tgl_pembayaran,
+                'bulan'                      => $row->bulan,
+                'id_persuratan'              => $row->id_persuratan,
+                'id_pegawai'                 => $row->id_pegawai,
+                'no_bku'                     => $row->no_bku,
+                'uraian'                     => $row->uraian,
+                'tujuan'                     => $row->tujuan,
+                'nama_pelaksana'             => $row->nama_pelaksana,
+                'skpd'                       => $row->skpd,
+                'no__sppd'                   => $row->no__sppd,
+                'lama_p_d'                   => $row->lama_p_d,
+                'tanggal_berangkat'          => $row->tanggal_berangkat,
+                'tgl_surat'                  => $row->tgl_surat,
+                'tanggal_kembali'            => $row->tanggal_kembali,
+                'uang_hari'                  => $row->uang_hari,
+                'harga_hari'                 => $row->harga_hari,
+                'jumlah_uang'                => $row->jumlah_uang,
+                'representasi_hari'          => $row->representasi_hari,
+                'representasi_harga'         => $row->representasi_harga,
+                'jumlah_representasi'        => $row->jumlah_representasi,
+                'uang_sakuhari'              => $row->uang_sakuhari,
+                'uang_sakuharga'             => $row->uang_sakuharga,
+                'uang_sku_p_j'               => $row->uang_sku_p_j,
+                'penginapan_malam'           => $row->penginapan_malam,
+                'penginapan_harga'           => $row->penginapan_harga,
+                'penginapan_jumlah'          => $row->penginapan_jumlah,
+                'tikettol_pulang'            => $row->tikettol_pulang,
+                'tikettol_pergi'             => $row->tikettol_pergi,
+                'tikettol_jumlah'            => $row->tikettol_jumlah,
+                's_t_k_asal_hari'            => $row->s_t_k_asal_hari,
+                's_t_k_asal_harga'           => $row->s_t_k_asal_harga,
+                's_t_k_asal_jumlah'          => $row->s_t_k_asal_jumlah,
+                's_t_k_tujuan_hari'          => $row->s_t_k_tujuan_hari,
+                's_t_k_tujuan_harga'         => $row->s_t_k_tujuan_harga,
+                's_t_k_tujuan_jumlah'        => $row->s_t_k_tujuan_jumlah,
+                'sewa_kendaraan_hari'        => $row->sewa_kendaraan_hari,
+                'sewa_kendaraan_harga'       => $row->sewa_kendaraan_harga,
+                'sewa_kendaraan_jumlah'      => $row->sewa_kendaraan_jumlah,
+                'bbm_liter'                  => $row->bbm_liter,
+                'bbm_harga'                  => $row->bbm_harga,
+                'bbm_jumlah'                 => $row->bbm_jumlah,
+                'swabdi_kota_asal'           => $row->swabdi_kota_asal,
+                'swabdi_kota_tujuan'         => $row->swabdi_kota_tujuan,
+                'swab_jumlah'                => $row->swab_jumlah,
+                'jumlah_total'               => $row->jumlah_total,
+                'itberangkat_maskapai'       => $row->itberangkat_maskapai,
+                'itberangkat_no_tiket'       => $row->itberangkat_no_tiket,
+                'itberangkat_kodebooking'    => $row->itberangkat_kodebooking,
+                'itberangkat_no_penerbangan' => $row->itberangkat_no_penerbangan,
+                'itberangkat_asal_daerah'    => $row->itberangkat_asal_daerah,
+                'itberangkat_tujuan'         => $row->itberangkat_tujuan,
+                'itberangkat_tanggal'        => $row->itberangkat_tanggal,
+                'itberangkat_kelas'          => $row->itberangkat_kelas,
+                'itberangkat_harga_tiket'    => $row->itberangkat_harga_tiket,
+                'itkembali_maskapai'         => $row->itkembali_maskapai,
+                'itkembali_nama'             => $row->itkembali_nama,
+                'itkembali_no_tiket'         => $row->itkembali_no_tiket,
+                'itkembali_kode_booking'     => $row->itkembali_kode_booking,
+                'itkembali_no_penerbangan'   => $row->itkembali_no_penerbangan,
+                'itkembali_asal_daerah'      => $row->itkembali_asal_daerah,
+                'itkembali_tujuan'           => $row->itkembali_tujuan,
+                'itkembali_tanggal'          => $row->itkembali_tanggal,
+                'itkembali_kelas'            => $row->itkembali_kelas,
+                'itkembali_harga_tiket'      => $row->itkembali_harga_tiket,
+                'nama_penginapan'            => $row->nama_penginapan,
+                'keterangan'                 => $row->keterangan,
+                'untuk'                      => $row->untuk,
+                'ttd_surat'                  => $row->ttd_surat,
+                'no_grup_perdin'             => $row->no_grup_perdin,
+                'status_approve'             => $row->status_approve,
+                'id_tim'                     => $row->id_tim,
+                'file_srt'                   => $row->file_srt,
+                'tanggal_sp_backdate'        => $row->tanggal_sp_backdate,
+                'mksd_pemberangkatan'        => $row->mksd_pemberangkatan,
+                'kode_rek_sub_req'           => $row->kode_rek_sub_req,
+                'perihal_srt_undangan'       => $row->perihal_srt_undangan,
+                'nmr_srt_undangan'           => $row->nmr_srt_undangan,
+                'tgl_srt_undangan'           => $row->tgl_srt_undangan,
+                'tipe_undangan'              => $row->tipe_undangan,
+                'srt_instansi_undangan'      => $row->srt_instansi_undangan,
+                'detail_tempat_pemberangkatan' => $row->detail_tempat_pemberangkatan,
+                'dasar_arahan_pimpiman'       => $row->dasar_arahan_pimpiman,
+                'pegawai_dinas_lain'         => $row->pegawai_dinas_lain,
+                'kode_rek'                   => $row->kode_rek,
+                'titik_lokasi'               => $row->titik_lokasi,
+                'kendaraan'                  => $row->kendaraan,
+                'jenis_dinas_luar'           => $row->jenis_dinas_luar
+            );
+
+            // Check if record exists in enroll by no_grup_perdin and id_tim
+            $this->db->where('no_grup_perdin', $row->no_grup_perdin);
+            $this->db->where('id_tim', $row->id_tim);
+            $this->db->where('id_pegawai', $row->id_pegawai);
+            $existing = $this->db->get('enroll')->row();
+
+            if ($existing) {
+                // Update existing record
+                $this->db->where('id', $existing->id);
+                $this->db->update('enroll', $data);
+            } else {
+                // Insert new record
+                $this->db->insert('enroll', $data);
+            }
+        }
+
+        $this->session->set_flashdata('sukses', 'Sinkronisasi tabel enroll berhasil diperbarui.');
+    }
+
+
 }
