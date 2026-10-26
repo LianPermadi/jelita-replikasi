@@ -722,10 +722,10 @@ class Menu_loader {
           $menu .= '      <span style="font-family: Cursive;">Peminjaman Mobil</span>';
           $menu .= "      <ul>";
           $menu .= "        <li class='first'></li>";
-          if($admin || $pengelolamobil){
+          if($pengelolamobil){
             $menu .=        $this->set_menu('peminjamanmobil/mobil', 'Pengelolaan Mobil');
           }
-          $menu .=          $this->set_menu('peminjamanmobil', 'Peminjaman Mobil');
+        //   $menu .=          $this->set_menu('peminjamanmobil', 'Peminjaman Mobil');
           $menu .= "        <li class='last'></li>";
           $menu .= "      </ul>";
           $menu .= "    </li>";
