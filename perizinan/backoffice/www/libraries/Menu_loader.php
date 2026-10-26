@@ -192,16 +192,16 @@ class Menu_loader {
             $persuratan = TRUE;
             break;
         case '33':
-            $komitmen_oss = TRUE;
+            $komitmen_oss = FALSE;
             break;
         case '34':
-            $timeline = TRUE;
+            $timeline = FALSE;
             break;
         case '35':
-            $ruangan = TRUE;
+            $ruangan = FALSE;
             break;
         case '36':
-            $bukutamu = TRUE;
+            $bukutamu = FALSE;
             break;
         case '37':
             $pajak = TRUE;
@@ -210,10 +210,10 @@ class Menu_loader {
             $investasi = TRUE;
             break;
         case '39':
-            $jdih = TRUE;
+            $jdih = FALSE;
             break;
         case '40':
-            $pengembangan = TRUE;
+            $pengembangan = FALSE;
             break;
         case '41':
             $inputtkk = TRUE;
@@ -225,49 +225,49 @@ class Menu_loader {
             $datakabkota = TRUE;
             break;
         case '44':
-            $pengelola_barang = TRUE;
+            $pengelola_barang = FALSE;
             break;
         case '45':
-            //$pengelolabarang = TRUE;
+            $pengelolabarang = FALSE;
             break;
         case '46':
-            $perdin = TRUE;
+            $perdin = FALSE;
             break;
         case '47':
-            $barang = TRUE;
+            $barang = FALSE;
             break;
         case '48':
             $anpeg = TRUE;
             break;
         case '50':
-            $pengawas_mobil = TRUE;
+            $pengawas_mobil = FALSE;
             break;
         case '49':
-            $pengelolamobil = TRUE;
+            $pengelolamobil = FALSE;
             break;
         case '51':
-            $rekapperdin = TRUE;
+            $rekapperdin = FALSE;
             break;
         case '52':
-            $motionadmin = TRUE;
+            $motionadmin = FALSE;
             break;
         case '53':
-            $kegiatandpa = TRUE;
+            $kegiatandpa = FALSE;
             break;
         case '54':
-            $nib = TRUE;
+            $nib = FALSE;
             break;
         case '55':
-            $callcenter = TRUE;
+            $callcenter = FALSE;
             break;
         case '56':
-            $aspri = TRUE;
+            $aspri = FALSE;
             break;
         case '57':
-            $pengolah_data = TRUE;
+            $pengolah_data = FALSE;
             break;
         case '58':
-            $event_wjis = TRUE;
+            $event_wjis = FALSE;
             break;
         case '59':    
             $pengelola_aset = TRUE;
@@ -282,13 +282,13 @@ class Menu_loader {
             $lkpm = TRUE;
             break;
         case '63':
-            $spperdin = TRUE;
+            $spperdin = FALSE;
             break;
         case '64':
-            $CmsInvestasi = TRUE;
+            $CmsInvestasi = FALSE;
             break;      
         case '65':
-            $skm = TRUE;
+            $skm = FALSE;
             break;      
         case '99':
             $menu .= "<li class='dir'>";

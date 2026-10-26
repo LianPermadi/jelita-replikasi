@@ -9393,9 +9393,15 @@ public function update ($id,$id_tim_parameter) {
       $this->update($no_grup_perdin, $id_tim);
   }
   
+  public function sinkronisasi(){
+    $this->sync_enroll_table();
+    $this->ensure_log_perjalanan_dinas_table();
+    $this->ensure_perdin_year_table();
+    $this->ensure_anggaran_kodering_sub_kegiatan();
+    redirect('perdin/suratperintah');
+  }
 
-  public function sync_enroll_table()
-  {
+  public function sync_enroll_table(){
       // Define the enroll table structure based on keu_perdin fields
         $required_fields = array(
             'id'                  => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => TRUE),
@@ -9488,7 +9494,6 @@ public function update ($id,$id_tim_parameter) {
             'kendaraan'           => array('type' => 'VARCHAR', 'constraint' => 225),
             'jenis_dinas_luar'    => array('type' => 'VARCHAR', 'constraint' => 225)
         );
-
         $fields_def = array();
         foreach ($required_fields as $field_name => $field_props) {
             $def = $field_props['type'];
@@ -9505,12 +9510,12 @@ public function update ($id,$id_tim_parameter) {
         $fields_def['id'] = $fields_def['id'] . ' PRIMARY KEY';
 
         // Check if enroll table exists, create if not
-        $this->db->query("SET @table_exists := (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'enroll')");
+        $this->db->query("SET @table_exists := (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'keu_perdin')");
         $result = $this->db->query("SELECT @table_exists as table_exists")->row();
 
         if ($result->table_exists == 0) {
             // Create table with all required fields
-            $this->db->query("CREATE TABLE IF NOT EXISTS enroll (");
+            $this->db->query("CREATE TABLE IF NOT EXISTS keu_perdin (");
             $field_defs = array();
             foreach ($required_fields as $field_name => $field_props) {
                 $def = $field_props['type'];
@@ -9525,12 +9530,12 @@ public function update ($id,$id_tim_parameter) {
                 }
                 $field_defs[] = "`$field_name` $def";
             }
-            $create_sql = "CREATE TABLE IF NOT EXISTS enroll (" . implode(', ', $field_defs) . ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+            $create_sql = "CREATE TABLE IF NOT EXISTS keu_perdin (" . implode(', ', $field_defs) . ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
             $this->db->query($create_sql);
-            log_message('debug', 'Enroll table created successfully.');
+            log_message('debug', 'keu_perdin table created successfully.');
         } else {
             // Table exists, check for missing fields
-            $existing_fields = $this->db->query("DESCRIBE enroll")->result();
+            $existing_fields = $this->db->query("DESCRIBE keu_perdin")->result();
             $existing_field_names = array();
             foreach ($existing_fields as $row) {
                 $existing_field_names[] = $row->Field;
@@ -9549,13 +9554,13 @@ public function update ($id,$id_tim_parameter) {
 
             if (!empty($missing_fields)) {
                 foreach ($missing_fields as $field_name => $def) {
-                    $this->db->query("ALTER TABLE enroll ADD COLUMN `$field_name` $def");
-                    log_message('debug', "Added missing field: $field_name to enroll table.");
+                    $this->db->query("ALTER TABLE keu_perdin ADD COLUMN `$field_name` $def");
+                    log_message('debug', "Added missing field: $field_name to keu_perdin table.");
                 }
             }
         }
 
-        // Synchronize data from keu_perdin to enroll
+        // Synchronize data from keu_perdin to keu_perdin
         $perdin_data = $this->db->get('keu_perdin')->result();
 
         foreach ($perdin_data as $row) {
@@ -9650,24 +9655,402 @@ public function update ($id,$id_tim_parameter) {
                 'jenis_dinas_luar'           => $row->jenis_dinas_luar
             );
 
-            // Check if record exists in enroll by no_grup_perdin and id_tim
+            // Check if record exists in keu_perdin by no_grup_perdin and id_tim
             $this->db->where('no_grup_perdin', $row->no_grup_perdin);
             $this->db->where('id_tim', $row->id_tim);
             $this->db->where('id_pegawai', $row->id_pegawai);
-            $existing = $this->db->get('enroll')->row();
+            $existing = $this->db->get('keu_perdin')->row();
 
             if ($existing) {
                 // Update existing record
                 $this->db->where('id', $existing->id);
-                $this->db->update('enroll', $data);
+                $this->db->update('keu_perdin', $data);
             } else {
                 // Insert new record
-                $this->db->insert('enroll', $data);
+                $this->db->insert('keu_perdin', $data);
             }
         }
 
-        $this->session->set_flashdata('sukses', 'Sinkronisasi tabel enroll berhasil diperbarui.');
-    }
+        $this->session->set_flashdata('sukses', 'Sinkronisasi tabel keu_perdin berhasil diperbarui.');
+  }
 
+  public function ensure_log_perjalanan_dinas_table(){
+      $table = 'log_perjalanan_dinas';
+
+      // Jika tabel sudah ada
+      if ($this->db->table_exists($table)) {
+          return true;
+      }
+
+      $sql = "
+          CREATE TABLE `{$table}` (
+              `id` INT(11) NOT NULL AUTO_INCREMENT,
+              `id_data_utama` INT(11) NOT NULL,
+              `status_approve` VARCHAR(50) DEFAULT NULL,
+              `catatan_approve` TEXT DEFAULT NULL,
+              `tanggal_pembuatan` DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+              PRIMARY KEY (`id`),
+              KEY `idx_id_data_utama` (`id_data_utama`),
+              KEY `idx_tanggal_pembuatan` (`tanggal_pembuatan`)
+          ) ENGINE=InnoDB
+            DEFAULT CHARSET=utf8mb4
+            COLLATE=utf8mb4_general_ci
+      ";
+
+      if (!$this->db->query($sql)) {
+
+          $error = $this->db->error();
+
+          log_message(
+              'error',
+              'Gagal membuat tabel ' . $table .
+              ': ' . $error['message']
+          );
+
+          return false;
+      }
+
+      log_message(
+          'debug',
+          'Tabel ' . $table . ' berhasil dibuat.'
+      );
+
+      return true;
+  }
+
+  public function ensure_perdin_year_table($tahun = null){
+      // Tahun berjalan jika tidak diberikan
+      if ($tahun === null) {
+          $tahun = (int) date('Y');
+      }
+
+      $tahun = (int) $tahun;
+
+      // Mulai dari tahun 2024
+      $tahun_awal = 2024;
+
+      // Pastikan tahun tidak lebih kecil dari 2024
+      if ($tahun < $tahun_awal) {
+          $tahun = $tahun_awal;
+      }
+
+      /*
+      * Pastikan tabel keu_perdin_2024 sampai
+      * keu_perdin_$tahun tersedia.
+      */
+      for ($year = $tahun_awal; $year <= $tahun; $year++) {
+
+          $target_table = 'keu_perdin_' . $year;
+
+          // Jika sudah ada, lanjut ke tahun berikutnya
+          if ($this->db->table_exists($target_table)) {
+              continue;
+          }
+
+          /*
+          * Cari template:
+          *
+          * 1. Tahun sebelumnya
+          * 2. Jika tidak ada, keu_perdin
+          */
+          $source_table = null;
+
+          if ($year > $tahun_awal) {
+
+              $previous_table = 'keu_perdin_' . ($year - 1);
+
+              if ($this->db->table_exists($previous_table)) {
+                  $source_table = $previous_table;
+              }
+          }
+
+          /*
+          * Untuk tahun pertama (2024), gunakan
+          * keu_perdin sebagai template jika ada.
+          */
+          if ($source_table === null) {
+
+              if ($this->db->table_exists('keu_perdin')) {
+                  $source_table = 'keu_perdin';
+              }
+          }
+
+          // Tidak ada tabel sumber
+          if ($source_table === null) {
+
+              log_message(
+                  'error',
+                  'Tidak dapat membuat ' . $target_table .
+                  '. Tabel sumber tidak ditemukan.'
+              );
+
+              return false;
+          }
+
+          // Buat tabel berdasarkan struktur template
+          $sql = "
+              CREATE TABLE `{$target_table}`
+              LIKE `{$source_table}`
+          ";
+
+          if (!$this->db->query($sql)) {
+
+              $error = $this->db->error();
+
+              log_message(
+                  'error',
+                  'Gagal membuat tabel ' . $target_table .
+                  ' dari ' . $source_table .
+                  ': ' . $error['message']
+              );
+
+              return false;
+          }
+
+            log_message(
+                'debug',
+                'Tabel ' . $target_table .
+                ' berhasil dibuat dari ' . $source_table
+            );
+        }
+
+        return true;
+  }
+
+  public function ensure_anggaran_kodering_sub_kegiatan()
+  {
+      $table = 'anggaran_kodering_sub_kegiatan';
+
+      // =========================================================
+      // 1. JIKA TABEL BELUM ADA, BUAT TABEL DASAR
+      // =========================================================
+      if (!$this->db->table_exists($table)) {
+
+          $sql = "
+              CREATE TABLE `{$table}` (
+                  `id` INT(11) NOT NULL AUTO_INCREMENT,
+                  PRIMARY KEY (`id`)
+              ) ENGINE=InnoDB
+              DEFAULT CHARSET=utf8mb4
+              COLLATE=utf8mb4_general_ci
+          ";
+
+          if (!$this->db->query($sql)) {
+
+              $error = $this->db->error();
+
+              log_message(
+                  'error',
+                  'Gagal membuat tabel ' . $table .
+                  ': ' . $error['message']
+              );
+
+              return false;
+          }
+
+          log_message(
+              'debug',
+              'Tabel ' . $table . ' berhasil dibuat.'
+          );
+      }
+
+      // =========================================================
+      // 2. DAFTAR FIELD YANG HARUS ADA
+      // =========================================================
+      $fields = array(
+
+          'id_kode_ring' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'kode_sub_ring' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'uraian_sub_kegiatan' => array(
+              'type' => 'VARCHAR(255)',
+              'null' => 'NOT NULL'
+          ),
+
+          'anggaran' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'tahun' => array(
+              'type' => 'INT(11)',
+              'null' => 'NOT NULL'
+          ),
+
+          't1' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't2' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't3' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't4' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't5' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't6' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't7' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't8' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't9' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't10' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't11' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          't12' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r1' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r2' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r3' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r4' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r5' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r6' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r7' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r8' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r9' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r10' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r11' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'r12' => array(
+              'type' => 'VARCHAR(20)',
+              'null' => 'NOT NULL'
+          ),
+
+          'keterangan' => array(
+              'type' => 'VARCHAR(255)',
+              'null' => 'NULL'
+          )
+      );
+
+      // =========================================================
+      // 3. CEK FIELD SATU PER SATU
+      // =========================================================
+      foreach ($fields as $field => $config) {
+
+          // Jika field sudah ada, lewati
+          if ($this->db->field_exists($field, $table)) {
+              continue;
+          }
+
+          // Field belum ada -> buat
+          $sql = "
+              ALTER TABLE `{$table}`
+              ADD COLUMN `{$field}`
+              {$config['type']}
+              {$config['null']}
+          ";
+
+          if (!$this->db->query($sql)) {
+
+              $error = $this->db->error();
+
+              log_message(
+                  'error',
+                  'Gagal menambahkan field ' . $field .
+                  ' pada tabel ' . $table .
+                  ': ' . $error['message']
+              );
+
+              return false;
+          }
+
+          log_message(
+              'debug',
+              'Field ' . $field .
+              ' berhasil ditambahkan ke ' . $table
+          );
+      }
+
+      return true;
+  }
 
 }
