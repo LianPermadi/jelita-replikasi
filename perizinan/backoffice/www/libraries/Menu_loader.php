@@ -717,7 +717,7 @@ class Menu_loader {
           $menu .= "  </li>";
         }
       
-        if($level == NULL){
+        if($level == NULL && $pengelolamobil){
           $menu .= "    <li class='dir'>";
           $menu .= '      <span style="font-family: Cursive;">Peminjaman Mobil</span>';
           $menu .= "      <ul>";
