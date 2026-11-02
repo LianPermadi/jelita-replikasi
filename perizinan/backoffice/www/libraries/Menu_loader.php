@@ -207,7 +207,7 @@ class Menu_loader {
             $pajak = TRUE;
             break;
         case '38':
-            $investasi = TRUE;
+            $investasi = FALSE;
             break;
         case '39':
             $jdih = FALSE;
@@ -270,7 +270,7 @@ class Menu_loader {
             $event_wjis = FALSE;
             break;
         case '59':    
-            $pengelola_aset = TRUE;
+            $pengelola_aset = FALSE;
             break;
         case '60':    
             $admin_ruangan = TRUE;
@@ -606,7 +606,7 @@ class Menu_loader {
           $menu .= "  </li>";
         }
         
-        if($level == NULL){
+        if($level == NULL && $pengelola_aset){
           $menu .= "    <li class='dir'>";
           $menu .= '      <span style="font-family: Cursive;">E-Tiket</span>';
           $menu .= "      <ul>";
@@ -659,7 +659,7 @@ class Menu_loader {
           $menu .= "  </li>";
         }
       
-        if($level == NULL){
+        if($level == NULL && $pengelola_aset){
           $menu .= "    <li class='dir'>";
           $menu .= '      <span style="font-family: Cursive;">Pengelolaan Laptop</span>';
           $menu .= "      <ul>";
@@ -747,7 +747,7 @@ class Menu_loader {
           $menu .= "    </ul>";
           $menu .= "  </li>";
         }
-          if($spperdin || $role_instansi == 'Pusat'){
+          if($perdin){
           $menu .= "  <li class='dir'>";
           $menu .= "    <span style='font-family: Cursive;'>Perdin</span>";
           $menu .= "    <ul>";
@@ -790,7 +790,7 @@ class Menu_loader {
           }
             $menu .= "  </li>";
         }
-        if($level == NULL){
+        if($level == NULL   && $investasi){
           $menu .=      $this->set_menu('info/invesment', 'Invest In West Java');
         }
         $menu .= "        <li class='last'></li>";
@@ -1167,7 +1167,7 @@ class Menu_loader {
         $menu .= "  DATA";
         $menu .= "  <ul>";
         $menu .= "    <li class='first'></li>";
-        $menu .=      $this->set_menu('datakabkota', 'REKONSILIASI NIB KAB/KOTA');
+        // $menu .=      $this->set_menu('datakabkota', 'REKONSILIASI NIB KAB/KOTA');
         $menu .= "    <li class='dir'>Perizinan";
         $menu .= "      <ul>";
         $menu .= "        <li class='first'></li>";
@@ -1261,26 +1261,26 @@ class Menu_loader {
  
     // Menu SSO & INFORMASI PUBLIK
     if($level == NULL){
-      $menu .= "<li class='dir'>";
-      $menu .= "  SSO & INFORMASI PUBLIK";
-      $menu .= "  <ul>";
-      $menu .= "    <li class='first'></li>";
-      $menu .=      $this->set_menu('info/super_apps', 'Super Apps (SMART JABAR)');  
-      $menu .=      $this->set_menu('info/fitur_jelita', 'Fitur Adm Perkantoran');
-      $menu .=      $this->set_menu('info/infoperizinan', 'Daftar Layanan Publik');
-      $menu .=      $this->set_menu('info/video_tutor', 'Video Tutorial Jelita');
-      $menu .=      $this->set_menu('info/info_sp', 'Daftar Standar Pelayanan');
-      $menu .=      $this->set_menu('info/skm', 'Survey Kepuasan Masyarakat (SKM)');
-      $menu .=      $this->set_menu('info/a_keg_dinas', 'Kalender Kegiatan');
-      $menu .=      $this->set_menu('info/ruang_rapat', 'Penggunaan Ruang Rapat');
-      $menu .=      $this->set_menu('info/super_apps/etanamya', 'E-Tanam Modal Ya');
-      $menu .=      $this->set_menu('info/super_apps/mppdigital', 'MPP Digital Jabar');
-      $menu .=      $this->set_menu('info/super_apps/peta_ijin', 'Peta Sebaran Perijinan');
-      $menu .=      $this->set_menu('info/super_apps/peta_potensi', 'Peta Sebaran Potensi Investasi Jabar');
-      $menu .=      $this->set_menu('info/super_apps/cambuk_nib', 'Capaian Penerbitan NIB "Cambuk-NIB"');
-      $menu .= "    <li class='last'></li>";
-      $menu .= "  </ul>";
-      $menu .= "</li>";
+    //   $menu .= "<li class='dir'>";
+    //   $menu .= "  SSO & INFORMASI PUBLIK";
+    //   $menu .= "  <ul>";
+    //   $menu .= "    <li class='first'></li>";
+    //   $menu .=      $this->set_menu('info/super_apps', 'Super Apps (SMART JABAR)');  
+    //   $menu .=      $this->set_menu('info/fitur_jelita', 'Fitur Adm Perkantoran');
+    //   $menu .=      $this->set_menu('info/infoperizinan', 'Daftar Layanan Publik');
+    //   $menu .=      $this->set_menu('info/video_tutor', 'Video Tutorial Jelita');
+    //   $menu .=      $this->set_menu('info/info_sp', 'Daftar Standar Pelayanan');
+    //   $menu .=      $this->set_menu('info/skm', 'Survey Kepuasan Masyarakat (SKM)');
+    //   $menu .=      $this->set_menu('info/a_keg_dinas', 'Kalender Kegiatan');
+    //   $menu .=      $this->set_menu('info/ruang_rapat', 'Penggunaan Ruang Rapat');
+    //   $menu .=      $this->set_menu('info/super_apps/etanamya', 'E-Tanam Modal Ya');
+    //   $menu .=      $this->set_menu('info/super_apps/mppdigital', 'MPP Digital Jabar');
+    //   $menu .=      $this->set_menu('info/super_apps/peta_ijin', 'Peta Sebaran Perijinan');
+    //   $menu .=      $this->set_menu('info/super_apps/peta_potensi', 'Peta Sebaran Potensi Investasi Jabar');
+    //   $menu .=      $this->set_menu('info/super_apps/cambuk_nib', 'Capaian Penerbitan NIB "Cambuk-NIB"');
+    //   $menu .= "    <li class='last'></li>";
+    //   $menu .= "  </ul>";
+    //   $menu .= "</li>";
     }
     // EOF() Menu SSO & INFORMASI PUBLIK
     
